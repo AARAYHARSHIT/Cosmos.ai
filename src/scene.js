@@ -13,6 +13,13 @@ export function initScene() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x030609);
 
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+  scene.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+  directionalLight.position.set(5, 5, 5);
+  scene.add(directionalLight);
+
   camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,

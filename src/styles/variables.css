@@ -1,0 +1,39 @@
+:root {
+  /* Colors */
+  --color-bg-deep:        hsl(230, 25%, 3%);
+  --color-bg-section:     hsl(240, 20%, 6%);
+  --color-accent-cyan:    hsl(190, 90%, 60%);
+  --color-accent-violet:  hsl(270, 80%, 65%);
+  --color-accent-rose:    hsl(330, 85%, 65%);
+  --color-text-primary:   hsl(0, 0%, 95%);
+  --color-text-muted:     hsl(230, 15%, 55%);
+
+  /* Typography */
+  --font-heading:         'Space Grotesk', sans-serif;
+  --font-body:            'Inter', sans-serif;
+  --font-size-h1:         3.5rem;
+  --font-size-h2:         2.5rem;
+  --font-size-body:       1rem;
+  --line-height-heading:  1.1;
+  --line-height-body:     1.6;
+
+  /* Spacing */
+  --spacing-xs:           0.25rem;
+  --spacing-sm:           0.5rem;
+  --spacing-md:           1rem;
+  --spacing-lg:           2rem;
+  --spacing-xl:           4rem;
+
+  /* Effects */
+  --shadow-glow-cyan:     0 0 20px rgba(0, 255, 220, 0.5);
+  --shadow-glow-violet:   0 0 20px rgba(150, 50, 255, 0.5);
+  --shadow-glow-rose:     0 0 20px rgba(255, 80, 150, 0.5);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-h1: 2.5rem;
+    --font-size-h2: 1.8rem;
+    --spacing-xl: 2rem;
+  }
+}
