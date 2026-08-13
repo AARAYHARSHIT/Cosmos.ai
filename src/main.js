@@ -1,8 +1,28 @@
-import * as THREE from 'three';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animate } from 'animejs';
+import { initScene, animate } from './scene.js';
+import { createStarField } from './stars.js';
+import { createPlanets } from './planets.js';
+import { createFloatingGeometry } from './geometry.js';
+import { createNebula } from './nebula.js';
+import { setupScrollCamera, setupScrollTriggers, setupHorizontalScroll } from './scroll-parallax.js';
+import { setupDOMAnimations } from './dom-animations.js';
+import './styles/index.css';
 
-gsap.registerPlugin(ScrollTrigger);
+(function init() {
+  const scene = initScene();
 
-console.log('Parallax 3D experience — main.js loaded');
+  const stars = createStarField(scene);
+  const planets = createPlanets(scene);
+  const geometries = createFloatingGeometry(scene);
+  const nebula = createNebula(scene);
+
+  setupScrollCamera({ stars, planets, geometries });
+  setupScrollTriggers();
+  setupHorizontalScroll();
+  setupDOMAnimations(planets, geometries);
+
+  animate((deltaTime) => {
+    if (nebula?.userData?.update) {
+      nebula.userData.update(deltaTime);
+    }
+  });
+})();
