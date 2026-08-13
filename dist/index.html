@@ -8,108 +8,87 @@
     <meta name="og:title" content="Explore the Cosmos" />
     <meta name="og:description" content="A parallax scrolling 3D journey through deep space, built with Three.js, Anime.js, and GSAP ScrollTrigger." />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <style>
-      :root {
-        --space-bg: hsl(230, 25%, 3%);
-        --cyan: hsl(190, 90%, 60%);
-        --violet: hsl(270, 90%, 65%);
-        --rose: hsl(350, 90%, 65%);
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        background: var(--space-bg);
-        color: #fff;
-        font-family: 'Inter', system-ui, sans-serif;
-        overflow-x: hidden;
-      }
-
-      #canvas-container {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      section {
-        position: relative;
-        z-index: 1;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: clamp(3rem, 8vw, 8rem) clamp(1.5rem, 6vw, 6rem);
-      }
-
-      h1,
-      h2,
-      h3 {
-        font-family: 'Space Grotesk', sans-serif;
-        font-weight: 700;
-        line-height: 1.1;
-      }
-
-      .accent-cyan {
-        color: var(--cyan);
-      }
-      .accent-violet {
-        color: var(--violet);
-      }
-      .accent-rose {
-        color: var(--rose);
-      }
-    </style>
-    <script type="module" crossorigin src="/assets/index-Bgkdc8a_.js"></script>
+    <script type="module" crossorigin src="/assets/index-DDl0HZDu.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/three-CbRIUp8_.js">
     <link rel="modulepreload" crossorigin href="/assets/gsap-C8IefbVz.js">
+    <link rel="modulepreload" crossorigin href="/assets/anime-BJsqpLo9.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-BLBUgWec.css">
   </head>
   <body>
     <div id="canvas-container"></div>
 
     <main role="main">
       <section role="region" aria-label="Hero" id="hero">
-        <h1>Explore the <span class="accent-cyan">Cosmos</span></h1>
-        <p role="region">Scroll to journey through deep space.</p>
+        <h1>Explore the Cosmos</h1>
+        <p class="subtitle" role="region">Scroll to journey through deep space.</p>
+        <div class="scroll-indicator" aria-hidden="true"></div>
       </section>
 
       <section role="region" aria-label="Nebula Discovery" id="nebula-discovery">
-        <h2>Nebula <span class="accent-violet">Discovery</span></h2>
-        <p role="region">Drift through the clouds of dust and gas that forge new stars.</p>
+        <h2 class="nebula-heading">Nebula <span class="accent-violet">Discovery</span></h2>
+        <p class="nebula-text" role="region">Drift through the clouds of dust and gas that forge new stars.</p>
       </section>
 
-      <section role="region" aria-label="Planets Showcase" id="planets-showcase">
+      <section role="region" aria-label="Planets Showcase" id="planets-showcase" class="planets-section">
         <h2>Planets <span class="accent-rose">Showcase</span></h2>
-        <p role="region">Orbiting worlds, each with its own story.</p>
+        <p class="subtitle" role="region">Orbiting worlds, each with its own story.</p>
+        <div class="planets-track">
+          <div class="planet-card card">
+            <h3>Meridian</h3>
+            <p>A scorched world of metal rivers and crystal storms.</p>
+          </div>
+          <div class="planet-card card">
+            <h3>Azurea</h3>
+            <p>An ocean giant wrapped in perpetual twilight.</p>
+          </div>
+          <div class="planet-card card">
+            <h3>Vesperion</h3>
+            <p>Violet winds carve canyons across an obsidian sky.</p>
+          </div>
+        </div>
       </section>
 
       <section role="region" aria-label="Stats Counter" id="stats-counter">
         <h2>By the <span class="accent-cyan">Numbers</span></h2>
-        <p role="region">Billions of galaxies, trillions of stars.</p>
+        <p class="nebula-text" role="region">Billions of galaxies, trillions of stars.</p>
+        <div class="stats-grid">
+          <div class="stat-card card">
+            <span class="stat-number" data-target="100000">0</span>
+            <span class="stat-label">Stars Observed</span>
+          </div>
+          <div class="stat-card card">
+            <span class="stat-number" data-target="5000">0</span>
+            <span class="stat-label">Known Worlds</span>
+          </div>
+          <div class="stat-card card">
+            <span class="stat-number" data-target="13">0</span>
+            <span class="stat-label">Billion Years</span>
+          </div>
+        </div>
       </section>
 
       <section role="region" aria-label="Gallery" id="gallery">
         <h2>Gallery</h2>
-        <p role="region">Fragments of the universe, frozen in time.</p>
+        <p class="nebula-text" role="region">Fragments of the universe, frozen in time.</p>
+        <div class="gallery-grid">
+          <div class="gallery-item"><span class="placeholder">NEBULA-01</span></div>
+          <div class="gallery-item"><span class="placeholder">STARFIELD-02</span></div>
+          <div class="gallery-item"><span class="placeholder">SUPERNOVA-03</span></div>
+          <div class="gallery-item"><span class="placeholder">ORION-04</span></div>
+          <div class="gallery-item"><span class="placeholder">ANDROMEDA-05</span></div>
+          <div class="gallery-item"><span class="placeholder">PULSAR-06</span></div>
+        </div>
       </section>
 
       <footer role="region" aria-label="Footer" id="footer">
         <p>Made for the cosmos — parallax 3D experience.</p>
+        <button class="cta-button" type="button">Launch Into Space</button>
+        <div class="footer-links">
+          <a href="#hero">Explore</a>
+          <a href="#nebula-discovery">Nebula</a>
+          <a href="#planets-showcase">Planets</a>
+          <a href="#gallery">Gallery</a>
+        </div>
       </footer>
     </main>
 
