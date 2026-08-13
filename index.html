@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore the Cosmos — Parallax 3D Experience</title>
+
+    <meta name="og:title" content="Explore the Cosmos" />
+    <meta name="og:description" content="A parallax scrolling 3D journey through deep space, built with Three.js, Anime.js, and GSAP ScrollTrigger." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --space-bg: hsl(230, 25%, 3%);
+        --cyan: hsl(190, 90%, 60%);
+        --violet: hsl(270, 90%, 65%);
+        --rose: hsl(350, 90%, 65%);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--space-bg);
+        color: #fff;
+        font-family: 'Inter', system-ui, sans-serif;
+        overflow-x: hidden;
+      }
+
+      #canvas-container {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      section {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(3rem, 8vw, 8rem) clamp(1.5rem, 6vw, 6rem);
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .accent-cyan {
+        color: var(--cyan);
+      }
+      .accent-violet {
+        color: var(--violet);
+      }
+      .accent-rose {
+        color: var(--rose);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+
+    <main role="main">
+      <section role="region" aria-label="Hero" id="hero">
+        <h1>Explore the <span class="accent-cyan">Cosmos</span></h1>
+        <p role="region">Scroll to journey through deep space.</p>
+      </section>
+
+      <section role="region" aria-label="Nebula Discovery" id="nebula-discovery">
+        <h2>Nebula <span class="accent-violet">Discovery</span></h2>
+        <p role="region">Drift through the clouds of dust and gas that forge new stars.</p>
+      </section>
+
+      <section role="region" aria-label="Planets Showcase" id="planets-showcase">
+        <h2>Planets <span class="accent-rose">Showcase</span></h2>
+        <p role="region">Orbiting worlds, each with its own story.</p>
+      </section>
+
+      <section role="region" aria-label="Stats Counter" id="stats-counter">
+        <h2>By the <span class="accent-cyan">Numbers</span></h2>
+        <p role="region">Billions of galaxies, trillions of stars.</p>
+      </section>
+
+      <section role="region" aria-label="Gallery" id="gallery">
+        <h2>Gallery</h2>
+        <p role="region">Fragments of the universe, frozen in time.</p>
+      </section>
+
+      <footer role="region" aria-label="Footer" id="footer">
+        <p>Made for the cosmos — parallax 3D experience.</p>
+      </footer>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

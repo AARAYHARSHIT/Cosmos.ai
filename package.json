@@ -1,0 +1,23 @@
+{
+  "name": "parallax-3d-experience",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Parallax scrolling 3D web experience built with Three.js, Anime.js v4, and GSAP ScrollTrigger",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "animejs": "^4.0.0",
+    "gsap": "^3.12.5",
+    "three": "^0.185.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
