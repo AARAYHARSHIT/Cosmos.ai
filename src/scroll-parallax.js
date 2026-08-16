@@ -4,9 +4,19 @@ import { getCamera } from './scene.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const geometryBasePosition = new Map();
+
 export function setupScrollCamera({ stars, planets, geometries } = {}) {
   const camera = getCamera();
   let rafId = null;
+
+  geometries?.forEach((geo) => {
+    geometryBasePosition.set(geo.uuid, {
+      x: geo.position.x,
+      y: geo.position.y,
+      z: geo.position.z,
+    });
+  });
 
   function onScroll() {
     if (rafId) return;
@@ -38,8 +48,11 @@ export function setupScrollCamera({ stars, planets, geometries } = {}) {
 
     if (geometries?.length) {
       geometries.forEach((geo, i) => {
+        const base = geometryBasePosition.get(geo.uuid);
+        if (!base) return;
         const phase = i * 1.3;
-        geo.position.y += Math.sin(p * Math.PI * 4 + phase) * 0.4;
+        geo.position.y = base.y + Math.sin(p * Math.PI * 4 + phase) * 0.4;
+        geo.position.x = base.x + Math.cos(p * Math.PI * 3 + phase) * 0.2;
       });
     }
   }
@@ -47,21 +60,25 @@ export function setupScrollCamera({ stars, planets, geometries } = {}) {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  return () => window.removeEventListener('scroll', onScroll);
+  return () => {
+    window.removeEventListener('scroll', onScroll);
+    geometryBasePosition.clear();
+  };
 }
 
 export function setupScrollTriggers() {
   const ctx = gsap.context(() => {
-    gsap.timeline({
+    const heroTl = gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom top',
         scrub: 0.5,
       },
-    })
+    });
+    heroTl
       .fromTo('#hero h1', { opacity: 0 }, { opacity: 1, duration: 1 }, 0)
-      .fromTo('#hero .subtitle', { xPercent: 100 }, { xPercent: 0, duration: 1 }, 0);
+      .fromTo('#hero .subtitle', { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 1 }, 0);
 
     gsap.timeline({
       scrollTrigger: {
@@ -72,17 +89,19 @@ export function setupScrollTriggers() {
         scrub: 1,
       },
     })
-      .fromTo('#nebula-discovery h2', { opacity: 0, xPercent: -100 }, { opacity: 1, xPercent: 0, duration: 1 }, 0)
-      .fromTo('#nebula-discovery .nebula-text', { opacity: 0, xPercent: -100 }, { opacity: 1, xPercent: 0, duration: 1 }, 0.2);
+      .fromTo('#nebula-discovery h2', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 1 }, 0)
+      .fromTo('#nebula-discovery .nebula-text', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 1 }, 0.2);
 
     gsap.utils.toArray('#stats-counter .stat-card').forEach((card, i) => {
       gsap.fromTo(card,
-        { opacity: 0, yPercent: 100 },
+        { opacity: 0, y: 40, scale: 0.9 },
         {
           opacity: 1,
-          yPercent: 0,
+          y: 0,
+          scale: 1,
           duration: 0.8,
           delay: i * 0.15,
+          ease: 'power3.out',
           scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' },
         }
       );
@@ -94,7 +113,7 @@ export function setupScrollTriggers() {
         {
           clipPath: 'circle(150% at 50% 50%)',
           opacity: 1,
-          duration: 1,
+          duration: 0.8,
           delay: i * 0.1,
           ease: 'power2.out',
           scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none reverse' },
@@ -103,14 +122,14 @@ export function setupScrollTriggers() {
     });
 
     const footerTl = gsap.timeline({
-      scrollTrigger: { trigger: '#footer', start: 'top 90%', toggleActions: 'play none none reverse' },
+      scrollTrigger: { trigger: '#footer', start: 'top 85%', toggleActions: 'play none none reverse' },
     });
     footerTl.fromTo('#footer .cta-button',
-      { scale: 1 },
-      { scale: 1.05, repeat: -1, yoyo: true, duration: 1.5, ease: 'sine.inOut' }, 0
+      { scale: 0.9, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0
     ).fromTo('#footer .footer-links a',
       { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, stagger: 0.1, duration: 0.6 }, 0.2
+      { opacity: 1, y: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out' }, 0.2
     );
   });
 
@@ -135,23 +154,24 @@ export function setupHorizontalScroll() {
   const cards = track.querySelectorAll('.planet-card');
   if (!cards.length) return () => {};
 
+  const cardCount = cards.length;
+  const totalPercent = (cardCount - 1) * 100;
+
   const tl = gsap.to(track, {
-    xPercent: -66.6,
+    xPercent: -totalPercent,
     ease: 'none',
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: '+=3000',
+      end: '+=4000',
       pin: true,
       scrub: 1,
-      markers: false,
       snap: {
-        snapTo: 1 / (cards.length - 1),
+        snapTo: 1 / (cardCount - 1),
         duration: { min: 0.3, max: 0.6 },
         delay: 0.1,
         ease: 'power2.out',
       },
-      onLeave: () => ScrollTrigger.refresh(),
     },
   });
 

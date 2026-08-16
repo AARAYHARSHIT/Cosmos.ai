@@ -3,10 +3,10 @@ import 'animejs/adapters/three';
 
 function setupHeroLetters() {
   const h1 = document.querySelector('#hero h1');
-  if (!h1 || h1.dataset.splitDone) return;
+  if (!h1 || h1.dataset.splitDone) return null;
 
   const text = h1.textContent.trim();
-  if (!text) return;
+  if (!text) return null;
 
   h1.innerHTML = text.split('').map(char =>
     char === ' '
@@ -18,15 +18,15 @@ function setupHeroLetters() {
   const letters = h1.querySelectorAll('.letter');
   if (!letters.length) return null;
 
-  const anim = animate(letters, {
+  animate(letters, {
     opacity: [0, 1],
-    translateY: [20, 0],
-    delay: stagger(50),
-    duration: 600,
-    easing: 'outElastic(1, 0.6)',
+    translateY: [30, 0],
+    delay: stagger(40),
+    duration: 800,
+    easing: 'outCubic',
   });
 
-  return () => anim.pause();
+  return null;
 }
 
 function setupNebulaText() {
@@ -34,11 +34,11 @@ function setupNebulaText() {
   if (!textEl) return null;
 
   const anim = animate(textEl, {
-    translateX: [-100, 0],
+    translateX: [-60, 0],
     opacity: [0, 1],
     duration: 1000,
-    delay: 200,
-    easing: 'outExpo',
+    delay: 300,
+    easing: 'outCubic',
   });
 
   return () => anim.pause();
@@ -55,7 +55,7 @@ function setupStatCounters() {
     return animate(state, {
       val: target,
       duration: 2000,
-      easing: 'inOutQuad',
+      easing: 'outCubic',
       round: 1,
       onUpdate: () => {
         el.textContent = Math.round(state.val).toLocaleString();
@@ -106,17 +106,17 @@ function setupHoverAnimations() {
     const onEnter = () => {
       animate(item, {
         scale: 1.05,
-        filter: 'brightness(1)',
+        filter: 'brightness(1.1)',
         duration: 300,
-        easing: 'outElastic(1, 0.5)',
+        easing: 'outCubic',
       });
     };
     const onLeave = () => {
       animate(item, {
         scale: 1,
-        filter: 'brightness(0.8)',
+        filter: 'brightness(1)',
         duration: 300,
-        easing: 'outElastic(1, 0.5)',
+        easing: 'outCubic',
       });
     };
     item.addEventListener('mouseenter', onEnter);
@@ -129,25 +129,24 @@ function setupHoverAnimations() {
 
   const cards = document.querySelectorAll('.card');
   if (cards.length) {
-    const anim = animate(cards, {
+    animate(cards, {
       opacity: [0, 1],
       translateY: [20, 0],
-      delay: stagger(100),
+      delay: stagger(80),
       duration: 600,
-      easing: 'outExpo',
+      easing: 'outCubic',
     });
-    cleanups.push(() => anim.pause());
   }
 
   document.querySelectorAll('.cta-button').forEach((btn) => {
     const anim = animate(btn, {
-      scale: [1, 1.1, 1],
+      scale: [1, 1.08, 1],
       boxShadow: [
-        '0 0 0 0 rgba(0, 255, 200, 0.7)',
-        '0 0 20px 5px rgba(0, 255, 200, 0)',
-        '0 0 0 0 rgba(0, 255, 200, 0.7)',
+        '0 0 0 0 rgba(0, 255, 220, 0.5)',
+        '0 0 25px 8px rgba(0, 255, 200, 0.3)',
+        '0 0 0 0 rgba(0, 255, 220, 0.5)',
       ],
-      duration: 2000,
+      duration: 2500,
       loop: true,
       easing: 'inOutQuad',
     });

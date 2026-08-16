@@ -9,45 +9,87 @@
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--spacing-lg);
   width: 100%;
   max-width: 1100px;
+  margin: 0 auto;
 }
 
 .gallery-item {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
-  aspect-ratio: 1;
+  aspect-ratio: 1/1;
   cursor: pointer;
   background: linear-gradient(135deg,
-    rgba(0, 255, 220, 0.1) 0%,
-    rgba(150, 50, 255, 0.1) 100%);
+    rgba(0, 255, 220, 0.15) 0%,
+    rgba(150, 50, 255, 0.15) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: scale(1);
 }
 
-.gallery-item:hover img {
-  transform: scale(1.05);
+.gallery-item img.loaded {
+  opacity: 1;
+}
+
+.gallery-item:hover img.loaded {
+  transform: scale(1.08);
 }
 
 .gallery-item .placeholder {
-  display: flex;
+  display: none;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--spacing-xs);
   width: 100%;
   height: 100%;
   font-family: var(--font-heading);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: var(--color-text-muted);
-  opacity: 0.4;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item .placeholder::before {
+  content: '';
+  width: 48px;
+  height: 48px;
+  border: 2px dashed var(--color-accent-cyan);
+  border-radius: 50%;
+}
+
+.gallery-item:hover .placeholder {
+  opacity: 0.7;
+}
+
+.gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg,
+    rgba(0, 255, 220, 0.1) 0%,
+    rgba(150, 50, 255, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
 }
 
 @media (max-width: 1024px) {
@@ -59,5 +101,12 @@
 @media (max-width: 640px) {
   .gallery-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-item .placeholder {
+    font-size: 1rem;
   }
 }

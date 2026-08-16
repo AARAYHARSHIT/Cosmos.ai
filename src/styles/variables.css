@@ -23,6 +23,7 @@
   --spacing-md:           1rem;
   --spacing-lg:           2rem;
   --spacing-xl:           4rem;
+  --spacing-2xl:          6rem;
 
   /* Effects */
   --shadow-glow-cyan:     0 0 20px rgba(0, 255, 220, 0.5);
@@ -30,10 +31,30 @@
   --shadow-glow-rose:     0 0 20px rgba(255, 80, 150, 0.5);
 }
 
+/* Tablet */
+@media (max-width: 1024px) {
+  :root {
+    --font-size-h1: 2.8rem;
+    --font-size-h2: 2.2rem;
+    --spacing-xl: 3rem;
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   :root {
     --font-size-h1: 2.5rem;
     --font-size-h2: 1.8rem;
     --spacing-xl: 2rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  :root {
+    --font-size-h1: 2rem;
+    --font-size-h2: 1.6rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 1.5rem;
   }
 }

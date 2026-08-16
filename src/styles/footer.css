@@ -25,11 +25,12 @@
   cursor: pointer;
   text-decoration: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 20px rgba(0, 255, 220, 0.3);
 }
 
 .cta-button:hover {
   transform: scale(1.05);
-  box-shadow: var(--shadow-glow-cyan);
+  box-shadow: 0 0 30px rgba(0, 255, 220, 0.5);
 }
 
 .cta-button:active {
@@ -41,6 +42,7 @@
   gap: var(--spacing-lg);
   justify-content: center;
   margin-top: var(--spacing-lg);
+  flex-wrap: wrap;
 }
 
 .footer-links a {
@@ -48,8 +50,38 @@
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s ease;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 8px;
 }
 
 .footer-links a:hover {
   color: var(--color-accent-cyan);
+  background: rgba(0, 255, 220, 0.05);
+}
+
+@media (max-width: 768px) {
+  .cta-button {
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+  }
+
+  .footer-links {
+    gap: var(--spacing-md);
+  }
+
+  .footer-links a {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-button {
+    padding: 0.8rem 1.8rem;
+    font-size: 0.95rem;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
 }
