@@ -1,21 +1,37 @@
 :root {
   /* Colors */
-  --color-bg-deep:        hsl(230, 25%, 3%);
-  --color-bg-section:     hsl(240, 20%, 6%);
-  --color-accent-cyan:    hsl(190, 90%, 60%);
-  --color-accent-violet:  hsl(270, 80%, 65%);
-  --color-accent-rose:    hsl(330, 85%, 65%);
-  --color-text-primary:   hsl(0, 0%, 95%);
-  --color-text-muted:     hsl(230, 15%, 55%);
+  --color-bg-deep:        hsl(228, 30%, 4%);
+  --color-bg-surface:     rgba(13, 19, 33, 0.7);
+  --color-bg-surface-hover: rgba(22, 33, 56, 0.85);
+  --color-bg-card:        rgba(255, 255, 255, 0.035);
+  --color-bg-card-hover:  rgba(255, 255, 255, 0.07);
+
+  --color-accent-cyan:    hsl(175, 100%, 50%);
+  --color-accent-violet:  hsl(275, 85%, 65%);
+  --color-accent-rose:    hsl(335, 90%, 65%);
+  --color-accent-gold:    hsl(42, 100%, 55%);
+  --color-accent-emerald: hsl(160, 95%, 48%);
+
+  --color-text-primary:   hsl(210, 40%, 98%);
+  --color-text-secondary: hsl(215, 20%, 75%);
+  --color-text-muted:     hsl(220, 15%, 55%);
+
+  --border-glass:         rgba(255, 255, 255, 0.1);
+  --border-glass-bright:  rgba(255, 255, 255, 0.22);
+  --border-cyan:          rgba(0, 255, 220, 0.35);
+  --border-violet:        rgba(157, 78, 221, 0.35);
 
   /* Typography */
-  --font-heading:         'Space Grotesk', sans-serif;
-  --font-body:            'Inter', sans-serif;
-  --font-size-h1:         3.5rem;
-  --font-size-h2:         2.5rem;
+  --font-heading:         'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:            'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:            'JetBrains Mono', monospace;
+
+  --font-size-h1:         clamp(2.8rem, 6vw, 4.5rem);
+  --font-size-h2:         clamp(2rem, 4vw, 3rem);
+  --font-size-h3:         clamp(1.25rem, 2.5vw, 1.75rem);
   --font-size-body:       1rem;
   --line-height-heading:  1.1;
-  --line-height-body:     1.6;
+  --line-height-body:     1.65;
 
   /* Spacing */
   --spacing-xs:           0.25rem;
@@ -23,38 +39,12 @@
   --spacing-md:           1rem;
   --spacing-lg:           2rem;
   --spacing-xl:           4rem;
-  --spacing-2xl:          6rem;
+  --spacing-2xl:          7rem;
 
-  /* Effects */
-  --shadow-glow-cyan:     0 0 20px rgba(0, 255, 220, 0.5);
-  --shadow-glow-violet:   0 0 20px rgba(150, 50, 255, 0.5);
-  --shadow-glow-rose:     0 0 20px rgba(255, 80, 150, 0.5);
-}
-
-/* Tablet */
-@media (max-width: 1024px) {
-  :root {
-    --font-size-h1: 2.8rem;
-    --font-size-h2: 2.2rem;
-    --spacing-xl: 3rem;
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  :root {
-    --font-size-h1: 2.5rem;
-    --font-size-h2: 1.8rem;
-    --spacing-xl: 2rem;
-  }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  :root {
-    --font-size-h1: 2rem;
-    --font-size-h2: 1.6rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 1.5rem;
-  }
+  /* Glassmorphism & Shadows */
+  --glass-blur:           blur(16px);
+  --shadow-subtle:        0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --shadow-glow-cyan:     0 0 25px rgba(0, 255, 220, 0.4);
+  --shadow-glow-violet:   0 0 25px rgba(157, 78, 221, 0.4);
+  --shadow-glow-rose:     0 0 25px rgba(255, 80, 150, 0.4);
 }

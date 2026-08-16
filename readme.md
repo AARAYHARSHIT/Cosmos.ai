@@ -1,31 +1,28 @@
-# Explore the Cosmos — Parallax 3D Experience
+# COSMOS.AI — Next-Gen 3D Deep Space Intelligence Platform
 
-A deep-space themed, scroll-driven 3D web experience. Built with **Three.js**, **Anime.js v4**, and **GSAP ScrollTrigger**, bundled with **Vite 6**.
+A high-performance, SaaS-grade 3D parallax web platform and deep space observatory. Built with **Three.js**, **Anime.js v4**, and **GSAP ScrollTrigger**, bundled with **Vite 6**.
 
 ## Features
 
-- **Pinned horizontal scroll** — planet cards slide as you scroll (Section 3)
-- **Scroll camera parallax** — camera flies through the star field as you scroll
-- **Custom GLSL nebula** — 800 particles with additive blending + noise displacement (Section 2)
-- **Instanced star field** — 3,000 stars on a single draw call, per-instance twinkle brightness
-- **Anime.js micro-interactions** — letter reveal, stat counters, planet rotation, geometry drift, hover/gallery effects, CTA pulse
-- **GSAP ScrollTrigger animations** — staggered section entrances, clip-path gallery reveals, footer CTA animations
-- **Lazy-loaded image gallery** — Unsplash deep-space imagery with loading states, lazy loading, and fallback placeholders
-- **Logarithmic depth buffer** — clean depth across a 1,000+ unit deep scene
-- **Fully responsive design** — mobile-first breakpoints for tablet and small phones
+- **High-Resolution Deep Space Archive** — 8 high-definition local astronomical assets (Nebulae, Galaxies, Supernovae, Exoplanets, Pulsars, Singularity Event Horizons) with progressive shimmer loading, category filters, instant search, and full Lightbox inspector modal.
+- **Section-Driven 3D Parallax Camera Choreography** — Flawlessly synchronized GSAP ScrollTrigger timeline navigating from deep space (Hero: `z = 80`), through volumetric nebula interior (`z = -260`), along planetary horizons (`z = -350` to `-750`), through floating quantum artifacts (`z = -840`), into telemetry starfields (`z = -960`).
+- **Pinned Horizontal Planetary Showcase** — Interactive 3D planetary systems with custom atmospheric Fresnel halos, molten asteroid rings, orbiting moons, and multispectral scanning actions.
+- **Dynamic GLSL Volumetric Nebula Shader** — 1,200 particle cloud with procedural noise displacement, additive blending, and interactive spectral resonance matrix presets (Orion Violet, Helix Emerald, Cygnus Blue, Crab Gold).
+- **Hyperspace Warp Propulsion Mode** — Dynamic star streaking acceleration with relativistic camera FOV expansion (75° to 97°).
+- **Procedural Web Audio Synthesizer** — Pure algorithmic harmonic space drone and UI click feedback synthesized with Web Audio API (0 external audio dependencies).
+- **Mission Control CLI Terminal (⌘K)** — Interactive terminal supporting live commands (`help`, `scan`, `warp`, `telemetry`, `planets`, `nebula`).
+- **SaaS Capabilities & Telemetry HUD** — 6 enterprise astrophysics capability cards, live canvas sparkline graph, animated stat counters, and persistent bottom-left telemetry monitor.
+- **SaaS Subscription Pricing & Modal** — Monthly / Annual billing switcher (20% discount calculation) with interactive checkout and license activation modal.
+- **Toast Notification Engine** — Non-intrusive floating glassmorphic feedback alerts.
 
 ## Tech Stack
 
 | Package | Version | Role |
 |---------|---------|------|
-| three | ^0.185 | WebGL rendering |
-| animejs | ^4 | DOM + Three.js micro-animations |
-| gsap | ^3.12 | ScrollTrigger scroll animations |
-| vite | ^6 | Dev server + production bundling |
-
-## Requirements
-
-- **Node.js 18+**
+| three | ^0.185 | WebGL 3D rendering & shaders |
+| animejs | ^4 | DOM micro-animations & number counters |
+| gsap | ^3.12 | ScrollTrigger scroll choreography |
+| vite | ^6 | Dev server & production bundling |
 
 ## Getting Started
 
@@ -46,70 +43,21 @@ npm run preview
 ## Project Structure
 
 ```
-├── index.html                    # Section markup (hero → footer)
+├── index.html                    # Complete SaaS layout & modals
 ├── vite.config.js                # Build config + vendor chunk splitting
-├── public/                       # Static assets (served at /)
+├── public/                       # Static high-res assets
+│   └── assets/gallery/           # 8 local astronomical images (0 broken 404s)
 └── src/
-    ├── main.js                   # Entry point — wires everything together
-    ├── scene.js                  # Scene, camera, renderer, lights, render loop
-    ├── stars.js                  # InstancedMesh star field (3,000 stars)
-    ├── planets.js                # 3 planet spheres at different Z-depths
-    ├── geometry.js               # Floating icosahedron / torus knot / octahedron
-    ├── nebula.js                 # GLSL shader particle cloud (cyan → violet)
-    ├── scroll-parallax.js        # Scroll camera + GSAP ScrollTrigger animations
-    ├── dom-animations.js         # Anime.js DOM + Three.js micro-interactions
-    └── styles/                   # CSS (variables, base, section-specific)
-        ├── index.css             # Root styles, scrollbar, @import hub
-        ├── variables.css         # CSS custom properties + theming
-        ├── base.css              # Reset, layout, glassmorphism cards
-        ├── hero.css              # Hero section + scroll indicator
-        ├── nebula.css            # Nebula discovery section
-        ├── planets.css           # Planet showcase (horizontal scroll)
-        ├── stats.css             # Statistics counter grid
-        ├── gallery.css           # Lazy-loaded image gallery
-        └── footer.css            # Footer + CTA button
+    ├── main.js                   # Main application coordinator & animation loop
+    ├── scene.js                  # Three.js scene, camera, lights, warp FOV
+    ├── stars.js                  # Instanced starfield with hyperspace streaking
+    ├── planets.js                # High-detail planets, atmosphere Fresnel shaders, rings
+    ├── geometry.js               # Floating crystalline quantum artifacts
+    ├── nebula.js                 # GLSL shader particle cloud with color presets
+    ├── scroll-parallax.js        # Section-synchronized GSAP ScrollTrigger camera flight
+    ├── dom-animations.js         # Interactive SaaS features, gallery, tilt, counters
+    ├── audio.js                  # Web Audio procedural sound engine
+    ├── terminal.js               # Mission Control CLI modal logic
+    ├── toast.js                  # Floating toast notification engine
+    └── styles/                   # Modular CSS design system
 ```
-
-## Build Details
-
-- **Production-ready bundling** — tree-shaking is enabled, code is minified with esbuild, and vendor libraries are split into cacheable chunks in `vite.config.js`:
-
-```js
-manualChunks: {
-  three: ['three'],
-  gsap: ['gsap', 'gsap/ScrollTrigger'],
-  anime: ['animejs'],
-}
-```
-
-## Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start Vite dev server with HMR |
-| `npm run build` | Production build to `dist/` |
-| `npm run preview` | Serve the production build locally |
-
-## Theme
-
-Deep space palette (defined in `src/styles/variables.css`):
-
-- Background: `hsl(230, 25%, 3%)`
-- Accents: cyan `hsl(190, 90%, 60%)`, violet `hsl(270, 80%, 65%)`, rose `hsl(330, 85%, 65%)`
-- Fonts: **Space Grotesk** (headings), **Inter** (body)
-
-## Responsive Breakpoints
-
-| Breakpoint | Use Case |
-|-----------|----------|
-| ≤ 1024px | Tablet — reduced font sizes, tighter spacing |
-| ≤ 768px | Mobile — reduced heights, 2-column planet grid |
-| ≤ 480px | Small phone — single column layout, smaller fonts |
-
-## Gallery Images
-
-The gallery uses lazy-loaded images from Unsplash with the following optimizations:
-- `loading="lazy"` for native lazy loading
-- `decoding="async"` for non-blocking image decode
-- `onload` class toggle for smooth fade-in
-- `onerror` fallback to show placeholder text

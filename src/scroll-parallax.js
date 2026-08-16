@@ -4,133 +4,287 @@ import { getCamera } from './scene.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const geometryBasePosition = new Map();
+let cameraTimeline = null;
+let horizontalScrollTrigger = null;
 
-export function setupScrollCamera({ stars, planets, geometries } = {}) {
+export function setupScrollCamera({ stars, planets = [], geometries = [], nebula } = {}) {
   const camera = getCamera();
-  let rafId = null;
+  if (!camera) return () => {};
 
-  geometries?.forEach((geo) => {
-    geometryBasePosition.set(geo.uuid, {
-      x: geo.position.x,
-      y: geo.position.y,
-      z: geo.position.z,
+  const ctx = gsap.context(() => {
+    // 1. Master Section-Synchronized Camera Choreography Timeline
+    // Hero -> Nebula Discovery
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    }).fromTo(
+      camera.position,
+      { x: 0, y: 0, z: 80 },
+      { x: 0, y: 2, z: -100, ease: 'power1.inOut' }
+    );
+
+    // Nebula Discovery: Dive into nebula center
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: '#nebula-discovery',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.2,
+      },
+    }).to(camera.position, {
+      x: 0,
+      y: 0,
+      z: -260,
+      ease: 'power2.inOut',
     });
+
+    // Horizontal Planets Showcase: Camera navigates from Planet 1 -> Planet 2 -> Planet 3
+    const planetsSection = document.querySelector('#planets-showcase');
+    const planetsTrack = document.querySelector('.planets-track');
+    const planetCards = document.querySelectorAll('.planet-card');
+
+    if (planetsSection && planetsTrack && planetCards.length > 0) {
+      const cardCount = planetCards.length;
+      const totalPercent = (cardCount - 1) * 100;
+
+      // Pin the section and animate horizontal track + camera positions simultaneously!
+      const planetTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#planets-showcase',
+          start: 'top top',
+          end: '+=3500',
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          snap: {
+            snapTo: 1 / (cardCount - 1),
+            duration: { min: 0.2, max: 0.5 },
+            delay: 0.1,
+            ease: 'power2.out',
+          },
+        },
+      });
+
+      // Track horizontal movement
+      planetTl.to(planetsTrack, {
+        xPercent: -totalPercent,
+        ease: 'none',
+      }, 0);
+
+      // Synchronized camera swoop through the 3 planets:
+      // Start near Meridian (z = -350) -> Azurea (z = -550) -> Vesperion (z = -750)
+      planetTl.fromTo(
+        camera.position,
+        { x: -14, y: 3, z: -310 },
+        { x: 16, y: -2, z: -500, ease: 'power1.inOut' },
+        0
+      ).to(
+        camera.position,
+        { x: -18, y: 5, z: -690, ease: 'power1.inOut' },
+        0.5
+      );
+    }
+
+    // Capabilities / Tech Lab: Camera moves through floating crystalline geometries
+    if (document.querySelector('#capabilities')) {
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#capabilities',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+      }).to(camera.position, {
+        x: 0,
+        y: 4,
+        z: -840,
+        ease: 'power2.inOut',
+      });
+    }
+
+    // Telemetry Stats: Camera in dense starfield
+    if (document.querySelector('#stats-counter')) {
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#stats-counter',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      }).to(camera.position, {
+        x: 4,
+        y: -3,
+        z: -960,
+        ease: 'power1.inOut',
+      });
+    }
+
+    // Gallery / Deep Space Archive: Serene observatory vantage
+    if (document.querySelector('#gallery')) {
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#gallery',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+      }).to(camera.position, {
+        x: 0,
+        y: 0,
+        z: -1080,
+        ease: 'power2.inOut',
+      });
+    }
+
+    // Pricing / Mission Control & Footer
+    if (document.querySelector('#pricing')) {
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: '#pricing',
+          start: 'top bottom',
+          end: 'bottom bottom',
+          scrub: 1.2,
+        },
+      }).to(camera.position, {
+        x: 0,
+        y: -4,
+        z: -1200,
+        ease: 'power1.inOut',
+      });
+    }
   });
 
-  function onScroll() {
-    if (rafId) return;
-    rafId = requestAnimationFrame(() => {
-      rafId = null;
-      const maxScroll = document.body.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0
-        ? Math.min(Math.max(window.scrollY / maxScroll, 0), 1)
-        : 0;
-      applyParallax(progress);
-    });
-  }
-
-  function applyParallax(p) {
-    camera.position.z = -p * 200 + 50;
-    camera.lookAt(0, 0, 0);
-
-    if (stars) {
-      stars.position.z = -p * 40;
-    }
-
-    if (planets?.length) {
-      planets.forEach((planet, i) => {
-        const depth = Math.abs(planet.position.z);
-        const strength = (depth / 800) * 12;
-        planet.position.x = Math.sin(p * Math.PI * 2 + i) * strength;
-      });
-    }
-
-    if (geometries?.length) {
-      geometries.forEach((geo, i) => {
-        const base = geometryBasePosition.get(geo.uuid);
-        if (!base) return;
-        const phase = i * 1.3;
-        geo.position.y = base.y + Math.sin(p * Math.PI * 4 + phase) * 0.4;
-        geo.position.x = base.x + Math.cos(p * Math.PI * 3 + phase) * 0.2;
-      });
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
   return () => {
-    window.removeEventListener('scroll', onScroll);
-    geometryBasePosition.clear();
+    ctx.revert();
   };
 }
 
 export function setupScrollTriggers() {
   const ctx = gsap.context(() => {
-    const heroTl = gsap.timeline({
+    // 1. Hero Reveal Animations
+    gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
         start: 'top top',
-        end: 'bottom top',
+        end: 'bottom 40%',
         scrub: 0.5,
       },
-    });
-    heroTl
-      .fromTo('#hero h1', { opacity: 0 }, { opacity: 1, duration: 1 }, 0)
-      .fromTo('#hero .subtitle', { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 1 }, 0);
+    })
+      .to('#hero .hero-content', { opacity: 0, y: -40, duration: 1 }, 0)
+      .to('#hero .scroll-indicator', { opacity: 0, duration: 0.3 }, 0);
 
+    // 2. Nebula Discovery Entrance
     gsap.timeline({
       scrollTrigger: {
         trigger: '#nebula-discovery',
-        start: 'top center',
-        end: '+=2000',
-        pin: true,
-        scrub: 1,
+        start: 'top 80%',
+        toggleActions: 'play none none reverse',
       },
     })
-      .fromTo('#nebula-discovery h2', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 1 }, 0)
-      .fromTo('#nebula-discovery .nebula-text', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 1 }, 0.2);
+      .fromTo('#nebula-discovery .nebula-badge', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 })
+      .fromTo('#nebula-discovery h2', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+      .fromTo('#nebula-discovery .nebula-text', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
+      .fromTo('#nebula-discovery .nebula-controls', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4');
 
-    gsap.utils.toArray('#stats-counter .stat-card').forEach((card, i) => {
-      gsap.fromTo(card,
-        { opacity: 0, y: 40, scale: 0.9 },
+    // 3. SaaS Capabilities Grid
+    gsap.utils.toArray('.capability-card').forEach((card, i) => {
+      gsap.fromTo(
+        card,
+        { opacity: 0, y: 50, scale: 0.95 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.8,
+          duration: 0.7,
+          delay: (i % 3) * 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 88%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    });
+
+    // 4. Stats Counter Cards
+    gsap.utils.toArray('#stats-counter .stat-card').forEach((card, i) => {
+      gsap.fromTo(
+        card,
+        { opacity: 0, y: 40, scale: 0.92 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.7,
+          delay: i * 0.12,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    });
+
+    // 5. Gallery Items with Smooth Zoom and Stagger
+    gsap.utils.toArray('#gallery .gallery-item').forEach((item, i) => {
+      gsap.fromTo(
+        item,
+        { opacity: 0, y: 40, scale: 0.94 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.65,
+          delay: (i % 4) * 0.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 88%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    });
+
+    // 6. Pricing Cards
+    gsap.utils.toArray('.pricing-card').forEach((card, i) => {
+      gsap.fromTo(
+        card,
+        { opacity: 0, y: 50, scale: 0.92 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.7,
           delay: i * 0.15,
           ease: 'power3.out',
-          scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' },
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
         }
       );
     });
 
-    gsap.utils.toArray('#gallery .gallery-item').forEach((item, i) => {
-      gsap.fromTo(item,
-        { clipPath: 'circle(0% at 50% 50%)', opacity: 0 },
-        {
-          clipPath: 'circle(150% at 50% 50%)',
-          opacity: 1,
-          duration: 0.8,
-          delay: i * 0.1,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none reverse' },
-        }
-      );
-    });
-
+    // 7. Footer Entrance
     const footerTl = gsap.timeline({
-      scrollTrigger: { trigger: '#footer', start: 'top 85%', toggleActions: 'play none none reverse' },
+      scrollTrigger: {
+        trigger: '#footer',
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      },
     });
-    footerTl.fromTo('#footer .cta-button',
-      { scale: 0.9, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0
-    ).fromTo('#footer .footer-links a',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out' }, 0.2
-    );
+    footerTl
+      .fromTo('#footer .footer-cta-box', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+      .fromTo('#footer .footer-columns', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.4');
   });
 
   function onResize() {
@@ -141,42 +295,5 @@ export function setupScrollTriggers() {
   return () => {
     ctx.revert();
     window.removeEventListener('resize', onResize);
-  };
-}
-
-export function setupHorizontalScroll() {
-  const section = document.querySelector('.planets-section');
-  if (!section) return () => {};
-
-  const track = section.querySelector('.planets-track');
-  if (!track) return () => {};
-
-  const cards = track.querySelectorAll('.planet-card');
-  if (!cards.length) return () => {};
-
-  const cardCount = cards.length;
-  const totalPercent = (cardCount - 1) * 100;
-
-  const tl = gsap.to(track, {
-    xPercent: -totalPercent,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: section,
-      start: 'top top',
-      end: '+=4000',
-      pin: true,
-      scrub: 1,
-      snap: {
-        snapTo: 1 / (cardCount - 1),
-        duration: { min: 0.3, max: 0.6 },
-        delay: 0.1,
-        ease: 'power2.out',
-      },
-    },
-  });
-
-  return () => {
-    tl.scrollTrigger?.kill();
-    tl.kill();
   };
 }

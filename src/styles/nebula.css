@@ -1,46 +1,67 @@
 #nebula-discovery {
-  background: radial-gradient(ellipse at center,
-    rgba(150, 50, 255, 0.08) 0%,
-    transparent 70%);
-  padding: var(--spacing-2xl) 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-2xl) var(--spacing-md);
 }
 
 #nebula-discovery h2 {
-  text-align: center;
+  font-size: var(--font-size-h2);
   margin-bottom: var(--spacing-md);
-  background: linear-gradient(135deg,
-    var(--color-accent-violet),
-    var(--color-accent-rose));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 #nebula-discovery .nebula-text {
+  font-size: 1.15rem;
+  max-width: 650px;
+  margin: 0 auto var(--spacing-xl);
+  line-height: 1.7;
+}
+
+.nebula-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.controls-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
   color: var(--color-text-muted);
-  font-size: 1.2rem;
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-  #nebula-discovery {
-    padding: var(--spacing-xl) 0;
-  }
-
-  #nebula-discovery h2 {
-    font-size: var(--font-size-h2);
-  }
-
-  #nebula-discovery .nebula-text {
-    font-size: 1.1rem;
-    padding: 0 var(--spacing-md);
-  }
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
-@media (max-width: 480px) {
-  #nebula-discovery .nebula-text {
-    font-size: 1rem;
-  }
+.nebula-chip {
+  padding: 8px 18px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--color-text-secondary);
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: var(--glass-blur);
+  transition: all 0.25s ease;
+}
+
+.nebula-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--border-glass-bright);
+  color: var(--color-text-primary);
+  transform: translateY(-2px);
+}
+
+.nebula-chip.active {
+  background: linear-gradient(135deg, rgba(0, 255, 220, 0.2), rgba(157, 78, 221, 0.3));
+  border-color: var(--color-accent-violet);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
 }

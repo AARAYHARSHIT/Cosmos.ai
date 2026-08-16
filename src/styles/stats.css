@@ -1,85 +1,169 @@
-#stats-counter {
-  background: linear-gradient(180deg,
-    transparent 0%,
-    rgba(0, 255, 220, 0.03) 100%);
-  padding: var(--spacing-2xl) 0;
+/* 1. SaaS Capabilities Grid */
+#capabilities {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-md);
 }
 
-#stats-counter h2 {
+#capabilities .subtitle {
+  max-width: 680px;
+  margin: var(--spacing-xs) auto var(--spacing-2xl);
+  font-size: 1.15rem;
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  width: 100%;
+  text-align: left;
+}
+
+.capability-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.capability-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-accent-cyan), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.capability-card:hover::before {
+  opacity: 1;
+}
+
+.cap-icon {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.capability-card h3 {
+  font-size: 1.25rem;
+  color: var(--color-text-primary);
+}
+
+.capability-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* 2. Stats Counter Section */
+#stats-counter {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-2xl) var(--spacing-md);
+}
+
+#stats-counter .nebula-text {
+  font-size: 1.15rem;
+  max-width: 600px;
+  margin: var(--spacing-xs) auto var(--spacing-xl);
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-lg);
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  margin-bottom: var(--spacing-xl);
 }
 
 .stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl) var(--spacing-md);
   text-align: center;
-  padding: var(--spacing-lg);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-  border-color: var(--color-accent-cyan);
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-4px);
 }
 
 .stat-number {
   font-family: var(--font-heading);
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--color-accent-cyan);
-  display: block;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 800;
   line-height: 1;
-  margin-bottom: var(--spacing-sm);
-  background: linear-gradient(135deg,
-    var(--color-accent-cyan),
-    var(--color-accent-violet));
+  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-violet));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  margin-bottom: 8px;
 }
 
 .stat-label {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  color: var(--color-text-muted);
 }
 
-/* Tablet */
-@media (max-width: 768px) {
-  #stats-counter {
-    padding: var(--spacing-xl) 0;
+/* Live Telemetry Sparkline Box */
+.live-telemetry-hud {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hud-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.hud-reading {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-accent-cyan);
+}
+
+#telemetry-sparkline {
+  width: 100%;
+  height: 60px;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .capabilities-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .stat-number {
-    font-size: 2.2rem;
-  }
-
-  .stat-card {
-    padding: var(--spacing-md);
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Mobile */
-@media (max-width: 480px) {
-  .stat-number {
-    font-size: 1.8rem;
+@media (max-width: 640px) {
+  .capabilities-grid {
+    grid-template-columns: 1fr;
   }
 
-  .stat-label {
-    font-size: 0.8rem;
-    letter-spacing: 1px;
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }
