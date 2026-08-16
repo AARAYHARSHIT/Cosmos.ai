@@ -8,11 +8,11 @@
     <meta name="og:title" content="Explore the Cosmos" />
     <meta name="og:description" content="A parallax scrolling 3D journey through deep space, built with Three.js, Anime.js, and GSAP ScrollTrigger." />
 
-    <script type="module" crossorigin src="/assets/index-DDl0HZDu.js"></script>
+    <script type="module" crossorigin src="/assets/index-CR2l2DOx.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/three-CbRIUp8_.js">
     <link rel="modulepreload" crossorigin href="/assets/gsap-C8IefbVz.js">
     <link rel="modulepreload" crossorigin href="/assets/anime-BJsqpLo9.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-BLBUgWec.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-PoHbeZ5w.css">
   </head>
   <body>
     <div id="canvas-container"></div>
@@ -67,18 +67,48 @@
         </div>
       </section>
 
-      <section role="region" aria-label="Gallery" id="gallery">
-        <h2>Gallery</h2>
-        <p class="nebula-text" role="region">Fragments of the universe, frozen in time.</p>
-        <div class="gallery-grid">
-          <div class="gallery-item"><span class="placeholder">NEBULA-01</span></div>
-          <div class="gallery-item"><span class="placeholder">STARFIELD-02</span></div>
-          <div class="gallery-item"><span class="placeholder">SUPERNOVA-03</span></div>
-          <div class="gallery-item"><span class="placeholder">ORION-04</span></div>
-          <div class="gallery-item"><span class="placeholder">ANDROMEDA-05</span></div>
-          <div class="gallery-item"><span class="placeholder">PULSAR-06</span></div>
-        </div>
-      </section>
+       <section role="region" aria-label="Gallery" id="gallery">
+         <h2>Gallery</h2>
+         <p class="nebula-text" role="region">Fragments of the universe, frozen in time.</p>
+         <div class="gallery-grid">
+           <div class="gallery-item">
+             <img src="https://images.unsplash.com/photo-1444703096256-8998fe3e81cf?auto=format&fit=crop&w=800&q=80"
+               alt="Nebula clouds in deep space" loading="lazy" decoding="async"
+               onload="this.classList.add('loaded')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <span class="placeholder">NEBULA-01</span>
+           </div>
+           <div class="gallery-item">
+             <img src="https://images.unsplash.com/photo-1506260408121-e353d10b87c7?auto=format&fit=crop&w=800&q=80"
+               alt="Star field with cosmic dust" loading="lazy" decoding="async"
+               onload="this.classList.add('loaded')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <span class="placeholder">STARFIELD-02</span>
+           </div>
+           <div class="gallery-item">
+             <img src="https://images.unsplash.com/photo-1446163420020-391e64f78b9c?auto=format&fit=crop&w=800&q=80"
+               alt="Supernova explosion remnant" loading="lazy" decoding="async"
+               onload="this.classList.add('loaded')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <span class="placeholder">SUPERNOVA-03</span>
+           </div>
+           <div class="gallery-item">
+             <img src="https://images.unsplash.com/photo-1519649474034-6e98d3de10e8?auto=format&fit=crop&w=800&q=80"
+               alt="Orion nebula in visible light" loading="lazy" decoding="async"
+               onload="this.classList.add('loaded')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <span class="placeholder">ORION-04</span>
+           </div>
+           <div class="gallery-item">
+             <img src="https://images.unsplash.com/photo-1451429689159-721b4ebd424d?auto=format&fit=crop&w=800&q=80"
+               alt="Andromeda galaxy spiral arms" loading="lazy" decoding="async"
+               onload="this.classList.add('loaded')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <span class="placeholder">ANDROMEDA-05</span>
+           </div>
+           <div class="gallery-item">
+             <img src="https://images.unsplash.com/photo-1444761369750-3472e1c2e4af?auto=format&fit=crop&w=800&q=80"
+               alt="Pulsar neutron star emission" loading="lazy" decoding="async"
+               onload="this.classList.add('loaded')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <span class="placeholder">PULSAR-06</span>
+           </div>
+         </div>
+       </section>
 
       <footer role="region" aria-label="Footer" id="footer">
         <p>Made for the cosmos — parallax 3D experience.</p>
