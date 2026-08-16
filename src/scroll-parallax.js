@@ -11,7 +11,7 @@ export function initSmoothScroll() {
   if (lenisInstance) return lenisInstance;
 
   lenisInstance = new Lenis({
-    duration: 1.2,
+    duration: 1.0,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     gestureOrientation: 'vertical',
@@ -39,18 +39,18 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
   initSmoothScroll();
 
   const ctx = gsap.context(() => {
-    // 1. Hero -> Nebula Discovery Smooth Scrub
+    // 1. Hero -> Nebula Discovery
     gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom top',
-        scrub: 1.2,
+        scrub: 0.8,
       },
     }).fromTo(
       camera.position,
       { x: 0, y: 0, z: 80 },
-      { x: 0, y: 1, z: -80, ease: 'power1.inOut' }
+      { x: 0, y: 1, z: -60, ease: 'power1.inOut' }
     );
 
     // 2. Nebula Discovery: Dive into nebula center
@@ -59,16 +59,16 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         trigger: '#nebula-discovery',
         start: 'top bottom',
         end: 'bottom top',
-        scrub: 1.4,
+        scrub: 1.0,
       },
     }).to(camera.position, {
       x: 0,
       y: 0,
-      z: -420,
+      z: -200,
       ease: 'power2.inOut',
     });
 
-    // 3. Horizontal Planets Showcase: Scale In & Synchronized Camera Navigation
+    // 3. Horizontal Planets Showcase: Synchronized Camera & Card Navigation
     const planetsSection = document.querySelector('#planets-showcase');
     const planetsTrack = document.querySelector('.planets-track');
     const planetCards = document.querySelectorAll('.planet-card');
@@ -77,14 +77,14 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
       const cardCount = planetCards.length;
       const totalPercent = (cardCount - 1) * 100;
 
-      // Scale in planets smoothly as user approaches showcase
+      // Scale in planets smoothly as user enters planets section
       planets.forEach((planetGroup) => {
         gsap.timeline({
           scrollTrigger: {
             trigger: '#planets-showcase',
-            start: 'top bottom',
-            end: 'top top',
-            scrub: 1,
+            start: 'top 80%',
+            end: 'top 20%',
+            scrub: 0.8,
           },
         }).to(planetGroup.scale, {
           x: 1,
@@ -98,8 +98,8 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           scrollTrigger: {
             trigger: '#capabilities',
             start: 'top bottom',
-            end: 'top top',
-            scrub: 1,
+            end: 'top 40%',
+            scrub: 0.8,
           },
         }).to(planetGroup.scale, {
           x: 0.001,
@@ -109,18 +109,19 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         });
       });
 
+      // Tight, responsive pin distance (1600px instead of 4200px)
       const planetTl = gsap.timeline({
         scrollTrigger: {
           trigger: '#planets-showcase',
           start: 'top top',
-          end: '+=4200',
+          end: '+=1600',
           pin: true,
-          scrub: 1.2,
+          scrub: 0.8,
           anticipatePin: 1,
           snap: {
             snapTo: 1 / (cardCount - 1),
-            duration: { min: 0.25, max: 0.6 },
-            delay: 0.08,
+            duration: { min: 0.2, max: 0.4 },
+            delay: 0.05,
             ease: 'power2.out',
           },
         },
@@ -132,15 +133,15 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         ease: 'none',
       }, 0);
 
-      // Camera smoothly glides from Meridian (z = -900) -> Azurea (z = -1500) -> Vesperion (z = -2100)
+      // Camera smoothly glides from Meridian (z = -380) -> Azurea (z = -620) -> Vesperion (z = -860)
       planetTl.fromTo(
         camera.position,
-        { x: -5, y: 0, z: -830 },
-        { x: 6, y: 2, z: -1420, ease: 'power1.inOut' },
+        { x: -2, y: 0, z: -310 },
+        { x: -2, y: 0, z: -550, ease: 'power1.inOut' },
         0
       ).to(
         camera.position,
-        { x: -8, y: -2, z: -2010, ease: 'power1.inOut' },
+        { x: -2, y: 0, z: -780, ease: 'power1.inOut' },
         0.5
       );
     }
@@ -151,9 +152,9 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         gsap.timeline({
           scrollTrigger: {
             trigger: '#capabilities',
-            start: 'top bottom',
+            start: 'top 80%',
             end: 'top 30%',
-            scrub: 1,
+            scrub: 0.8,
           },
         }).to(geomGroup.scale, {
           x: 1,
@@ -167,7 +168,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
             trigger: '#stats-counter',
             start: 'top bottom',
             end: 'top top',
-            scrub: 1,
+            scrub: 0.8,
           },
         }).to(geomGroup.scale, {
           x: 0.001,
@@ -182,12 +183,12 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#capabilities',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.4,
+          scrub: 1.0,
         },
       }).to(camera.position, {
         x: 0,
-        y: 3,
-        z: -2620,
+        y: 2,
+        z: -1140,
         ease: 'power2.inOut',
       });
     }
@@ -199,12 +200,12 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#stats-counter',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.2,
+          scrub: 1.0,
         },
       }).to(camera.position, {
-        x: 3,
-        y: -2,
-        z: -3150,
+        x: 2,
+        y: -1,
+        z: -1420,
         ease: 'power1.inOut',
       });
     }
@@ -216,12 +217,12 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#gallery',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.4,
+          scrub: 1.0,
         },
       }).to(camera.position, {
         x: 0,
         y: 0,
-        z: -3500,
+        z: -1720,
         ease: 'power2.inOut',
       });
     }
@@ -233,12 +234,12 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#pricing',
           start: 'top bottom',
           end: 'bottom bottom',
-          scrub: 1.4,
+          scrub: 1.0,
         },
       }).to(camera.position, {
         x: 0,
-        y: -3,
-        z: -3900,
+        y: -2,
+        z: -2020,
         ease: 'power1.inOut',
       });
     }
