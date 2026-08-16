@@ -4,16 +4,12 @@ import { getCamera } from './scene.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-let cameraTimeline = null;
-let horizontalScrollTrigger = null;
-
 export function setupScrollCamera({ stars, planets = [], geometries = [], nebula } = {}) {
   const camera = getCamera();
   if (!camera) return () => {};
 
   const ctx = gsap.context(() => {
-    // 1. Master Section-Synchronized Camera Choreography Timeline
-    // Hero -> Nebula Discovery
+    // 1. Hero -> Nebula Discovery
     gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
@@ -24,10 +20,10 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
     }).fromTo(
       camera.position,
       { x: 0, y: 0, z: 80 },
-      { x: 0, y: 2, z: -100, ease: 'power1.inOut' }
+      { x: 0, y: 1, z: -80, ease: 'power1.inOut' }
     );
 
-    // Nebula Discovery: Dive into nebula center
+    // 2. Nebula Discovery: Dive into nebula center
     gsap.timeline({
       scrollTrigger: {
         trigger: '#nebula-discovery',
@@ -38,11 +34,11 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
     }).to(camera.position, {
       x: 0,
       y: 0,
-      z: -260,
+      z: -420,
       ease: 'power2.inOut',
     });
 
-    // Horizontal Planets Showcase: Camera navigates from Planet 1 -> Planet 2 -> Planet 3
+    // 3. Horizontal Planets Showcase: Synchronized Camera Navigation through 3 Distinct Worlds
     const planetsSection = document.querySelector('#planets-showcase');
     const planetsTrack = document.querySelector('.planets-track');
     const planetCards = document.querySelectorAll('.planet-card');
@@ -51,12 +47,11 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
       const cardCount = planetCards.length;
       const totalPercent = (cardCount - 1) * 100;
 
-      // Pin the section and animate horizontal track + camera positions simultaneously!
       const planetTl = gsap.timeline({
         scrollTrigger: {
           trigger: '#planets-showcase',
           start: 'top top',
-          end: '+=3500',
+          end: '+=4200',
           pin: true,
           scrub: 1,
           anticipatePin: 1,
@@ -75,21 +70,20 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         ease: 'none',
       }, 0);
 
-      // Synchronized camera swoop through the 3 planets:
-      // Start near Meridian (z = -350) -> Azurea (z = -550) -> Vesperion (z = -750)
+      // Camera smoothly glides from Meridian (z = -900) -> Azurea (z = -1500) -> Vesperion (z = -2100)
       planetTl.fromTo(
         camera.position,
-        { x: -14, y: 3, z: -310 },
-        { x: 16, y: -2, z: -500, ease: 'power1.inOut' },
+        { x: -5, y: 0, z: -830 },
+        { x: 6, y: 2, z: -1420, ease: 'power1.inOut' },
         0
       ).to(
         camera.position,
-        { x: -18, y: 5, z: -690, ease: 'power1.inOut' },
+        { x: -8, y: -2, z: -2010, ease: 'power1.inOut' },
         0.5
       );
     }
 
-    // Capabilities / Tech Lab: Camera moves through floating crystalline geometries
+    // 4. Capabilities / Tech Lab: Camera moves through floating crystalline geometries
     if (document.querySelector('#capabilities')) {
       gsap.timeline({
         scrollTrigger: {
@@ -100,13 +94,13 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         },
       }).to(camera.position, {
         x: 0,
-        y: 4,
-        z: -840,
+        y: 3,
+        z: -2620,
         ease: 'power2.inOut',
       });
     }
 
-    // Telemetry Stats: Camera in dense starfield
+    // 5. Telemetry Stats: Camera in deep telemetry starfield
     if (document.querySelector('#stats-counter')) {
       gsap.timeline({
         scrollTrigger: {
@@ -116,14 +110,14 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           scrub: 1,
         },
       }).to(camera.position, {
-        x: 4,
-        y: -3,
-        z: -960,
+        x: 3,
+        y: -2,
+        z: -3150,
         ease: 'power1.inOut',
       });
     }
 
-    // Gallery / Deep Space Archive: Serene observatory vantage
+    // 6. Gallery / Deep Space Archive: Serene observatory vantage
     if (document.querySelector('#gallery')) {
       gsap.timeline({
         scrollTrigger: {
@@ -135,12 +129,12 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
       }).to(camera.position, {
         x: 0,
         y: 0,
-        z: -1080,
+        z: -3500,
         ease: 'power2.inOut',
       });
     }
 
-    // Pricing / Mission Control & Footer
+    // 7. Pricing / Mission Control & Footer
     if (document.querySelector('#pricing')) {
       gsap.timeline({
         scrollTrigger: {
@@ -151,8 +145,8 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         },
       }).to(camera.position, {
         x: 0,
-        y: -4,
-        z: -1200,
+        y: -3,
+        z: -3900,
         ease: 'power1.inOut',
       });
     }

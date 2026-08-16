@@ -17,31 +17,35 @@ export function initScene() {
   if (scene) return scene;
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x02040a);
-  scene.fog = new THREE.FogExp2(0x02040a, 0.0008);
+  scene.background = new THREE.Color(0x010308);
+  scene.fog = new THREE.FogExp2(0x010308, 0.0003);
 
-  // Lighting
-  const ambientLight = new THREE.AmbientLight(0x334466, 0.6);
+  // High-Dynamic Lighting
+  const ambientLight = new THREE.AmbientLight(0x445577, 0.75);
   scene.add(ambientLight);
 
-  const mainLight = new THREE.DirectionalLight(0x00ffdc, 1.2);
-  mainLight.position.set(100, 100, 50);
+  const mainLight = new THREE.DirectionalLight(0x00ffdc, 1.4);
+  mainLight.position.set(120, 100, 60);
   scene.add(mainLight);
 
-  const rimLight = new THREE.DirectionalLight(0x9d4edd, 1.0);
-  rimLight.position.set(-100, -50, -100);
+  const rimLight = new THREE.DirectionalLight(0x9d4edd, 1.2);
+  rimLight.position.set(-120, -60, -120);
   scene.add(rimLight);
+
+  const warmSunLight = new THREE.DirectionalLight(0xffaa44, 0.8);
+  warmSunLight.position.set(0, -80, 100);
+  scene.add(warmSunLight);
 
   // Camera
   camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    5000
+    6000
   );
   camera.position.set(0, 0, 80);
 
-  // Renderer
+  // WebGL Renderer with ACESFilmic HDR Tone Mapping
   renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
@@ -52,7 +56,8 @@ export function initScene() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
+  renderer.toneMappingExposure = 1.15;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   const container = document.getElementById('canvas-container');
   if (container) {
@@ -62,7 +67,7 @@ export function initScene() {
     document.body.appendChild(renderer.domElement);
   }
 
-  // Mouse move listener for subtle camera rotation damping
+  // Mouse move listener for smooth camera rotation damping
   window.addEventListener('mousemove', onMouseMove, { passive: true });
   window.addEventListener('resize', onWindowResize);
 
@@ -106,8 +111,8 @@ export function animate(callback) {
     lastTime = elapsedTime;
 
     // Smooth mouse damping
-    mouse.x += (mouse.targetX - mouse.x) * 0.05;
-    mouse.y += (mouse.targetY - mouse.y) * 0.05;
+    mouse.x += (mouse.targetX - mouse.x) * 0.04;
+    mouse.y += (mouse.targetY - mouse.y) * 0.04;
 
     // Smooth warp FOV transition
     const targetWarp = isWarpActive ? 1 : 0;
@@ -118,8 +123,8 @@ export function animate(callback) {
       camera.updateProjectionMatrix();
 
       // Subtle parallax tilt
-      camera.rotation.y = -mouse.x * 0.04;
-      camera.rotation.x = mouse.y * 0.04;
+      camera.rotation.y = -mouse.x * 0.035;
+      camera.rotation.x = mouse.y * 0.035;
     }
 
     if (renderer && scene && camera) {
