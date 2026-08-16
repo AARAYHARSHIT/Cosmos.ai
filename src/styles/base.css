@@ -7,7 +7,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* Managed by Lenis smooth scroll */
   scroll-padding-top: 80px;
   background-color: var(--color-bg-deep);
   color: var(--color-text-primary);
@@ -47,6 +47,18 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+/* Subtle Interstellar Horizon Glow Dividers */
+section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 220, 0.25) 50%, transparent 100%);
+  pointer-events: none;
 }
 
 .content-wrapper {
