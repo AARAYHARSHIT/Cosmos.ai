@@ -1,14 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap');
 
 @import './variables.css';
 @import './base.css';
+@import './navbar.css';
 @import './hero.css';
 @import './nebula.css';
 @import './planets.css';
 @import './stats.css';
 @import './gallery.css';
+@import './pricing.css';
+@import './modal.css';
+@import './toast.css';
 @import './footer.css';
 
+/* Custom Deep Space Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -18,10 +23,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-accent-cyan);
+  background: linear-gradient(180deg, var(--color-accent-cyan), var(--color-accent-violet));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-violet);
+  background: linear-gradient(180deg, var(--color-accent-violet), var(--color-accent-rose));
 }

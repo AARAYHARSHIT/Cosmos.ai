@@ -1,21 +1,30 @@
 .planets-section {
   min-height: 100vh;
-  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
 }
 
-.planets-section h2 {
+.planets-section .section-header {
   text-align: center;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .planets-section .subtitle {
-  color: var(--color-text-muted);
-  font-size: 1.2rem;
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 1.15rem;
+  margin-top: var(--spacing-xs);
+}
+
+.planets-track-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: visible;
 }
 
 .planets-track {
@@ -26,95 +35,131 @@
 }
 
 .planet-card {
-  flex: 0 0 calc(100% / 3);
-  min-height: 450px;
+  flex: 0 0 calc(100% / 3 - var(--spacing-xl));
+  max-width: 480px;
+  background: rgba(10, 15, 30, 0.7);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: var(--spacing-xl);
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-md);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.planet-card[data-planet="meridian"] {
+  border-color: rgba(255, 80, 0, 0.35);
+  box-shadow: 0 0 40px rgba(255, 69, 0, 0.15);
+}
+
+.planet-card[data-planet="azurea"] {
+  border-color: rgba(0, 240, 255, 0.35);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+}
+
+.planet-card[data-planet="vesperion"] {
+  border-color: rgba(157, 78, 221, 0.35);
+  box-shadow: 0 0 40px rgba(157, 78, 221, 0.15);
+}
+
+.planet-card-header {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: rgba(20, 30, 60, 0.4);
-  border: 1px solid var(--color-accent-cyan);
-  border-radius: 16px;
-  padding: var(--spacing-xl);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 0 30px rgba(0, 255, 220, 0.2);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  justify-content: space-between;
 }
 
-.planet-card:nth-child(2) {
-  border-color: var(--color-accent-violet);
-  box-shadow: 0 0 30px rgba(150, 50, 255, 0.2);
+.planet-type-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
 }
 
-.planet-card:nth-child(3) {
-  border-color: var(--color-accent-rose);
-  box-shadow: 0 0 30px rgba(255, 80, 150, 0.2);
+.molten-badge {
+  background: rgba(255, 69, 0, 0.2);
+  color: #ff7733;
+  border: 1px solid rgba(255, 69, 0, 0.4);
 }
 
-.planet-card:hover {
-  box-shadow: 0 0 50px rgba(0, 255, 220, 0.4);
-  transform: translateY(-8px);
+.ocean-badge {
+  background: rgba(0, 240, 255, 0.2);
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+}
+
+.ringed-badge {
+  background: rgba(157, 78, 221, 0.2);
+  color: #d8b4fe;
+  border: 1px solid rgba(157, 78, 221, 0.4);
+}
+
+.planet-dist {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
 }
 
 .planet-card h3 {
-  margin-bottom: var(--spacing-md);
+  font-size: 2rem;
+  color: var(--color-text-primary);
 }
 
 .planet-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.planet-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid var(--border-glass);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.spec-row span {
   color: var(--color-text-muted);
-  max-width: 300px;
 }
 
-/* Tablet */
+.spec-row strong {
+  font-family: var(--font-mono);
+  color: var(--color-text-primary);
+}
+
+.planet-scan-btn {
+  margin-top: var(--spacing-xs);
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass-bright);
+  color: var(--color-text-primary);
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.planet-scan-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 220, 0.2), rgba(157, 78, 221, 0.2));
+  border-color: var(--color-accent-cyan);
+  color: var(--color-accent-cyan);
+  transform: translateY(-2px);
+}
+
 @media (max-width: 1024px) {
-  .planets-track {
-    gap: var(--spacing-md);
-  }
-
   .planet-card {
-    flex: 0 0 calc(100% / 3);
-    min-height: 350px;
-    padding: var(--spacing-md);
-  }
-
-  .planet-card p {
-    max-width: 250px;
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .planets-section {
-    min-height: auto;
-    padding: var(--spacing-xl) var(--spacing-md);
-  }
-
-  .planet-card {
-    flex: 0 0 calc(50% - var(--spacing-md));
-    min-height: 300px;
-    padding: var(--spacing-md);
-  }
-
-  .planet-card h3 {
-    font-size: 1.4rem;
-  }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .planet-card {
-    flex: 0 0 100%;
-    min-height: 280px;
-    padding: var(--spacing-md);
-  }
-
-  .planet-card h3 {
-    font-size: 1.25rem;
-  }
-
-  .planet-card p {
-    font-size: 0.9rem;
+    padding: var(--spacing-lg);
   }
 }
