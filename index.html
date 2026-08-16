@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>COSMOS.AI — Next-Gen 3D Deep Space Intelligence Platform</title>
 
-    <meta name="description" content="A parallax scrolling 3D deep space intelligence platform built with Three.js, Anime.js, and GSAP ScrollTrigger." />
+    <meta name="description" content="An enterprise 3D deep space exploration and astrophysics intelligence platform built with Three.js, Anime.js, and GSAP ScrollTrigger." />
     <meta name="og:title" content="COSMOS.AI — 3D Deep Space Intelligence Platform" />
-    <meta name="og:description" content="Explore the cosmos in real-time 3D with synchronized parallax flight, volumetric nebula simulations, and telemetry." />
+    <meta name="og:description" content="Explore the cosmos in real-time 3D with synchronized parallax flight, volumetric nebula simulations, and astrophysics telemetry." />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="/src/styles/index.css" />
   </head>
   <body>
-    <!-- 3D Canvas Background -->
+    <!-- 3D WebGL Canvas Background -->
     <div id="canvas-container" aria-hidden="true"></div>
 
     <!-- SaaS Navigation Bar -->
@@ -26,18 +26,18 @@
           <div class="brand-icon">
             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="16" cy="16" r="14" stroke="url(#brand-grad)" stroke-width="2"/>
-              <circle cx="16" cy="16" r="6" fill="url(#brand-grad)"/>
-              <ellipse cx="16" cy="16" rx="14" ry="5" stroke="#00ffdc" stroke-width="1.5" transform="rotate(-30 16 16)"/>
+              <circle cx="16" cy="16" r="5" fill="url(#brand-grad)"/>
+              <ellipse cx="16" cy="16" rx="14" ry="5.5" stroke="#38bdf8" stroke-width="1.5" transform="rotate(-28 16 16)"/>
               <defs>
                 <linearGradient id="brand-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#00ffdc"/>
-                  <stop offset="1" stop-color="#9d4edd"/>
+                  <stop stop-color="#38bdf8"/>
+                  <stop offset="1" stop-color="#a855f7"/>
                 </linearGradient>
               </defs>
             </svg>
           </div>
           <span class="brand-text">COSMOS<span class="accent-cyan">.AI</span></span>
-          <span class="brand-badge">v2.5</span>
+          <span class="brand-badge">v3.8</span>
         </a>
 
         <nav class="nav-links" role="navigation" aria-label="Primary Navigation">
@@ -52,15 +52,15 @@
 
         <div class="nav-actions">
           <button id="warp-toggle-btn" class="nav-btn warp-btn" type="button" title="Toggle Hyperspace Propulsion">
-            <span class="btn-icon">⚡</span>
-            <span>Engage Warp</span>
+            <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>Warp Speed</span>
           </button>
           <button id="audio-toggle-btn" class="nav-btn audio-btn" type="button" title="Toggle Ambient Audio Synth">
-            <span class="btn-icon">🔇</span>
+            <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
             <span>Audio Muted</span>
           </button>
           <button class="nav-btn-primary open-terminal-btn" type="button">
-            <span>Launch Console</span>
+            <span>Mission Console</span>
             <span class="btn-shortcut">⌘K</span>
           </button>
         </div>
@@ -73,36 +73,46 @@
         <div class="hero-content content-wrapper">
           <div class="hero-badge">
             <span class="pulse-dot"></span>
-            <span>DEEP SPACE INTELLIGENCE ENGINE ONLINE</span>
+            <span>v3.8 ASTROPHYSICS INTELLIGENCE ENGINE ONLINE</span>
           </div>
 
-          <h1>Explore the Cosmos</h1>
+          <h1 class="hero-title">Explore the Infinite <span class="gradient-text">Cosmos</span></h1>
           <p class="subtitle">
-            Next-generation 3D deep space exploration and orbital spectrometry platform. Journey through volumetric nebulae, investigate planetary atmospheres, and harness astrophysical telemetry in real-time.
+            Enterprise 3D deep space exploration and orbital spectrometry platform. Journey through volumetric nebulae, investigate planetary atmospheres, and stream astrophysical telemetry in real-time.
           </p>
 
           <div class="hero-actions">
-            <a href="#nebula-discovery" class="cta-button primary-cta">Explore Live Engine 🚀</a>
-            <button class="cta-button secondary-cta open-terminal-btn" type="button">Mission Console (⌘K)</button>
-            <a href="#gallery" class="cta-button outline-cta">Observatory Archive 🔭</a>
+            <a href="#nebula-discovery" class="cta-button primary-cta">
+              <span>Launch 3D Engine</span>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="cta-button secondary-cta open-terminal-btn" type="button">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              <span>Mission Console</span>
+              <span class="key-badge">⌘K</span>
+            </button>
+            <a href="#gallery" class="cta-button outline-cta">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <span>Observatory Archive</span>
+            </a>
           </div>
 
-          <div class="hero-hud-strip">
+          <div class="hero-hud-strip card">
             <div class="hud-item">
               <span class="hud-label">COSMIC SECTOR</span>
-              <span class="hud-value">CYGNUS OB2-12</span>
+              <span class="hud-value font-mono">CYGNUS OB2-12</span>
             </div>
             <div class="hud-item">
               <span class="hud-label">SPECTROMETER ARRAY</span>
-              <span class="hud-value accent-cyan">14/14 NOMINAL</span>
+              <span class="hud-value accent-cyan font-mono">14/14 NOMINAL</span>
             </div>
             <div class="hud-item">
               <span class="hud-label">RELATIVISTIC VELOCITY</span>
-              <span class="hud-value">0.85c (254,827 km/s)</span>
+              <span class="hud-value font-mono">0.85c (254,827 km/s)</span>
             </div>
             <div class="hud-item">
               <span class="hud-label">QUANTUM LATENCY</span>
-              <span class="hud-value accent-violet">0.8ms</span>
+              <span class="hud-value accent-violet font-mono">0.8ms</span>
             </div>
           </div>
         </div>
@@ -118,19 +128,34 @@
       <!-- 2. Nebula Discovery Section -->
       <section role="region" aria-label="Nebula Discovery" id="nebula-discovery">
         <div class="content-wrapper">
-          <div class="section-badge nebula-badge">VOLUMETRIC SHADER SIMULATION</div>
-          <h2 class="nebula-heading">Nebula <span class="accent-violet">Resonance</span></h2>
+          <div class="section-badge nebula-badge">
+            <span class="badge-dot"></span>
+            <span>VOLUMETRIC SHADER MATRIX</span>
+          </div>
+          <h2 class="nebula-heading">Volumetric <span class="accent-violet">Resonance</span></h2>
           <p class="nebula-text">
-            Fly directly through 1,200 volumetric particle clouds rendered with GLSL procedural noise displacement and additive light blending.
+            Fly directly through dynamic volumetric particle clouds rendered with GLSL procedural noise turbulence and multi-spectral light scattering.
           </p>
 
-          <div class="nebula-controls">
-            <span class="controls-label">SPECTRAL MATRIX PRESETS:</span>
+          <div class="nebula-controls card">
+            <span class="controls-label font-mono">SELECT SPECTRAL FILTER:</span>
             <div class="chip-group">
-              <button class="nebula-chip active" data-preset="violet" type="button">Orion Violet</button>
-              <button class="nebula-chip" data-preset="emerald" type="button">Helix Emerald</button>
-              <button class="nebula-chip" data-preset="cyan" type="button">Cygnus Blue</button>
-              <button class="nebula-chip" data-preset="gold" type="button">Crab Gold</button>
+              <button class="nebula-chip active" data-preset="violet" type="button">
+                <span class="chip-color-dot dot-violet"></span>
+                <span>Orion Violet (656 nm)</span>
+              </button>
+              <button class="nebula-chip" data-preset="emerald" type="button">
+                <span class="chip-color-dot dot-emerald"></span>
+                <span>Helix Emerald (500 nm)</span>
+              </button>
+              <button class="nebula-chip" data-preset="cyan" type="button">
+                <span class="chip-color-dot dot-cyan"></span>
+                <span>Cygnus Blue (486 nm)</span>
+              </button>
+              <button class="nebula-chip" data-preset="gold" type="button">
+                <span class="chip-color-dot dot-gold"></span>
+                <span>Crab Gold (589 nm)</span>
+              </button>
             </div>
           </div>
         </div>
@@ -139,10 +164,13 @@
       <!-- 3. Planetary Systems (Pinned Horizontal Scroll) -->
       <section role="region" aria-label="Planets Showcase" id="planets-showcase" class="planets-section">
         <div class="section-header">
-          <div class="section-badge">INTERACTIVE 3D HORIZONS</div>
-          <h2>Planetary <span class="accent-rose">Systems</span></h2>
+          <div class="section-badge">
+            <span class="badge-dot"></span>
+            <span>INTERACTIVE ORBITAL TELEMETRY</span>
+          </div>
+          <h2>Planetary <span class="accent-rose">Classifications</span></h2>
           <p class="subtitle">
-            Orbiting worlds with multi-layer atmospheric Fresnel shaders, molten asteroid rings, and orbital telemetry.
+            Survey charted exoplanets featuring procedural thermal shaders, atmospheric Rayleigh scattering, and orbiting debris rings.
           </p>
         </div>
 
@@ -152,57 +180,72 @@
             <div class="planet-card card" data-planet="meridian">
               <div class="planet-card-header">
                 <span class="planet-type-badge molten-badge">MOLTEN CORE WORLD</span>
-                <span class="planet-dist">0.38 AU</span>
+                <span class="planet-dist font-mono">0.38 AU</span>
               </div>
               <h3>Meridian</h3>
-              <p>A scorched planet of liquid titanium rivers, molten magma fissures, and crystalline asteroid rings.</p>
+              <p>A scorched planet of liquid titanium rivers, molten magma fissures, and orbiting 3D asteroid belts.</p>
               <div class="planet-specs">
-                <div class="spec-row"><span>Surface Temp:</span><strong>840 K (567°C)</strong></div>
-                <div class="spec-row"><span>Gravity:</span><strong>1.42 g</strong></div>
-                <div class="spec-row"><span>Atmosphere:</span><strong>Sulfur / Argon</strong></div>
+                <div class="spec-row"><span>Surface Temp:</span><strong class="font-mono">840 K (567°C)</strong></div>
+                <div class="spec-row"><span>Gravitational Field:</span><strong class="font-mono">1.42 g</strong></div>
+                <div class="spec-row"><span>Atmosphere Mix:</span><strong class="font-mono">Sulfur / Argon</strong></div>
+                <div class="spec-row"><span>Hazard Level:</span><strong class="accent-rose font-mono">Extreme Thermal</strong></div>
               </div>
-              <button class="planet-scan-btn" data-planet="meridian" type="button">Perform Surface Scan</button>
+              <button class="planet-scan-btn cta-button primary-cta" data-planet="meridian" type="button">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                <span>Perform Surface Scan</span>
+              </button>
             </div>
 
             <!-- Planet 2: Azurea -->
             <div class="planet-card card" data-planet="azurea">
               <div class="planet-card-header">
                 <span class="planet-type-badge ocean-badge">OCEAN SUPER-EARTH</span>
-                <span class="planet-dist">1.12 AU</span>
+                <span class="planet-dist font-mono">1.12 AU</span>
               </div>
               <h3>Azurea</h3>
-              <p>A colossal ocean giant shrouded in atmospheric turquoise Fresnel haze with bioluminescent depths.</p>
+              <p>A colossal ocean giant shrouded in atmospheric turquoise haze with rotating cloud decks and night-side bio-luminescence.</p>
               <div class="planet-specs">
-                <div class="spec-row"><span>Ocean Depth:</span><strong>120 km Liquid</strong></div>
-                <div class="spec-row"><span>Gravity:</span><strong>0.98 g</strong></div>
-                <div class="spec-row"><span>Biosignatures:</span><strong class="accent-cyan">94.2% Probable</strong></div>
+                <div class="spec-row"><span>Ocean Depth:</span><strong class="font-mono">120 km Liquid</strong></div>
+                <div class="spec-row"><span>Gravitational Field:</span><strong class="font-mono">0.98 g</strong></div>
+                <div class="spec-row"><span>Biosignatures:</span><strong class="accent-cyan font-mono">94.2% Probable</strong></div>
+                <div class="spec-row"><span>Habitability Index:</span><strong class="accent-emerald font-mono">Class-A Prime</strong></div>
               </div>
-              <button class="planet-scan-btn" data-planet="azurea" type="button">Perform Surface Scan</button>
+              <button class="planet-scan-btn cta-button primary-cta" data-planet="azurea" type="button">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                <span>Perform Surface Scan</span>
+              </button>
             </div>
 
             <!-- Planet 3: Vesperion -->
             <div class="planet-card card" data-planet="vesperion">
               <div class="planet-card-header">
                 <span class="planet-type-badge ringed-badge">RINGED GAS GIANT</span>
-                <span class="planet-dist">3.45 AU</span>
+                <span class="planet-dist font-mono">3.45 AU</span>
               </div>
               <h3>Vesperion</h3>
-              <p>High-energy violet winds carve atmospheric storms beneath shimmering dual ice-particle rings.</p>
+              <p>High-energy violet winds carve atmospheric storms beneath shimmering dual ice rings and polar auroras.</p>
               <div class="planet-specs">
-                <div class="spec-row"><span>Wind Velocity:</span><strong>1,800 km/h</strong></div>
-                <div class="spec-row"><span>Rings:</span><strong>Dual Major Bands</strong></div>
-                <div class="spec-row"><span>Moons:</span><strong>2 Mapped Satellites</strong></div>
+                <div class="spec-row"><span>Zonal Wind Velocity:</span><strong class="font-mono">1,800 km/h</strong></div>
+                <div class="spec-row"><span>Planetary Rings:</span><strong class="font-mono">Dual Cassini Bands</strong></div>
+                <div class="spec-row"><span>Natural Satellites:</span><strong class="font-mono">2 Mapped Moons</strong></div>
+                <div class="spec-row"><span>Magnetic Field:</span><strong class="accent-violet font-mono">14.8 Gauss</strong></div>
               </div>
-              <button class="planet-scan-btn" data-planet="vesperion" type="button">Perform Surface Scan</button>
+              <button class="planet-scan-btn cta-button primary-cta" data-planet="vesperion" type="button">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                <span>Perform Surface Scan</span>
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 4. SaaS Capabilities & Core Tech Grid -->
+      <!-- 4. SaaS Capabilities Bento Grid -->
       <section role="region" aria-label="Capabilities" id="capabilities">
         <div class="content-wrapper">
-          <div class="section-badge">ENTERPRISE ASTROPHYSICS ENGINE</div>
+          <div class="section-badge">
+            <span class="badge-dot"></span>
+            <span>ENTERPRISE ASTROPHYSICS STACK</span>
+          </div>
           <h2>SaaS-Grade Space <span class="accent-cyan">Capabilities</span></h2>
           <p class="subtitle">
             Engineered for astrophysics research institutes, deep space agencies, and orbital satellite operators.
@@ -210,39 +253,57 @@
 
           <div class="capabilities-grid">
             <div class="capability-card card">
-              <div class="cap-icon">🛰️</div>
+              <div class="cap-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+              </div>
               <h3>Real-Time Spectral Analysis</h3>
               <p>Instant multi-band infrared, ultraviolet, and x-ray decomposition of interstellar mediums with high precision.</p>
+              <div class="cap-meta font-mono"><span class="accent-cyan">λ 10nm - 100μm</span> • 128 channels</div>
             </div>
 
             <div class="capability-card card">
-              <div class="cap-icon">🌀</div>
-              <h3>Quantum Gravitational Lensing</h3>
+              <div class="cap-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+              </div>
+              <h3>Gravitational Lensing Engine</h3>
               <p>Real-time Einstein-Rosen metric computation and photon ring distortion mapping around singularity horizons.</p>
+              <div class="cap-meta font-mono"><span class="accent-violet">G = 6.674×10⁻¹¹</span> • Tensor Core</div>
             </div>
 
             <div class="capability-card card">
-              <div class="cap-icon">🧪</div>
-              <h3>Atmospheric Biosignature Detection</h3>
+              <div class="cap-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"></path><circle cx="10" cy="16" r="1"></circle><circle cx="14" cy="14" r="1"></circle></svg>
+              </div>
+              <h3>Atmospheric Biosignatures</h3>
               <p>Automated spectral line matching for liquid water, ozone, methane, and bio-industrial exoplanet signatures.</p>
+              <div class="cap-meta font-mono"><span class="accent-emerald">H₂O / O₃ / CH₄</span> • 99.4% precision</div>
             </div>
 
             <div class="capability-card card">
-              <div class="cap-icon">🌌</div>
-              <h3>Volumetric Nebula AI Segmentation</h3>
+              <div class="cap-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </div>
+              <h3>Volumetric Nebula AI Cluster</h3>
               <p>Neural point-cloud clustering that isolates proto-stellar accretion disks inside dense gas nurseries.</p>
+              <div class="cap-meta font-mono"><span class="accent-cyan">GLSL Shaders</span> • 60 FPS Compute</div>
             </div>
 
             <div class="capability-card card">
-              <div class="cap-icon">🚀</div>
-              <h3>Autonomous Telemetry & Trajectories</h3>
+              <div class="cap-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>
+              </div>
+              <h3>Autonomous Trajectory Solver</h3>
               <p>Sub-millisecond orbital propagation and N-body gravitational simulation for interplanetary space probes.</p>
+              <div class="cap-meta font-mono"><span class="accent-gold">RK4 Integration</span> • Sub-mm drift</div>
             </div>
 
             <div class="capability-card card">
-              <div class="cap-icon">🔭</div>
+              <div class="cap-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+              </div>
               <h3>Multi-Band Optical Synthesis</h3>
               <p>Seamless composition of space telescope matrices into unified ultra-high dynamic range 3D assets.</p>
+              <div class="cap-meta font-mono"><span class="accent-rose">8K HDR Pipeline</span> • Zero Artifacts</div>
             </div>
           </div>
         </div>
@@ -251,26 +312,33 @@
       <!-- 5. Telemetry & Stats Section -->
       <section role="region" aria-label="Stats Counter" id="stats-counter">
         <div class="content-wrapper">
-          <div class="section-badge">REAL-TIME TELEMETRY</div>
+          <div class="section-badge">
+            <span class="badge-dot"></span>
+            <span>LIVE QUANTUM TELEMETRY</span>
+          </div>
           <h2>Cosmos by the <span class="accent-cyan">Numbers</span></h2>
           <p class="nebula-text">Continuous telemetry streaming across distributed quantum astronomical nodes.</p>
 
           <div class="stats-grid">
             <div class="stat-card card">
-              <span class="stat-number" data-target="142500">0</span>
+              <span class="stat-number font-mono" data-target="142500">0</span>
               <span class="stat-label">Stars Cataloged</span>
+              <span class="stat-trend font-mono">+12.4% / mo</span>
             </div>
             <div class="stat-card card">
-              <span class="stat-number" data-target="5280">0</span>
-              <span class="stat-label">Known Worlds</span>
+              <span class="stat-number font-mono" data-target="5280">0</span>
+              <span class="stat-label">Confirmed Exoworlds</span>
+              <span class="stat-trend font-mono">+84 new</span>
             </div>
             <div class="stat-card card">
-              <span class="stat-number" data-target="99">0</span>
+              <span class="stat-number font-mono" data-target="99">0</span>
               <span class="stat-label">Telemetry % Uptime</span>
+              <span class="stat-trend font-mono accent-emerald">99.99% SLA</span>
             </div>
             <div class="stat-card card">
-              <span class="stat-number" data-target="14">0</span>
+              <span class="stat-number font-mono" data-target="14">0</span>
               <span class="stat-label">Billion Light Years</span>
+              <span class="stat-trend font-mono">Observable Span</span>
             </div>
           </div>
 
@@ -279,11 +347,11 @@
             <div class="hud-header">
               <div class="hud-status">
                 <span class="live-pulse"></span>
-                <span>QUANTUM FREQUENCY FEED (LIVE)</span>
+                <span class="font-mono">QUANTUM OSCILLOSCOPE FEED (LIVE)</span>
               </div>
-              <div class="hud-reading" id="live-quantum-ping">620.4 GHz</div>
+              <div class="hud-reading font-mono" id="live-quantum-ping">620.4 GHz</div>
             </div>
-            <canvas id="telemetry-sparkline" width="600" height="70"></canvas>
+            <canvas id="telemetry-sparkline" width="700" height="75"></canvas>
           </div>
         </div>
       </section>
@@ -291,12 +359,15 @@
       <!-- 6. Observational Archive (Gallery) -->
       <section role="region" aria-label="Gallery" id="gallery">
         <div class="content-wrapper">
-          <div class="section-badge">HIGH-RESOLUTION DEEP SPACE ARCHIVE</div>
+          <div class="section-badge">
+            <span class="badge-dot"></span>
+            <span>HIGH-RESOLUTION DEEP SPACE ARCHIVE</span>
+          </div>
           <h2>Observatory <span class="accent-violet">Archive</span></h2>
           <p class="nebula-text">Fragments of deep space captured across multi-spectral wavelengths. Click any card to inspect in high-resolution.</p>
 
           <!-- Gallery Filters & Search -->
-          <div class="gallery-toolbar">
+          <div class="gallery-toolbar card">
             <div class="gallery-filters">
               <button class="gallery-filter-btn active" data-category="all" type="button">All Objects</button>
               <button class="gallery-filter-btn" data-category="nebula" type="button">Nebulae</button>
@@ -305,7 +376,9 @@
               <button class="gallery-filter-btn" data-category="phenomena" type="button">Phenomena</button>
             </div>
             <div class="gallery-search">
-              <input type="text" id="gallery-search-input" placeholder="Search catalog (e.g. Andromeda, Nebula, Kepler)..." aria-label="Search astronomical objects" />
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="gallery-search-input" placeholder="Search catalog (e.g. Andromeda, Kepler)..." aria-label="Search astronomical objects" />
+              <span class="search-kbd-hint font-mono">/</span>
             </div>
           </div>
 
@@ -319,18 +392,21 @@
       <!-- 7. SaaS Pricing Plans Section -->
       <section role="region" aria-label="Pricing" id="pricing">
         <div class="content-wrapper">
-          <div class="section-badge">FLEXIBLE LICENSING</div>
+          <div class="section-badge">
+            <span class="badge-dot"></span>
+            <span>FLEXIBLE ENTERPRISE LICENSING</span>
+          </div>
           <h2>Scalable Plans for <span class="accent-rose">Every Mission</span></h2>
           <p class="subtitle">Choose the computational capacity and deep space sensor bandwidth for your observatory.</p>
 
           <!-- Billing Switcher -->
-          <div class="pricing-billing-switch">
-            <span class="switch-label">Monthly</span>
+          <div class="pricing-billing-switch card">
+            <span class="switch-label">Monthly Billing</span>
             <label class="switch">
               <input type="checkbox" id="billing-toggle" />
               <span class="slider round"></span>
             </label>
-            <span class="switch-label">Annual <span class="discount-badge">Save 20%</span></span>
+            <span class="switch-label">Annual Billing <span class="discount-badge font-mono">Save 20%</span></span>
           </div>
 
           <div class="pricing-grid">
@@ -338,60 +414,59 @@
             <div class="pricing-card card">
               <div class="plan-header">
                 <h3 class="plan-name">Observer</h3>
-                <p class="plan-desc">For independent astronomers and space enthusiasts.</p>
+                <p class="plan-desc">For independent astronomers and academic researchers.</p>
               </div>
               <div class="plan-price">
-                <span class="price-val" data-monthly="$0" data-annual="$0">$0</span>
-                <span class="price-period">/month</span>
+                <span class="price-val font-mono" data-monthly="$0" data-annual="$0">$0</span>
+                <span class="price-period font-mono">/month</span>
               </div>
               <ul class="plan-features">
-                <li>✓ Standard 3D WebGL resolution</li>
-                <li>✓ Public nebula & galaxy catalogs</li>
-                <li>✓ Up to 100 spectral scans/day</li>
-                <li>✓ Community forum access</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Standard 3D WebGL resolution</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Public nebula & galaxy catalogs</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 100 spectral scans/day</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Community observatory forum</li>
               </ul>
-              <button class="pricing-cta-btn" type="button">Start Free Journey</button>
+              <button class="pricing-cta-btn secondary-cta" type="button">Start Free Journey</button>
             </div>
 
             <!-- Tier 2: Voyager Pro (Popular) -->
             <div class="pricing-card card popular">
-              <div class="popular-badge">RECOMMENDED</div>
+              <div class="popular-badge font-mono">MOST POPULAR</div>
               <div class="plan-header">
                 <h3 class="plan-name">Voyager Pro</h3>
-                <p class="plan-desc">For researchers, observatories, and aerospace engineers.</p>
+                <p class="plan-desc">For active observatories and aerospace research teams.</p>
               </div>
               <div class="plan-price">
-                <span class="price-val" data-monthly="$49" data-annual="$39">$49</span>
-                <span class="price-period">/month</span>
+                <span class="price-val font-mono" data-monthly="$49" data-annual="$39">$49</span>
+                <span class="price-period font-mono">/month</span>
               </div>
               <ul class="plan-features">
-                <li>✓ Ultra-high 8K volumetric simulation</li>
-                <li>✓ Full multispectral scan suite</li>
-                <li>✓ Unlimited deep space queries</li>
-                <li>✓ Mission Control CLI terminal access</li>
-                <li>✓ Hyperspace warp telemetry stream</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Ultra-high volumetric simulation</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Full multispectral scan suite</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited deep space queries</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Mission Control CLI terminal</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Hyperspace warp telemetry stream</li>
               </ul>
-              <button class="pricing-cta-btn primary" type="button">Deploy Voyager Pro</button>
+              <button class="pricing-cta-btn primary-cta" type="button">Deploy Voyager Pro</button>
             </div>
 
             <!-- Tier 3: Enterprise Deep Space -->
             <div class="pricing-card card">
               <div class="plan-header">
                 <h3 class="plan-name">Enterprise</h3>
-                <p class="plan-desc">For space agencies, universities, and satellite fleets.</p>
+                <p class="plan-desc">For space agencies, satellite fleets, and aerospace labs.</p>
               </div>
               <div class="plan-price">
-                <span class="price-val" data-monthly="$199" data-annual="$159">$199</span>
-                <span class="price-period">/month</span>
+                <span class="price-val font-mono" data-monthly="$199" data-annual="$159">$199</span>
+                <span class="price-period font-mono">/month</span>
               </div>
               <ul class="plan-features">
-                <li>✓ Dedicated quantum telemetry node</li>
-                <li>✓ Custom satellite API & real-time webhook feeds</li>
-                <li>✓ 99.99% Guaranteed SLA uptime</li>
-                <li>✓ Private mission telemetry encryption</li>
-                <li>✓ 24/7 Priority astrophysical support</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a855f7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Dedicated quantum telemetry node</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a855f7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom satellite API & webhooks</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a855f7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> 99.99% Guaranteed SLA uptime</li>
+                <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a855f7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> 24/7 Dedicated astrophysical support</li>
               </ul>
-              <button class="pricing-cta-btn" type="button">Contact Mission Control</button>
+              <button class="pricing-cta-btn secondary-cta" type="button">Contact Mission Control</button>
             </div>
           </div>
         </div>
@@ -413,9 +488,9 @@
             <div class="footer-col brand-col">
               <div class="brand-text">COSMOS<span class="accent-cyan">.AI</span></div>
               <p>The next-generation 3D deep space exploration and astrophysical intelligence operating system.</p>
-              <div class="footer-status-pill">
+              <div class="footer-status-pill font-mono">
                 <span class="live-pulse"></span>
-                <span>All Deep Space Systems Nominal</span>
+                <span>ALL DEEP SPACE NODES NOMINAL</span>
               </div>
             </div>
 
@@ -452,7 +527,7 @@
 
           <div class="footer-bottom">
             <p>© 2026 COSMOS.AI Platform. Built for the cosmos — Parallax 3D Experience.</p>
-            <a href="#hero" class="back-to-top" aria-label="Back to Top">Back to Top ↑</a>
+            <a href="#hero" class="back-to-top font-mono" aria-label="Back to Top">Back to Top ↑</a>
           </div>
         </div>
       </footer>
@@ -467,25 +542,25 @@
             <img class="lightbox-image" src="" alt="Deep Space Object High-Res View" />
           </div>
           <div class="lightbox-info-pane">
-            <div class="lightbox-category badge">NEBULA</div>
+            <div class="lightbox-category badge font-mono">NEBULA</div>
             <h2 class="lightbox-title">Carina Nebula</h2>
             <p class="lightbox-desc">Detailed cosmic description...</p>
 
             <div class="lightbox-specs">
               <div class="spec-item">
-                <span class="spec-k">Distance:</span>
-                <span class="spec-v lb-distance">7,500 ly</span>
+                <span class="spec-k font-mono">Distance:</span>
+                <span class="spec-v lb-distance font-mono">7,500 ly</span>
               </div>
               <div class="spec-item">
-                <span class="spec-k">Constellation:</span>
-                <span class="spec-v lb-constellation">Carina</span>
+                <span class="spec-k font-mono">Constellation:</span>
+                <span class="spec-v lb-constellation font-mono">Carina</span>
               </div>
               <div class="spec-item">
-                <span class="spec-k">Classification:</span>
-                <span class="spec-v lb-type">Diffuse Nebula</span>
+                <span class="spec-k font-mono">Classification:</span>
+                <span class="spec-v lb-type font-mono">Diffuse Nebula</span>
               </div>
               <div class="spec-item">
-                <span class="spec-k">Coordinates:</span>
+                <span class="spec-k font-mono">Coordinates:</span>
                 <span class="spec-v lb-coords font-mono">RA 10h 45m | Dec -59°</span>
               </div>
             </div>
@@ -507,27 +582,27 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <div class="terminal-title">COSMOS.AI — MISSION CONTROL TERMINAL [v2.5]</div>
+          <div class="terminal-title font-mono">COSMOS.AI — MISSION CONTROL TERMINAL [v3.8]</div>
           <button class="modal-close" aria-label="Close terminal">&times;</button>
         </div>
 
         <div class="terminal-chips">
-          <button class="terminal-chip" data-cmd="help">help</button>
-          <button class="terminal-chip" data-cmd="scan meridian">scan meridian</button>
-          <button class="terminal-chip" data-cmd="scan azurea">scan azurea</button>
-          <button class="terminal-chip" data-cmd="warp on">warp on</button>
-          <button class="terminal-chip" data-cmd="warp off">warp off</button>
-          <button class="terminal-chip" data-cmd="telemetry">telemetry</button>
-          <button class="terminal-chip" data-cmd="planets">planets</button>
-          <button class="terminal-chip" data-cmd="nebula emerald">nebula emerald</button>
-          <button class="terminal-chip" data-cmd="clear">clear</button>
+          <button class="terminal-chip font-mono" data-cmd="help">help</button>
+          <button class="terminal-chip font-mono" data-cmd="scan meridian">scan meridian</button>
+          <button class="terminal-chip font-mono" data-cmd="scan azurea">scan azurea</button>
+          <button class="terminal-chip font-mono" data-cmd="warp on">warp on</button>
+          <button class="terminal-chip font-mono" data-cmd="warp off">warp off</button>
+          <button class="terminal-chip font-mono" data-cmd="telemetry">telemetry</button>
+          <button class="terminal-chip font-mono" data-cmd="planets">planets</button>
+          <button class="terminal-chip font-mono" data-cmd="nebula emerald">nebula emerald</button>
+          <button class="terminal-chip font-mono" data-cmd="clear">clear</button>
         </div>
 
-        <div class="terminal-output"></div>
+        <div class="terminal-output font-mono"></div>
 
         <div class="terminal-input-row">
-          <span class="terminal-prompt">commander@cosmos:~$</span>
-          <input type="text" class="terminal-input" placeholder="Type command (e.g. scan, warp on, telemetry, help)..." autofocus />
+          <span class="terminal-prompt font-mono">commander@cosmos:~$</span>
+          <input type="text" class="terminal-input font-mono" placeholder="Type command (e.g. scan, warp on, telemetry, help)..." autofocus />
         </div>
       </div>
     </div>
@@ -537,9 +612,9 @@
       <div class="modal-card checkout-card">
         <button class="modal-close" aria-label="Close checkout">&times;</button>
         <div class="checkout-header">
-          <div class="section-badge">SECURE MISSION AUTHORIZATION</div>
+          <div class="section-badge font-mono">SECURE MISSION AUTHORIZATION</div>
           <h2>Deploy <span id="checkout-plan-name" class="accent-cyan">Voyager Pro</span></h2>
-          <p>Activate your dedicated deep space telemetry license at <strong id="checkout-plan-price" class="accent-violet">$49</strong>.</p>
+          <p>Activate your dedicated deep space telemetry license at <strong id="checkout-plan-price" class="accent-violet font-mono">$49</strong>.</p>
         </div>
 
         <form id="checkout-form" class="checkout-form">
@@ -557,7 +632,7 @@
           </div>
           <div class="form-group">
             <label for="co-key">Quantum Access Clearance Key</label>
-            <input type="text" id="co-key" value="COSMOS-QUANTUM-7749-X" readonly />
+            <input type="text" id="co-key" class="font-mono" value="COSMOS-QUANTUM-7749-X" readonly />
           </div>
           <button type="submit" class="cta-button primary-cta full-width">Confirm Deep Space License 🚀</button>
         </form>
@@ -565,11 +640,11 @@
     </div>
 
     <!-- Persistent Floating HUD (Bottom Left) -->
-    <div class="floating-hud" aria-hidden="true">
+    <div class="floating-hud font-mono" aria-hidden="true">
       <div class="hud-dot"></div>
       <div class="hud-text">
-        <span class="hud-sec">SECTOR: DEEP SPACE</span>
-        <span class="hud-fps">TELEMETRY: SYNCHRONIZED</span>
+        <span class="hud-sec">SECTOR: CYGNUS-OB2</span>
+        <span class="hud-fps">TELEMETRY: NOMINAL (0.8ms)</span>
       </div>
     </div>
 

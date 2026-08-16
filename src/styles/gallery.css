@@ -6,11 +6,12 @@
 #gallery h2 {
   font-size: var(--font-size-h2);
   margin-bottom: var(--spacing-xs);
+  letter-spacing: -0.03em;
 }
 
 #gallery .nebula-text {
-  font-size: 1.15rem;
-  max-width: 650px;
+  font-size: 1.125rem;
+  max-width: 680px;
   margin: 0 auto var(--spacing-xl);
 }
 
@@ -21,92 +22,110 @@
   justify-content: space-between;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
   flex-wrap: wrap;
 }
 
 .gallery-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .gallery-filter-btn {
-  padding: 8px 16px;
-  border-radius: 50px;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-glass);
   color: var(--color-text-secondary);
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-size: 0.825rem;
+  font-weight: 500;
   cursor: pointer;
   backdrop-filter: var(--glass-blur);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .gallery-filter-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
   border-color: var(--border-glass-bright);
   color: var(--color-text-primary);
 }
 
 .gallery-filter-btn.active {
-  background: linear-gradient(135deg, rgba(0, 255, 220, 0.25), rgba(157, 78, 221, 0.35));
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(168, 85, 247, 0.25));
   border-color: var(--color-accent-cyan);
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(0, 255, 220, 0.3);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
 }
 
 .gallery-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   flex: 1;
   max-width: 380px;
-  min-width: 260px;
+  min-width: 240px;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.gallery-search:focus-within {
+  border-color: var(--color-accent-cyan);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.gallery-search svg {
+  color: var(--color-text-muted);
 }
 
 .gallery-search input {
   width: 100%;
-  padding: 9px 16px;
-  border-radius: 12px;
-  background: rgba(10, 15, 30, 0.6);
-  border: 1px solid var(--border-glass);
+  background: transparent;
+  border: none;
   color: var(--color-text-primary);
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   outline: none;
-  backdrop-filter: var(--glass-blur);
-  transition: all 0.2s ease;
 }
 
-.gallery-search input:focus {
-  border-color: var(--color-accent-cyan);
-  box-shadow: 0 0 15px rgba(0, 255, 220, 0.25);
-  background: rgba(10, 15, 30, 0.85);
+.search-kbd-hint {
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: var(--color-text-muted);
 }
 
 /* Gallery Grid */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   width: 100%;
 }
 
 .gallery-item {
   position: relative;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   aspect-ratio: 1 / 1;
-  background: rgba(10, 15, 30, 0.8);
+  background: rgba(15, 23, 42, 0.8);
   border: 1px solid var(--border-glass);
   cursor: pointer;
-  box-shadow: var(--shadow-subtle);
+  box-shadow: var(--shadow-card);
   transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .gallery-item:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-6px) scale(1.015);
   border-color: var(--color-accent-cyan);
-  box-shadow: 0 15px 35px -5px rgba(0, 255, 220, 0.3);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .gallery-img-wrapper {
@@ -141,20 +160,20 @@
 }
 
 .gallery-item:hover img.loaded {
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
 .gallery-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(3, 7, 18, 0.95) 0%, rgba(3, 7, 18, 0.4) 50%, transparent 100%);
+  background: linear-gradient(to top, rgba(3, 7, 18, 0.95) 0%, rgba(3, 7, 18, 0.35) 60%, transparent 100%);
   padding: var(--spacing-md);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   text-align: left;
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
   transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -165,27 +184,27 @@
 
 .gallery-badge {
   align-self: flex-start;
-  font-family: var(--font-mono);
   font-size: 0.65rem;
   font-weight: 700;
   padding: 2px 6px;
-  background: rgba(0, 255, 220, 0.2);
-  border: 1px solid rgba(0, 255, 220, 0.4);
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
   color: var(--color-accent-cyan);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   margin-bottom: 4px;
 }
 
 .gallery-title {
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
   color: var(--color-text-primary);
   margin-bottom: 4px;
+  letter-spacing: -0.02em;
 }
 
 .gallery-meta {
   display: flex;
   gap: 12px;
-  font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--color-text-secondary);
   margin-bottom: 8px;
@@ -193,9 +212,9 @@
 
 .gallery-inspect-btn {
   padding: 6px 12px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   font-family: var(--font-heading);
   font-size: 0.75rem;

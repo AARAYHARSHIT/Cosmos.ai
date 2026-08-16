@@ -68,7 +68,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
       ease: 'power2.inOut',
     });
 
-    // 3. Horizontal Planets Showcase: Synchronized Camera Navigation
+    // 3. Horizontal Planets Showcase: Scale In & Synchronized Camera Navigation
     const planetsSection = document.querySelector('#planets-showcase');
     const planetsTrack = document.querySelector('.planets-track');
     const planetCards = document.querySelectorAll('.planet-card');
@@ -76,6 +76,38 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
     if (planetsSection && planetsTrack && planetCards.length > 0) {
       const cardCount = planetCards.length;
       const totalPercent = (cardCount - 1) * 100;
+
+      // Scale in planets smoothly as user approaches showcase
+      planets.forEach((planetGroup) => {
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: '#planets-showcase',
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1,
+          },
+        }).to(planetGroup.scale, {
+          x: 1,
+          y: 1,
+          z: 1,
+          ease: 'power2.out',
+        });
+
+        // Scale down planets as user exits showcase into capabilities
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: '#capabilities',
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1,
+          },
+        }).to(planetGroup.scale, {
+          x: 0.001,
+          y: 0.001,
+          z: 0.001,
+          ease: 'power2.in',
+        });
+      });
 
       const planetTl = gsap.timeline({
         scrollTrigger: {
@@ -113,8 +145,38 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
       );
     }
 
-    // 4. Capabilities / Tech Lab: Camera moves through floating crystalline geometries
+    // 4. Capabilities / Tech Lab: Scale In Geometries & Camera Move
     if (document.querySelector('#capabilities')) {
+      geometries.forEach((geomGroup) => {
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: '#capabilities',
+            start: 'top bottom',
+            end: 'top 30%',
+            scrub: 1,
+          },
+        }).to(geomGroup.scale, {
+          x: 1,
+          y: 1,
+          z: 1,
+          ease: 'power2.out',
+        });
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: '#stats-counter',
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1,
+          },
+        }).to(geomGroup.scale, {
+          x: 0.001,
+          y: 0.001,
+          z: 0.001,
+          ease: 'power2.in',
+        });
+      });
+
       gsap.timeline({
         scrollTrigger: {
           trigger: '#capabilities',

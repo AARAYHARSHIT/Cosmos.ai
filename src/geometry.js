@@ -6,8 +6,8 @@ export function createFloatingGeometry(scene) {
       name: 'icosahedron',
       geometry: new THREE.IcosahedronGeometry(8, 0),
       wireGeometry: new THREE.IcosahedronGeometry(8.3, 0),
-      position: new THREE.Vector3(-45, 20, -2700),
-      color: 0x00ffdc,
+      position: new THREE.Vector3(-35, 15, -1200),
+      color: 0x38bdf8,
       emissive: 0x005544,
       rotSpeed: { x: 0.005, y: 0.008, z: 0.003 },
     },
@@ -15,8 +15,8 @@ export function createFloatingGeometry(scene) {
       name: 'torusKnot',
       geometry: new THREE.TorusKnotGeometry(6, 1.6, 120, 24),
       wireGeometry: new THREE.TorusKnotGeometry(6.2, 1.65, 60, 12),
-      position: new THREE.Vector3(45, -18, -2750),
-      color: 0xc77dff,
+      position: new THREE.Vector3(35, -14, -1220),
+      color: 0xc084fc,
       emissive: 0x4a0e4e,
       rotSpeed: { x: 0.007, y: 0.005, z: 0.006 },
     },
@@ -24,8 +24,8 @@ export function createFloatingGeometry(scene) {
       name: 'octahedron',
       geometry: new THREE.OctahedronGeometry(9, 0),
       wireGeometry: new THREE.OctahedronGeometry(9.4, 0),
-      position: new THREE.Vector3(0, 32, -2800),
-      color: 0xff007f,
+      position: new THREE.Vector3(0, 24, -1250),
+      color: 0xf43f5e,
       emissive: 0x660033,
       rotSpeed: { x: 0.004, y: 0.009, z: 0.002 },
     },
@@ -34,6 +34,7 @@ export function createFloatingGeometry(scene) {
   const meshes = config.map((cfg) => {
     const group = new THREE.Group();
     group.position.copy(cfg.position);
+    group.scale.setScalar(0.001);
 
     // Faceted solid core
     const material = new THREE.MeshPhysicalMaterial({

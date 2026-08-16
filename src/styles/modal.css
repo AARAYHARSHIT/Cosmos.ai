@@ -3,8 +3,8 @@
   inset: 0;
   z-index: 2000;
   background: rgba(2, 4, 10, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,10 +20,10 @@
 }
 
 .modal-card {
-  background: rgba(13, 19, 33, 0.95);
+  background: rgba(10, 15, 29, 0.95);
   border: 1px solid var(--border-glass-bright);
-  border-radius: 20px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   position: relative;
   max-width: 900px;
   width: 100%;
@@ -44,9 +44,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--border-glass);
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
   font-size: 1.25rem;
   line-height: 1;
   display: flex;
@@ -58,7 +58,7 @@
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(244, 63, 94, 0.2);
   border-color: var(--color-accent-rose);
   color: var(--color-accent-rose);
 }
@@ -80,7 +80,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
+  min-height: 420px;
   border-right: 1px solid var(--border-glass);
 }
 
@@ -100,12 +100,13 @@
 }
 
 .lightbox-title {
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 .lightbox-desc {
-  font-size: 0.95rem;
+  font-size: 0.925rem;
   line-height: 1.6;
   color: var(--color-text-secondary);
 }
@@ -132,18 +133,17 @@
 
 .spec-v {
   color: var(--color-text-primary);
-  font-weight: 600;
 }
 
 /* 2. Terminal CLI Modal */
 .terminal-card {
   max-width: 840px;
   background: rgba(3, 7, 18, 0.98);
-  border-color: rgba(0, 255, 220, 0.3);
-  box-shadow: 0 0 50px rgba(0, 255, 220, 0.2);
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 50px rgba(56, 189, 248, 0.2);
   display: flex;
   flex-direction: column;
-  height: 600px;
+  height: 580px;
 }
 
 .terminal-header {
@@ -152,7 +152,7 @@
   justify-content: space-between;
   padding: 12px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(10, 15, 30, 0.6);
+  background: rgba(10, 15, 29, 0.8);
 }
 
 .terminal-dots {
@@ -171,10 +171,9 @@
 .dot-green { background: #27c93f; }
 
 .terminal-title {
-  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--color-text-muted);
 }
 
@@ -190,17 +189,16 @@
 .terminal-chip {
   padding: 3px 8px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--color-accent-cyan);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.725rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .terminal-chip:hover {
-  background: rgba(0, 255, 220, 0.2);
+  background: rgba(56, 189, 248, 0.18);
   border-color: var(--color-accent-cyan);
 }
 
@@ -208,13 +206,12 @@
   flex: 1;
   padding: 18px;
   overflow-y: auto;
-  font-family: var(--font-mono);
   font-size: 0.85rem;
   line-height: 1.5;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: #a0aec0;
+  color: #94a3b8;
 }
 
 .terminal-line.banner {
@@ -237,12 +234,11 @@
   align-items: center;
   gap: 10px;
   padding: 12px 18px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .terminal-prompt {
-  font-family: var(--font-mono);
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--color-accent-cyan);
@@ -253,14 +249,13 @@
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: #ffffff;
 }
 
 /* 3. Checkout Modal */
 .checkout-card {
-  max-width: 540px;
+  max-width: 520px;
   padding: var(--spacing-xl);
 }
 
@@ -288,21 +283,21 @@
 }
 
 .form-group label {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.775rem;
   font-weight: 600;
   color: var(--color-text-secondary);
 }
 
 .form-group input {
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-glass-bright);
   color: #ffffff;
   font-family: var(--font-body);
   font-size: 0.95rem;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
 .form-group input:focus {

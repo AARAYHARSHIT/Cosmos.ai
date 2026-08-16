@@ -140,7 +140,7 @@ const AZUREA_FRAGMENT_SHADER = `
 // Helper: Generate procedural 3D asteroid rock belt
 function create3DAsteroidBelt(count, innerRad, outerRad, colorHex) {
   const group = new THREE.Group();
-  const asteroidGeo = new THREE.DodecahedronGeometry(0.5, 1);
+  const asteroidGeo = new THREE.DodecahedronGeometry(0.45, 1);
   const asteroidMat = new THREE.MeshStandardMaterial({
     color: colorHex,
     roughness: 0.8,
@@ -153,8 +153,8 @@ function create3DAsteroidBelt(count, innerRad, outerRad, colorHex) {
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
     const dist = innerRad + Math.random() * (outerRad - innerRad);
-    const height = (Math.random() - 0.5) * 5.0;
-    const scale = 0.5 + Math.random() * 1.5;
+    const height = (Math.random() - 0.5) * 4.0;
+    const scale = 0.5 + Math.random() * 1.4;
 
     dummy.position.set(Math.cos(angle) * dist, height, Math.sin(angle) * dist);
     dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
@@ -230,10 +230,11 @@ export function createPlanets(scene) {
   const planets = [];
 
   // ==========================================================================
-  // 1. MERIDIAN — Scorched Volcanic Lava World (Stationed at z = -900)
+  // 1. MERIDIAN — Scorched Volcanic Lava World (Stationed at z = -380)
   // ==========================================================================
   const meridianGroup = new THREE.Group();
-  meridianGroup.position.set(18, 0, -900);
+  meridianGroup.position.set(16, 0, -380);
+  meridianGroup.scale.setScalar(0.001); // Hidden in Hero
 
   const meridianGeo = new THREE.SphereGeometry(18, 64, 64);
   const placeholderTex = new THREE.CanvasTexture(document.createElement('canvas'));
@@ -294,13 +295,13 @@ export function createPlanets(scene) {
     rotSpeedX: 0.001,
   };
   scene.add(meridianGroup);
-  planets.push(meridianGroup);
 
   // ==========================================================================
-  // 2. AZUREA — Ocean Super-Earth with Clouds (Stationed at z = -1500)
+  // 2. AZUREA — Ocean Super-Earth with Clouds (Stationed at z = -620)
   // ==========================================================================
   const azureaGroup = new THREE.Group();
-  azureaGroup.position.set(-18, 2, -1500);
+  azureaGroup.position.set(16, 0, -620);
+  azureaGroup.scale.setScalar(0.001); // Hidden in Hero
 
   const azureaGeo = new THREE.SphereGeometry(20, 64, 64);
   const azureaShaderMat = new THREE.ShaderMaterial({
@@ -376,15 +377,15 @@ export function createPlanets(scene) {
     rotSpeedX: 0.001,
   };
   scene.add(azureaGroup);
-  planets.push(azureaGroup);
 
   // ==========================================================================
-  // 3. VESPERION — Violet Ringed Giant with Polar Auroras (Stationed at z = -2100)
+  // 3. VESPERION — Violet Ringed Giant with Polar Auroras (Stationed at z = -860)
   // ==========================================================================
   const vesperionGroup = new THREE.Group();
-  vesperionGroup.position.set(22, -3, -2100);
+  vesperionGroup.position.set(18, 0, -860);
+  vesperionGroup.scale.setScalar(0.001); // Hidden in Hero
 
-  const vesperionGeo = new THREE.SphereGeometry(26, 64, 64);
+  const vesperionGeo = new THREE.SphereGeometry(24, 64, 64);
   const vesperionMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(0x7209b7),
     emissive: new THREE.Color(0x240046),
@@ -403,13 +404,13 @@ export function createPlanets(scene) {
   vesperionGroup.add(vesperionCore);
 
   // Polar Aurora Borealis (North and South)
-  const northAurora = createAuroraRing(26, new THREE.Color(0x00ffff));
-  northAurora.position.y = 25.8;
+  const northAurora = createAuroraRing(24, new THREE.Color(0x00ffff));
+  northAurora.position.y = 23.8;
   northAurora.rotation.x = Math.PI / 2;
   vesperionGroup.add(northAurora);
 
-  const southAurora = createAuroraRing(26, new THREE.Color(0xd8b4fe));
-  southAurora.position.y = -25.8;
+  const southAurora = createAuroraRing(24, new THREE.Color(0xd8b4fe));
+  southAurora.position.y = -23.8;
   southAurora.rotation.x = Math.PI / 2;
   vesperionGroup.add(southAurora);
 
@@ -427,13 +428,13 @@ export function createPlanets(scene) {
     transparent: true,
     depthWrite: false,
   });
-  const vesperionAtmo = new THREE.Mesh(new THREE.SphereGeometry(29, 64, 64), vesperionAtmoMat);
+  const vesperionAtmo = new THREE.Mesh(new THREE.SphereGeometry(27, 64, 64), vesperionAtmoMat);
   vesperionGroup.add(vesperionAtmo);
 
   // Concentric Planetary Rings
   const ringTex1 = createConcentricRingTexture(new THREE.Color(0.85, 0.65, 1.0), 16);
   const ring1 = new THREE.Mesh(
-    new THREE.RingGeometry(34, 54, 96),
+    new THREE.RingGeometry(32, 50, 96),
     new THREE.MeshStandardMaterial({
       map: ringTex1,
       color: 0xd8b4fe,
@@ -448,7 +449,7 @@ export function createPlanets(scene) {
 
   const ringTex2 = createConcentricRingTexture(new THREE.Color(0.6, 0.3, 0.9), 10);
   const ring2 = new THREE.Mesh(
-    new THREE.RingGeometry(56, 70, 96),
+    new THREE.RingGeometry(52, 66, 96),
     new THREE.MeshStandardMaterial({
       map: ringTex2,
       color: 0x9d4edd,
@@ -466,14 +467,14 @@ export function createPlanets(scene) {
     new THREE.SphereGeometry(2.0, 32, 32),
     new THREE.MeshStandardMaterial({ color: 0xddbbff, roughness: 0.5 })
   );
-  moonlet3.position.set(54, -16, 12);
+  moonlet3.position.set(50, -14, 12);
   vesperionGroup.add(moonlet3);
 
   const moonlet4 = new THREE.Mesh(
     new THREE.SphereGeometry(1.5, 32, 32),
     new THREE.MeshStandardMaterial({ color: 0xa0e7e5, roughness: 0.4 })
   );
-  moonlet4.position.set(-64, 12, -8);
+  moonlet4.position.set(-60, 10, -8);
   vesperionGroup.add(moonlet4);
 
   vesperionGroup.userData = {
@@ -490,7 +491,7 @@ export function createPlanets(scene) {
     rotSpeedX: 0.001,
   };
   scene.add(vesperionGroup);
-  planets.push(meridianGroup, azureaGroup, vesperionGroup);
 
+  planets.push(meridianGroup, azureaGroup, vesperionGroup);
   return planets;
 }
