@@ -20,7 +20,7 @@ import './styles/index.css';
   setupDOMAnimations({ planets, geometries, nebula });
 
   animate((deltaTime, elapsedTime, state) => {
-    // 1. Update Starfield
+    // 1. Update Starfield & Milky Way Backdrop
     if (stars?.userData?.update) {
       stars.userData.update(deltaTime, elapsedTime, state);
     }
@@ -30,7 +30,7 @@ import './styles/index.css';
       nebula.userData.update(deltaTime, elapsedTime, state);
     }
 
-    // 3. Update Planets Continuous Orbit & Rotation
+    // 3. Update Planets Continuous Orbit, Clouds & Moons
     if (planets?.length) {
       planets.forEach((planetGroup, idx) => {
         const u = planetGroup.userData;
@@ -38,25 +38,40 @@ import './styles/index.css';
           u.core.rotation.y += u.rotSpeedY || 0.005;
           u.core.rotation.x += u.rotSpeedX || 0.002;
         }
+        // Independent rotating cloud layer
+        if (u.clouds) {
+          u.clouds.rotation.y += (u.rotSpeedY || 0.004) * 1.4;
+          u.clouds.rotation.x += 0.001;
+        }
+        // Ring rotations
         if (u.ring) {
-          u.ring.rotation.z += 0.004;
+          u.ring.rotation.z += 0.003;
         }
         if (u.ring1) {
-          u.ring1.rotation.z += 0.003;
+          u.ring1.rotation.z += 0.0025;
         }
         if (u.ring2) {
-          u.ring2.rotation.z -= 0.002;
+          u.ring2.rotation.z -= 0.0018;
         }
+        // Moon orbital mechanics
         if (u.moon) {
-          const orbitAngle = elapsedTime * (0.8 + idx * 0.3);
-          const orbitRadius = 24 + idx * 6;
+          const orbitAngle = elapsedTime * (0.6 + idx * 0.2);
+          const orbitRadius = 28 + idx * 6;
           u.moon.position.x = Math.cos(orbitAngle) * orbitRadius;
           u.moon.position.z = Math.sin(orbitAngle) * orbitRadius;
+          u.moon.rotation.y += 0.01;
         }
         if (u.moon1) {
-          const orbitAngle = elapsedTime * 0.6;
-          u.moon1.position.x = Math.cos(orbitAngle) * 38;
-          u.moon1.position.z = Math.sin(orbitAngle) * 38;
+          const orbitAngle = elapsedTime * 0.5;
+          u.moon1.position.x = Math.cos(orbitAngle) * 44;
+          u.moon1.position.z = Math.sin(orbitAngle) * 44;
+          u.moon1.rotation.y += 0.008;
+        }
+        if (u.moon2) {
+          const orbitAngle = -elapsedTime * 0.35 + 1.5;
+          u.moon2.position.x = Math.cos(orbitAngle) * 52;
+          u.moon2.position.z = Math.sin(orbitAngle) * 52;
+          u.moon2.rotation.y += 0.012;
         }
       });
     }
