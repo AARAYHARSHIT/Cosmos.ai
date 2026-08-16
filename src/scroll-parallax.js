@@ -1,21 +1,51 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 import { getCamera } from './scene.js';
 
 gsap.registerPlugin(ScrollTrigger);
+
+let lenisInstance = null;
+
+export function initSmoothScroll() {
+  if (lenisInstance) return lenisInstance;
+
+  lenisInstance = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: 1.0,
+    touchMultiplier: 1.5,
+  });
+
+  lenisInstance.on('scroll', ScrollTrigger.update);
+
+  gsap.ticker.add((time) => {
+    lenisInstance.raf(time * 1000);
+  });
+
+  gsap.ticker.lagSmoothing(0);
+
+  return lenisInstance;
+}
 
 export function setupScrollCamera({ stars, planets = [], geometries = [], nebula } = {}) {
   const camera = getCamera();
   if (!camera) return () => {};
 
+  // Initialize buttery smooth scrolling
+  initSmoothScroll();
+
   const ctx = gsap.context(() => {
-    // 1. Hero -> Nebula Discovery
+    // 1. Hero -> Nebula Discovery Smooth Scrub
     gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom top',
-        scrub: 1,
+        scrub: 1.2,
       },
     }).fromTo(
       camera.position,
@@ -29,7 +59,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
         trigger: '#nebula-discovery',
         start: 'top bottom',
         end: 'bottom top',
-        scrub: 1.2,
+        scrub: 1.4,
       },
     }).to(camera.position, {
       x: 0,
@@ -38,7 +68,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
       ease: 'power2.inOut',
     });
 
-    // 3. Horizontal Planets Showcase: Synchronized Camera Navigation through 3 Distinct Worlds
+    // 3. Horizontal Planets Showcase: Synchronized Camera Navigation
     const planetsSection = document.querySelector('#planets-showcase');
     const planetsTrack = document.querySelector('.planets-track');
     const planetCards = document.querySelectorAll('.planet-card');
@@ -53,12 +83,12 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           start: 'top top',
           end: '+=4200',
           pin: true,
-          scrub: 1,
+          scrub: 1.2,
           anticipatePin: 1,
           snap: {
             snapTo: 1 / (cardCount - 1),
-            duration: { min: 0.2, max: 0.5 },
-            delay: 0.1,
+            duration: { min: 0.25, max: 0.6 },
+            delay: 0.08,
             ease: 'power2.out',
           },
         },
@@ -90,7 +120,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#capabilities',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.2,
+          scrub: 1.4,
         },
       }).to(camera.position, {
         x: 0,
@@ -107,7 +137,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#stats-counter',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1,
+          scrub: 1.2,
         },
       }).to(camera.position, {
         x: 3,
@@ -124,7 +154,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#gallery',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.2,
+          scrub: 1.4,
         },
       }).to(camera.position, {
         x: 0,
@@ -141,7 +171,7 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#pricing',
           start: 'top bottom',
           end: 'bottom bottom',
-          scrub: 1.2,
+          scrub: 1.4,
         },
       }).to(camera.position, {
         x: 0,
@@ -165,7 +195,7 @@ export function setupScrollTriggers() {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom 40%',
-        scrub: 0.5,
+        scrub: 0.6,
       },
     })
       .to('#hero .hero-content', { opacity: 0, y: -40, duration: 1 }, 0)
@@ -188,13 +218,13 @@ export function setupScrollTriggers() {
     gsap.utils.toArray('.capability-card').forEach((card, i) => {
       gsap.fromTo(
         card,
-        { opacity: 0, y: 50, scale: 0.95 },
+        { opacity: 0, y: 45, scale: 0.96 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.7,
-          delay: (i % 3) * 0.15,
+          duration: 0.75,
+          delay: (i % 3) * 0.12,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: card,
@@ -209,7 +239,7 @@ export function setupScrollTriggers() {
     gsap.utils.toArray('#stats-counter .stat-card').forEach((card, i) => {
       gsap.fromTo(
         card,
-        { opacity: 0, y: 40, scale: 0.92 },
+        { opacity: 0, y: 40, scale: 0.94 },
         {
           opacity: 1,
           y: 0,
@@ -251,7 +281,7 @@ export function setupScrollTriggers() {
     gsap.utils.toArray('.pricing-card').forEach((card, i) => {
       gsap.fromTo(
         card,
-        { opacity: 0, y: 50, scale: 0.92 },
+        { opacity: 0, y: 45, scale: 0.94 },
         {
           opacity: 1,
           y: 0,
