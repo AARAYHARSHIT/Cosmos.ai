@@ -151,6 +151,14 @@ export function playBeep(type = 'click') {
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
     osc.start(now);
     osc.stop(now + 0.26);
+  } else if (type === 'radarChirp') {
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, now);
+    osc.frequency.exponentialRampToValueAtTime(1800, now + 0.05);
+    gain.gain.setValueAtTime(0.06, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    osc.start(now);
+    osc.stop(now + 0.07);
   } else if (type === 'warp') {
     // Warp drive sound sweep
     const warpFilter = ctx.createBiquadFilter();
@@ -172,4 +180,8 @@ export function playBeep(type = 'click') {
     osc.start(now);
     osc.stop(now + 0.95);
   }
+}
+
+export function playSound(type) {
+  playBeep(type);
 }

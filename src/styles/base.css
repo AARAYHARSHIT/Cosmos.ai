@@ -23,7 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#canvas-container {
+#starfield-canvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -31,12 +31,604 @@ body {
   height: 100vh;
   z-index: 0;
   pointer-events: none;
+  background-color: var(--color-bg-deep);
+}
+
+/* Persistent Mission Journey Trail HUD (Fixed Right) */
+.mission-flight-trail {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: auto;
+}
+
+.trail-line {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 5px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: -1;
+}
+
+.trail-progress-fill {
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--color-accent-cyan), var(--color-accent-violet));
+  box-shadow: 0 0 8px var(--color-accent-cyan);
+  transition: height 0.2s ease;
+}
+
+.trail-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(10, 15, 30, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.step-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  background: rgba(8, 12, 28, 0.85);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-glass);
+}
+
+.trail-step:hover .step-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.trail-step:hover .step-dot {
+  border-color: var(--color-accent-cyan);
+  box-shadow: 0 0 10px var(--color-accent-cyan);
+  transform: scale(1.2);
+}
+
+.trail-step.active .step-dot {
+  background: var(--color-accent-cyan);
+  border-color: #ffffff;
+  box-shadow: 0 0 14px var(--color-accent-cyan);
+  transform: scale(1.3);
+}
+
+.trail-step.active .step-label {
+  color: var(--color-accent-cyan);
+  opacity: 0.85;
+  transform: translateX(0);
+}
+
+@media (max-width: 1024px) {
+  .mission-flight-trail {
+    display: none;
+  }
+}
+
+/* Story Chapter Badge */
+.story-chapter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-cyan);
+  background: rgba(0, 255, 220, 0.08);
+  border: 1px solid rgba(0, 255, 220, 0.25);
+  box-shadow: 0 0 15px rgba(0, 255, 220, 0.1);
+  margin-bottom: var(--spacing-md);
+}
+
+.chapter-num {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.chapter-divider {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.chapter-title {
+  color: var(--color-accent-cyan);
+}
+
+/* Layer 1: Deep Stars */
+.layer-deep-stars {
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 100px 150px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 250px 80px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 300px 300px, rgba(255, 255, 255, 0.8), rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 450px 120px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 550px 400px, #38bdf8, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 80px 450px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(2.5px 2.5px at 700px 200px, rgba(168, 85, 247, 0.8), rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 800px 600px;
+  opacity: 0.6;
+}
+
+/* Layer 2: Nebula Glow */
+.layer-nebula-glow {
+  background: 
+    radial-gradient(circle at 15% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 10%, rgba(20, 184, 166, 0.1) 0%, transparent 60%);
+  mix-blend-mode: screen;
+}
+
+/* Nebula Masterpiece Transition */
+.nebula-masterpiece-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150vw;
+  height: 150vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(56, 189, 248, 0.08) 40%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0.1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  mix-blend-mode: screen;
+}
+
+/* Layer 3: Tech Grid */
+.layer-grid {
+  background-image: 
+    linear-gradient(rgba(0, 255, 220, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 220, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  perspective: 1000px;
+  transform-origin: center top;
+  opacity: 0.5;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+}
+
+/* Premium CSS Planets */
+.css-planet {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: inset -20px -20px 50px rgba(0, 0, 0, 0.9),
+              inset 10px 10px 30px rgba(255, 255, 255, 0.2);
+}
+
+.planet-azurea {
+  width: 400px;
+  height: 400px;
+  right: 10%;
+  top: 25%;
+  background: radial-gradient(circle at 30% 30%, #0284c7, #082f49);
+  box-shadow: 
+    inset -40px -40px 80px rgba(0, 0, 0, 0.9),
+    inset 20px 20px 40px rgba(56, 189, 248, 0.4),
+    0 0 120px rgba(2, 132, 199, 0.4);
+}
+
+.planet-vesperion {
+  width: 600px;
+  height: 600px;
+  left: -5%;
+  top: 55%;
+  background: radial-gradient(circle at 30% 30%, #7e22ce, #3b0764);
+  box-shadow: 
+    inset -60px -60px 120px rgba(0, 0, 0, 0.9),
+    inset 20px 20px 50px rgba(216, 180, 254, 0.3),
+    0 0 150px rgba(126, 34, 206, 0.3);
+}
+
+.css-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180%;
+  height: 40%;
+  border: 20px solid rgba(168, 85, 247, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.6), inset 0 0 40px rgba(168, 85, 247, 0.6);
+  z-index: -1;
+}
+
+/* Floating Abstract Shapes */
+.css-shape {
+  position: absolute;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.shape-1 { width: 120px; height: 120px; left: 15%; top: 15%; transform: rotate(15deg); }
+.shape-2 { width: 80px; height: 80px; right: 25%; top: 45%; transform: rotate(-25deg); border-radius: 50%; }
+.shape-3 { width: 150px; height: 150px; left: 35%; top: 75%; transform: rotate(45deg); }
+
+/* ==========================================================================
+   CHAPTER 03.5 // QUANTUM RELATIVITY GATEWAY (Inter-Chapter Parallax Bridge)
+   ========================================================================== */
+.quantum-gateway-section {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-md);
+  overflow: visible;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  z-index: 5;
+}
+
+.gateway-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gateway-heading {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: var(--spacing-xs) 0;
+}
+
+/* 3D Gyroscopic Astrolabe Stage */
+.astrolabe-3d-stage {
+  position: relative;
+  width: 480px;
+  height: 480px;
+  margin: var(--spacing-xl) auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.astrolabe-ring {
+  position: absolute;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  box-shadow: 0 0 30px rgba(0, 255, 220, 0.2), inset 0 0 25px rgba(0, 255, 220, 0.1);
+  will-change: transform;
+}
+
+.ring-outer {
+  width: 460px;
+  height: 460px;
+  border: 2px solid rgba(0, 255, 220, 0.5);
+  animation: astrolabe-spin-x 24s linear infinite;
+}
+
+.ring-middle {
+  width: 340px;
+  height: 340px;
+  border: 2px dashed rgba(56, 189, 248, 0.6);
+  animation: astrolabe-spin-y 18s linear infinite reverse;
+}
+
+.ring-inner {
+  width: 220px;
+  height: 220px;
+  border: 1.5px solid rgba(168, 85, 247, 0.7);
+  animation: astrolabe-spin-z 12s linear infinite;
+}
+
+.astrolabe-node {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #030712;
+  border: 1px solid var(--color-accent-cyan);
+  color: var(--color-accent-cyan);
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 255, 220, 0.5);
+}
+
+.node-2 { top: auto; bottom: -10px; }
+.node-4 { top: auto; bottom: -10px; border-color: #38bdf8; color: #38bdf8; }
+
+/* Central Tesseract 3D Cube */
+.singularity-core-stage {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+.photon-orbit-ring {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px dotted #00ffdc;
+  animation: rotate-slow 6s linear infinite;
+  box-shadow: 0 0 30px #00ffdc;
+}
+
+.tesseract-cube {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  transform-style: preserve-3d;
+  animation: tesseract-spin 14s infinite linear;
+}
+
+.cube-face {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 255, 220, 0.12);
+  border: 1px solid rgba(0, 255, 220, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: #00ffdc;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: inset 0 0 15px rgba(0, 255, 220, 0.3);
+}
+
+.cube-face.front  { transform: rotateY(  0deg) translateZ(30px); }
+.cube-face.back   { transform: rotateY(180deg) translateZ(30px); }
+.cube-face.left   { transform: rotateY(-90deg) translateZ(30px); }
+.cube-face.right  { transform: rotateY( 90deg) translateZ(30px); }
+.cube-face.top    { transform: rotateX( 90deg) translateZ(30px); }
+.cube-face.bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+@keyframes tesseract-spin {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg); }
+}
+
+@keyframes astrolabe-spin-x {
+  0% { transform: rotateX(0deg) rotateY(35deg); }
+  100% { transform: rotateX(360deg) rotateY(35deg); }
+}
+
+@keyframes astrolabe-spin-y {
+  0% { transform: rotateY(0deg) rotateX(45deg); }
+  100% { transform: rotateY(360deg) rotateX(45deg); }
+}
+
+@keyframes astrolabe-spin-z {
+  0% { transform: rotateZ(0deg) rotateX(60deg); }
+  100% { transform: rotateZ(360deg) rotateX(60deg); }
+}
+
+/* Parallax Floating Relativistic Data Panels */
+.gateway-data-stream {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  width: 100%;
+  margin-top: var(--spacing-lg);
+  text-align: left;
+}
+
+.stream-panel {
+  padding: var(--spacing-lg);
+  background: rgba(8, 12, 28, 0.85);
+  border: 1px solid rgba(0, 255, 220, 0.25);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  will-change: transform;
+}
+
+.stream-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--spacing-xs);
+}
+
+.stream-formula {
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  border-left: 3px solid var(--color-accent-cyan);
+  color: #ffffff;
+  margin: var(--spacing-xs) 0;
+}
+
+.stream-panel p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.stream-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: var(--spacing-xs);
+}
+
+/* ==========================================================================
+   CHAPTER 04 // QUANTUM ENGINE CORE BACKDROP
+   ========================================================================== */
+.quantum-core-backdrop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.quantum-singularity-core {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(0, 255, 220, 0.2) 0%, rgba(16, 185, 129, 0.08) 40%, transparent 70%);
+  box-shadow: 0 0 120px rgba(0, 255, 220, 0.25);
+  animation: pulse-ring 3s infinite ease-in-out;
+}
+
+.quantum-flux-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 220, 0.25);
+  will-change: transform;
+}
+
+.ring-alpha { width: 550px; height: 550px; border-style: dashed; animation: rotate-slow 35s linear infinite; }
+.ring-beta { width: 750px; height: 750px; border-color: rgba(56, 189, 248, 0.15); animation: rotate-slow 50s linear infinite reverse; }
+.ring-gamma { width: 1000px; height: 1000px; border-color: rgba(168, 85, 247, 0.12); }
+
+.quantum-circuit-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at center, rgba(0, 255, 220, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.6;
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
+  -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
+}
+
+/* ==========================================================================
+   CHAPTER 05 // SENSOR ARRAY BACKDROP
+   ========================================================================== */
+.sensor-array-backdrop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sensor-dish-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.dish-outer { width: 850px; height: 850px; border-style: dashed; animation: rotate-slow 60s linear infinite; }
+.dish-mid { width: 600px; height: 600px; border-color: rgba(0, 255, 220, 0.2); }
+.dish-inner { width: 380px; height: 380px; border-style: dotted; border-color: rgba(168, 85, 247, 0.25); animation: rotate-slow 40s linear infinite reverse; }
+
+.sensor-signal-wave {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 220, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 220, 0.2);
+}
+
+.wave-1 { width: 250px; height: 250px; animation: signal-pulse 3s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
+.wave-2 { width: 250px; height: 250px; animation: signal-pulse 3s cubic-bezier(0.2, 0.8, 0.2, 1) infinite 1.5s; }
+
+@keyframes signal-pulse {
+  0% { transform: scale(0.5); opacity: 0.8; }
+  100% { transform: scale(3.5); opacity: 0; }
 }
 
 main {
   position: relative;
   z-index: 1;
   width: 100%;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+/* Foreground 3D Parallax Container */
+#parallax-fg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50; /* Sits above content but below modals/nav */
+  pointer-events: none;
+  overflow: visible;
+  perspective: 1500px;
+  transform-style: preserve-3d;
+}
+
+.fg-object {
+  position: absolute;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+/* Floating 3D Primitives */
+.fg-ring {
+  border: 1px solid rgba(0, 255, 220, 0.4);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(0, 255, 220, 0.1), inset 0 0 30px rgba(0, 255, 220, 0.1);
+  background: radial-gradient(circle at center, rgba(0,255,220,0.05) 0%, transparent 60%);
+}
+
+.fg-cube {
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(168, 85, 247, 0.02));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2);
+  border-radius: 12px;
 }
 
 section {

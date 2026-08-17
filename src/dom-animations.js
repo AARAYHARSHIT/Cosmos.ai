@@ -1,8 +1,9 @@
 import { animate, stagger } from 'animejs';
-import { playBeep, toggleAudio, getAudioState } from './audio.js';
-import { setWarpMode, getWarpState } from './scene.js';
+import { playBeep, toggleAudio, getAudioState, playSound } from './audio.js';
 import { showToast } from './toast.js';
 import { openTerminal, initTerminal } from './terminal.js';
+import { getLenis, PLANET_DATA } from './scroll-parallax.js';
+import { getCanvasEngine } from './canvas-engine.js';
 
 // Gallery dataset with astronomical parameters
 export const GALLERY_DATA = [
@@ -104,11 +105,9 @@ export const GALLERY_DATA = [
   },
 ];
 
-export function setupDOMAnimations({ planets = [], geometries = [], nebula } = {}) {
+export function setupDOMAnimations() {
   setupHeroLetters();
   setupNavbarAndControls();
-  setupNebulaControls(nebula);
-  setupPlanetCardInteractions(planets);
   setupStatCounters();
   setupLiveTelemetrySparkline();
   setupGallery();
@@ -117,13 +116,12 @@ export function setupDOMAnimations({ planets = [], geometries = [], nebula } = {
   setupNewsletter();
   setup3DCardTilt();
   initTerminal({
-    toggleWarpDrive: (val) => setWarpMode(val),
-    isWarpActive: () => getWarpState(),
+    toggleWarpDrive: (val) => {},
+    isWarpActive: () => false,
     setWarpDrive: (val) => {
-      setWarpMode(val);
       updateWarpButtonUI(val);
     },
-    setNebulaColor: (preset) => nebula?.userData?.setPreset?.(preset),
+    setNebulaColor: (preset) => {},
   });
 }
 
@@ -143,9 +141,9 @@ function setupHeroLetters() {
   if (letters.length) {
     animate(letters, {
       opacity: [0, 1],
-      translateY: [40, 0],
-      delay: stagger(35, { start: 200 }),
-      duration: 900,
+      translateY: [35, 0],
+      delay: stagger(30, { start: 150 }),
+      duration: 800,
       easing: 'outCubic',
     });
   }
@@ -154,8 +152,8 @@ function setupHeroLetters() {
   if (badge) {
     animate(badge, {
       opacity: [0, 1],
-      scale: [0.9, 1],
-      duration: 800,
+      scale: [0.92, 1],
+      duration: 700,
       easing: 'outBack',
     });
   }
@@ -178,14 +176,23 @@ function setupNavbarAndControls() {
   // Warp Drive Toggle
   const warpBtn = document.getElementById('warp-toggle-btn');
   if (warpBtn) {
+    let isWarpActive = false;
     warpBtn.addEventListener('click', () => {
-      const nextState = !getWarpState();
-      setWarpMode(nextState);
-      updateWarpButtonUI(nextState);
-      showToast(nextState ? 'Hyperspace propulsion engaged (Warp 9.9)' : 'Sublight cruise mode resumed', {
-        title: 'Propulsion Telemetry',
-        type: 'warp',
-      });
+      isWarpActive = !isWarpActive;
+      const canvasEngine = getCanvasEngine();
+      if (isWarpActive) {
+        warpBtn.classList.add('active');
+        warpBtn.style.color = '#00ffdc';
+        if (canvasEngine) canvasEngine.setScrollVelocity(50);
+        playSound('warp');
+        showToast('HYPERSPACE PROPULSION ENGAGED: 12.4c', { title: 'Warp Drive', type: 'scan' });
+      } else {
+        warpBtn.classList.remove('active');
+        warpBtn.style.color = '';
+        if (canvasEngine) canvasEngine.setScrollVelocity(0);
+        playBeep('click');
+        showToast('Sub-light cruising restored', { title: 'Warp Drive', type: 'info' });
+      }
     });
   }
 
@@ -214,75 +221,129 @@ function setupNavbarAndControls() {
     });
   });
 
-  // ScrollSpy Active Link Tracking
+  // IntersectionObserver for High-Performance ScrollSpy (Zero forced layout reflows on scroll)
   const sections = document.querySelectorAll('section[id], footer[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
 
-  function updateScrollSpy() {
-    let currentId = '';
-    const scrollPos = window.scrollY + window.innerHeight * 0.35;
+  const scrollSpyObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navLinks.forEach((link) => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    },
+    { rootMargin: '-30% 0px -40% 0px', threshold: 0 }
+  );
 
-    sections.forEach(section => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      if (scrollPos >= top && scrollPos < top + height) {
-        currentId = section.getAttribute('id');
+  sections.forEach((s) => scrollSpyObserver.observe(s));
+
+  // Interactive Navigation with Lenis
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      const lenis = getLenis();
+      if (lenis && targetId !== '#') {
+        lenis.scrollTo(targetId, { duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+      } else {
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
       }
     });
-
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${currentId}`) {
-        link.classList.add('active');
-      }
-    });
-  }
-
-  window.addEventListener('scroll', updateScrollSpy, { passive: true });
-  updateScrollSpy();
+  });
 
   // Button Click Feedback Sounds
   document.querySelectorAll('button, .nav-links a, .footer-links a').forEach(el => {
-    el.addEventListener('mouseenter', () => playBeep('hover'));
+    el.addEventListener('mouseenter', () => playBeep('hover'), { passive: true });
     el.addEventListener('click', () => playBeep('click'));
   });
 }
 
-function setupNebulaControls(nebula) {
+function setupNebulaControls() {
   const chips = document.querySelectorAll('.nebula-chip');
   chips.forEach(chip => {
     chip.addEventListener('click', () => {
       chips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       const preset = chip.dataset.preset || 'violet';
-      if (nebula?.userData?.setPreset) {
-        nebula.userData.setPreset(preset);
+      const canvasEngine = getCanvasEngine();
+
+      if (preset === 'violet') {
+        if (canvasEngine) canvasEngine.setAmbientChapter(28, 12, 45);
+      } else if (preset === 'emerald') {
+        if (canvasEngine) canvasEngine.setAmbientChapter(8, 35, 25);
+      } else if (preset === 'cyan') {
+        if (canvasEngine) canvasEngine.setAmbientChapter(6, 30, 48);
+      } else if (preset === 'gold') {
+        if (canvasEngine) canvasEngine.setAmbientChapter(42, 28, 8);
       }
+
       playBeep('activate');
       showToast(`Nebula quantum resonance tuned to: ${preset.toUpperCase()}`, { title: 'Spectroscopy Matrix', type: 'info' });
     });
   });
 }
 
-function setupPlanetCardInteractions(planets) {
-  const scanButtons = document.querySelectorAll('.planet-scan-btn');
-  scanButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const targetPlanet = btn.dataset.planet || 'azurea';
-      playBeep('activate');
-      showToast(`Full multispectral scan initiated on ${targetPlanet.toUpperCase()}`, { title: 'Planetary Radar', type: 'scan' });
+function setupPlanetCardInteractions() {
+  const mainScanBtn = document.getElementById('main-planet-scan-btn');
+  const scanModal = document.getElementById('planet-scan-modal');
+  const modalClose = scanModal?.querySelector('.modal-close');
+  const modalCloseBtn = scanModal?.querySelector('.modal-close-btn');
 
-      btn.textContent = 'Scanning...';
-      btn.disabled = true;
-      setTimeout(() => {
-        btn.textContent = 'Scan Complete ✓';
-        setTimeout(() => {
-          btn.textContent = 'Perform Surface Scan';
-          btn.disabled = false;
-        }, 2000);
-      }, 1000);
+  function openScanModal(planetKey = 'azurea') {
+    const data = PLANET_DATA[planetKey] || PLANET_DATA.azurea;
+    
+    // Update Modal Data
+    const nameEl = document.getElementById('scan-modal-planet-name');
+    const crustEl = document.getElementById('scan-res-crust');
+    const presEl = document.getElementById('scan-res-pres');
+    const atmoEl = document.getElementById('scan-res-atmo');
+    const habEl = document.getElementById('scan-res-hab');
+    const spherePreview = document.getElementById('scan-sphere-preview');
+
+    if (nameEl) nameEl.textContent = `${data.name} — Surface Scan`;
+    if (crustEl) crustEl.textContent = data.crust;
+    if (presEl) presEl.textContent = data.pressure;
+    if (atmoEl) atmoEl.textContent = data.atmosphereDepth;
+    if (habEl) habEl.textContent = data.habitability;
+    if (spherePreview) {
+      spherePreview.className = `scan-sphere-render orb-${planetKey}`;
+    }
+
+    if (scanModal) {
+      scanModal.classList.add('active');
+      playSound('warp');
+      showToast(`High-resolution LiDAR radar locked onto ${data.name}`, { title: 'Spectra Radar', type: 'scan' });
+    }
+  }
+
+  if (mainScanBtn) {
+    mainScanBtn.addEventListener('click', () => {
+      const activeCard = document.querySelector('.planet-select-card.active');
+      const planetKey = activeCard?.getAttribute('data-target-planet') || 'azurea';
+      openScanModal(planetKey);
     });
+  }
+
+  [modalClose, modalCloseBtn].forEach(btn => {
+    btn?.addEventListener('click', () => {
+      scanModal?.classList.remove('active');
+      playBeep('click');
+    });
+  });
+
+  scanModal?.addEventListener('click', (e) => {
+    if (e.target === scanModal) {
+      scanModal.classList.remove('active');
+    }
   });
 }
 
@@ -299,7 +360,7 @@ function setupStatCounters() {
 
         animate(state, {
           val: target,
-          duration: 2200,
+          duration: 1800,
           easing: 'outExpo',
           onUpdate: () => {
             entry.target.textContent = Math.round(state.val).toLocaleString();
@@ -312,27 +373,36 @@ function setupStatCounters() {
   counters.forEach(c => observer.observe(c));
 }
 
+// Zero-reflow lightweight telemetry sparkline
 function setupLiveTelemetrySparkline() {
   const canvas = document.getElementById('telemetry-sparkline');
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
   const points = new Array(30).fill(50);
+  let canvasW = 600;
+  let canvasH = 70;
+
+  function resizeCanvas() {
+    canvasW = canvas.width = canvas.offsetWidth || 600;
+    canvasH = canvas.height = canvas.offsetHeight || 70;
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas, { passive: true });
+
+  const coordEl = document.getElementById('live-quantum-ping');
 
   function draw() {
-    // Add new random jitter
     const last = points[points.length - 1];
-    const next = Math.max(15, Math.min(85, last + (Math.random() - 0.49) * 15));
+    const next = Math.max(15, Math.min(85, last + (Math.random() - 0.49) * 14));
     points.shift();
     points.push(next);
 
-    const w = canvas.width = canvas.offsetWidth;
-    const h = canvas.height = canvas.offsetHeight;
-
-    ctx.clearRect(0, 0, w, h);
+    ctx.clearRect(0, 0, canvasW, canvasH);
 
     // Gradient stroke
-    const grad = ctx.createLinearGradient(0, 0, w, 0);
+    const grad = ctx.createLinearGradient(0, 0, canvasW, 0);
     grad.addColorStop(0, 'rgba(0, 255, 220, 0.2)');
     grad.addColorStop(1, 'rgba(157, 78, 221, 1)');
 
@@ -340,29 +410,27 @@ function setupLiveTelemetrySparkline() {
     ctx.strokeStyle = grad;
     ctx.lineWidth = 2.5;
 
-    const step = w / (points.length - 1);
+    const step = canvasW / (points.length - 1);
     points.forEach((p, i) => {
       const x = i * step;
-      const y = h - (p / 100) * h;
+      const y = canvasH - (p / 100) * canvasH;
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     });
     ctx.stroke();
 
     // Pulse dot at current point
-    const currentY = h - (next / 100) * h;
+    const currentY = canvasH - (next / 100) * canvasH;
     ctx.beginPath();
     ctx.fillStyle = '#00ffdc';
-    ctx.arc(w - 2, currentY, 4, 0, Math.PI * 2);
+    ctx.arc(canvasW - 3, currentY, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // Update coordinate text
-    const coordEl = document.getElementById('live-quantum-ping');
     if (coordEl) {
       coordEl.textContent = `${(next * 12.4).toFixed(1)} GHz`;
     }
 
-    setTimeout(draw, 100);
+    setTimeout(draw, 120);
   }
 
   draw();
@@ -376,7 +444,6 @@ function setupGallery() {
 
   if (!grid) return;
 
-  // Render gallery cards dynamically from local dataset
   function renderGallery(items) {
     grid.innerHTML = '';
 
@@ -424,7 +491,6 @@ function setupGallery() {
 
   renderGallery(GALLERY_DATA);
 
-  // Category Filters
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
@@ -435,7 +501,6 @@ function setupGallery() {
     });
   });
 
-  // Search Input Filter
   if (searchInput) {
     searchInput.addEventListener('input', () => {
       const activeBtn = document.querySelector('.gallery-filter-btn.active');
@@ -457,7 +522,6 @@ function setupGallery() {
     renderGallery(filtered);
   }
 
-  // Lightbox Modal Wiring
   function openLightbox(item) {
     if (!lightboxModal) return;
 
@@ -616,23 +680,31 @@ function setupNewsletter() {
   }
 }
 
+// Ultra-performant 3D Card Tilt with cached rects (Zero synchronous layout reflows)
 function setup3DCardTilt() {
   const cards = document.querySelectorAll('.card, .capability-card, .pricing-card, .stat-card');
 
   cards.forEach(card => {
+    let rect = null;
+
+    card.addEventListener('mouseenter', () => {
+      rect = card.getBoundingClientRect();
+    }, { passive: true });
+
     card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
+      if (!rect) rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
 
-      const rotX = -(y / (rect.height / 2)) * 6;
-      const rotY = (x / (rect.width / 2)) * 6;
+      const rotX = -(y / (rect.height / 2)) * 5;
+      const rotY = (x / (rect.width / 2)) * 5;
 
       card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
-    });
+    }, { passive: true });
 
     card.addEventListener('mouseleave', () => {
+      rect = null;
       card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
-    });
+    }, { passive: true });
   });
 }

@@ -1,17 +1,178 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { getCamera } from './scene.js';
+import { getCanvasEngine } from './canvas-engine.js';
+import { playSound } from './audio.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Prevent GSAP ticker from sleeping
+gsap.to({}, { duration: 999999, repeat: -1 });
+
 let lenisInstance = null;
+
+// Planet data catalog for real-time telemetry updates
+export const PLANET_DATA = {
+  azurea: {
+    name: 'Azurea Prime',
+    type: 'OCEAN SUPER-EARTH',
+    badgeClass: 'ocean-badge',
+    stageClass: 'planet-azurea-stage',
+    dist: '1.12 AU',
+    gravity: '0.98 g',
+    temp: '19.4 °C',
+    biosignature: '94.2%',
+    inclination: '14.82°',
+    crust: 'Silicate Basin / 92% H₂O',
+    pressure: '1.14 bar (Earth Equiv)',
+    atmosphereDepth: '280 km Troposphere',
+    habitability: 'Class-A Prime (94%)',
+    gases: [
+      { name: 'H₂O (Water Vapor)', val: '78.4%', fillClass: 'cyan-fill' },
+      { name: 'N₂ (Nitrogen)', val: '14.2%', fillClass: 'blue-fill' },
+      { name: 'O₂ (Oxygen)', val: '5.8%', fillClass: 'emerald-fill' },
+      { name: 'Xe (Rare Xenon)', val: '1.6%', fillClass: 'violet-fill' },
+    ]
+  },
+  vesperion: {
+    name: 'Vesperion',
+    type: 'RINGED GAS TITAN',
+    badgeClass: 'ringed-badge',
+    stageClass: 'planet-vesperion-stage',
+    dist: '3.45 AU',
+    gravity: '2.14 g',
+    temp: '-148.0 °C',
+    biosignature: '12.8%',
+    inclination: '26.40°',
+    crust: 'Metallic Hydrogen Core',
+    pressure: '48.2 bar (Supercritical)',
+    atmosphereDepth: '1,400 km Gas Shroud',
+    habitability: 'Class-D Gas Giant',
+    gases: [
+      { name: 'H₂ (Hydrogen)', val: '86.2%', fillClass: 'violet-fill' },
+      { name: 'He (Helium)', val: '11.4%', fillClass: 'cyan-fill' },
+      { name: 'CH₄ (Methane)', val: '2.1%', fillClass: 'blue-fill' },
+      { name: 'NH₃ (Ammonia)', val: '0.3%', fillClass: 'emerald-fill' },
+    ]
+  },
+  ignis: {
+    name: 'Ignis-9',
+    type: 'MOLTEN LAVA CORE',
+    badgeClass: 'lava-badge',
+    stageClass: 'planet-ignis-stage',
+    dist: '0.38 AU',
+    gravity: '1.42 g',
+    temp: '840.5 °C',
+    biosignature: '0.0%',
+    inclination: '4.12°',
+    crust: 'Basaltic Magma & Obsidian',
+    pressure: '92.0 bar (Volcanic Outgas)',
+    atmosphereDepth: '120 km Sulfur Cloud',
+    habitability: 'Class-F Pyros (Hostile)',
+    gases: [
+      { name: 'SO₂ (Sulfur Dioxide)', val: '64.5%', fillClass: 'lava-fill' },
+      { name: 'CO₂ (Carbon Dioxide)', val: '28.1%', fillClass: 'blue-fill' },
+      { name: 'N₂ (Nitrogen)', val: '6.2%', fillClass: 'emerald-fill' },
+      { name: 'Ar (Argon)', val: '1.2%', fillClass: 'violet-fill' },
+    ]
+  },
+  glacies: {
+    name: 'Glacies-X',
+    type: 'CRYOGENIC ICE GIANT',
+    badgeClass: 'cryo-badge',
+    stageClass: 'planet-glacies-stage',
+    dist: '6.82 AU',
+    gravity: '0.82 g',
+    temp: '-212.8 °C',
+    biosignature: '41.6%',
+    inclination: '31.15°',
+    crust: 'Superdense Nitrogen Ice Shell',
+    pressure: '0.45 bar (Sub-Surface Liquid)',
+    atmosphereDepth: '350 km Diamond Mist',
+    habitability: 'Class-C Cryo (Sub-ice Sea)',
+    gases: [
+      { name: 'N₂ (Nitrogen Ice Gas)', val: '82.0%', fillClass: 'cyan-fill' },
+      { name: 'CH₄ (Methane Ice)', val: '12.5%', fillClass: 'blue-fill' },
+      { name: 'CO (Carbon Monoxide)', val: '4.2%', fillClass: 'violet-fill' },
+      { name: 'H₂O (Sub-ice Vapor)', val: '1.3%', fillClass: 'emerald-fill' },
+    ]
+  }
+};
+
+let currentActivePlanet = 'azurea';
+
+export function getLenis() {
+  return lenisInstance;
+}
+
+export function switchPlanetUI(planetKey, animateStage = true) {
+  const data = PLANET_DATA[planetKey];
+  if (!data) return;
+
+  currentActivePlanet = planetKey;
+
+  // Update target labels
+  const nameEl = document.getElementById('planet-target-name');
+  const typeEl = document.getElementById('planet-target-type');
+  if (nameEl) nameEl.textContent = data.name;
+  if (typeEl) {
+    typeEl.textContent = data.type;
+    typeEl.className = `target-class ${data.badgeClass}`;
+  }
+
+  // Update metrics
+  const distEl = document.getElementById('planet-metric-dist');
+  const gravEl = document.getElementById('planet-metric-grav');
+  const tempEl = document.getElementById('planet-metric-temp');
+  const bioEl = document.getElementById('planet-metric-bio');
+  const incEl = document.getElementById('stage-orbit-inc');
+
+  if (distEl) distEl.textContent = data.dist;
+  if (gravEl) gravEl.textContent = data.gravity;
+  if (tempEl) tempEl.textContent = data.temp;
+  if (bioEl) bioEl.textContent = data.biosignature;
+  if (incEl) incEl.textContent = data.inclination;
+
+  // Update Gas Composition Bars
+  data.gases.forEach((g, i) => {
+    const valEl = document.getElementById(`gas-val-${i + 1}`);
+    const barEl = document.getElementById(`gas-bar-${i + 1}`);
+    if (valEl) valEl.textContent = g.val;
+    if (barEl) {
+      barEl.style.width = g.val;
+      barEl.className = `bar-fill ${g.fillClass}`;
+    }
+  });
+
+  // Update Hologram Planet Sphere Stage
+  const sphere = document.getElementById('hologram-planet-core');
+  if (sphere) {
+    sphere.className = `planet-hologram-sphere ${data.stageClass}`;
+    if (animateStage) {
+      gsap.fromTo(sphere, 
+        { scale: 0.85, rotationY: -45, opacity: 0.7 },
+        { scale: 1, rotationY: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.4)' }
+      );
+    }
+  }
+
+  // Update selector card active states
+  document.querySelectorAll('.planet-select-card').forEach(card => {
+    if (card.getAttribute('data-target-planet') === planetKey) {
+      card.classList.add('active');
+    } else {
+      card.classList.remove('active');
+    }
+  });
+
+  playSound('radarChirp');
+}
 
 export function initSmoothScroll() {
   if (lenisInstance) return lenisInstance;
 
   lenisInstance = new Lenis({
-    duration: 1.2,
+    duration: 1.1,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     gestureOrientation: 'vertical',
@@ -21,338 +182,302 @@ export function initSmoothScroll() {
     infinite: false,
   });
 
-  lenisInstance.on('scroll', ScrollTrigger.update);
+  const canvasEngine = getCanvasEngine();
+  const speedHud = document.getElementById('hud-warp-speed');
 
-  gsap.ticker.add((time) => {
-    lenisInstance.raf(time * 1000);
+  lenisInstance.on('scroll', (e) => {
+    ScrollTrigger.update();
+
+    // Feed scroll velocity to 3D Canvas Starfield
+    if (canvasEngine && e.velocity) {
+      canvasEngine.setScrollVelocity(e.velocity);
+
+      // Update speedometer HUD
+      if (speedHud) {
+        const vel = Math.abs(e.velocity);
+        if (vel > 12) {
+          speedHud.textContent = `WARP SPEED: ${(vel * 0.4).toFixed(1)}c [HYPERSPACE]`;
+          speedHud.style.color = '#00ffdc';
+        } else {
+          speedHud.textContent = `VELOCITY: ${(0.85 + vel * 0.05).toFixed(2)}c [STABLE]`;
+          speedHud.style.color = 'var(--color-accent-cyan)';
+        }
+      }
+    }
   });
 
-  gsap.ticker.lagSmoothing(0);
+  function raf(time) {
+    lenisInstance.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
 
   return lenisInstance;
 }
 
-export function setupScrollCamera({ stars, planets = [], geometries = [], nebula } = {}) {
-  const camera = getCamera();
-  if (!camera) return () => {};
-
-  // Initialize buttery smooth scrolling
-  initSmoothScroll();
-
-  const SCRUB_SPEED = 1.2;
-
-  const azurea = planets[0];
-  const vesperion = planets[1];
-
-  const ctx = gsap.context(() => {
-    // Ensure all 3D foreground objects start completely invisible
-    if (azurea) azurea.scale.set(0.0001, 0.0001, 0.0001);
-    if (vesperion) vesperion.scale.set(0.0001, 0.0001, 0.0001);
-    geometries.forEach((g) => g.scale.set(0.0001, 0.0001, 0.0001));
-
-    // ========================================================================
-    // 1. HERO FLIGHT (Camera moves z: 80 -> -40) — Pure stars & cosmic atmosphere
-    // ========================================================================
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: '#hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: SCRUB_SPEED,
-      },
-    }).fromTo(
-      camera.position,
-      { x: 0, y: 0, z: 80 },
-      { x: 0, y: 0.4, z: -40, ease: 'none' }
-    );
-
-    // ========================================================================
-    // 2. NEBULA DISCOVERY (Camera moves z: -40 -> -190)
-    //    Dive through volumetric nebula cloud, Azurea begins emerging at end
-    // ========================================================================
-    const nebulaTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#nebula-discovery',
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: SCRUB_SPEED,
-      },
-    });
-
-    nebulaTl.to(camera.position, {
-      x: 0,
-      y: 0,
-      z: -190,
-      ease: 'none',
-    });
-
-    // Azurea starts scaling up as user scrolls through nebula toward planets
-    if (azurea) {
-      nebulaTl.fromTo(
-        azurea.scale,
-        { x: 0.0001, y: 0.0001, z: 0.0001 },
-        { x: 1, y: 1, z: 1, ease: 'power2.out' },
-        0.5 // Start halfway through nebula discovery
-      );
-      nebulaTl.fromTo(
-        azurea.position,
-        { x: 28, y: -10, z: -330 },
-        { x: 15, y: 0, z: -290, ease: 'power1.out' },
-        0.5
-      );
-    }
-
-    // ========================================================================
-    // 3. PLANETS SHOWCASE (Pinned Horizontal Parallax)
-    //    Azurea Prime (Earth) -> Vesperion (Ringed Giant)
-    // ========================================================================
-    const planetsSection = document.querySelector('#planets-showcase');
-    const planetsTrack = document.querySelector('.planets-track');
-    const planetCards = document.querySelectorAll('.planet-card');
-
-    if (planetsSection && planetsTrack && planetCards.length > 0) {
-      const cardCount = planetCards.length;
-      const totalPercent = (cardCount - 1) * 100;
-
-      const planetTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#planets-showcase',
-          start: 'top top',
-          end: '+=1000',
-          pin: true,
-          scrub: SCRUB_SPEED,
-          anticipatePin: 1,
-        },
-      });
-
-      // Horizontal track slide
-      planetTl.to(planetsTrack, {
-        xPercent: -totalPercent,
-        ease: 'none',
-      }, 0);
-
-      // Camera glides from Azurea focus to Vesperion focus
-      planetTl.fromTo(
-        camera.position,
-        { x: -3.5, y: 0, z: -250 },
-        { x: 3.8, y: 0, z: -440, ease: 'none' },
-        0
-      );
-
-      // Azurea glides off to left and shrinks as we transition across
-      if (azurea) {
-        planetTl.to(
-          azurea.position,
-          { x: -28, y: -6, z: -360, ease: 'power1.inOut' },
-          0
-        );
-        planetTl.to(
-          azurea.scale,
-          { x: 0.25, y: 0.25, z: 0.25, ease: 'power1.in' },
-          0.4
-        );
-      }
-
-      // Vesperion scales up and glides into position on the left
-      if (vesperion) {
-        planetTl.fromTo(
-          vesperion.scale,
-          { x: 0.0001, y: 0.0001, z: 0.0001 },
-          { x: 1, y: 1, z: 1, ease: 'power2.out' },
-          0.25
-        );
-        planetTl.fromTo(
-          vesperion.position,
-          { x: -30, y: 8, z: -530 },
-          { x: -16, y: 0, z: -480, ease: 'power1.out' },
-          0.25
-        );
-      }
-    }
-
-    // Clean exit of planets as we enter Capabilities
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: '#capabilities',
-        start: 'top bottom',
-        end: 'top 20%',
-        scrub: SCRUB_SPEED,
-      },
-    })
-      .to(azurea?.scale || {}, { x: 0.0001, y: 0.0001, z: 0.0001, ease: 'power2.in' }, 0)
-      .to(vesperion?.scale || {}, { x: 0.0001, y: 0.0001, z: 0.0001, ease: 'power2.in' }, 0);
-
-    // ========================================================================
-    // 4. SAAS CAPABILITIES (Crystalline Quantum Polyhedra in 3D)
-    // ========================================================================
-    if (document.querySelector('#capabilities')) {
-      const capTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#capabilities',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: SCRUB_SPEED,
-        },
-      });
-
-      capTl.to(camera.position, {
-        x: 0,
-        y: 1.5,
-        z: -680,
-        ease: 'none',
-      }, 0);
-
-      // Reveal floating quantum geometries
-      geometries.forEach((geomGroup, idx) => {
-        capTl.fromTo(
-          geomGroup.scale,
-          { x: 0.0001, y: 0.0001, z: 0.0001 },
-          { x: 1, y: 1, z: 1, ease: 'back.out(1.4)' },
-          0.1 + idx * 0.08
-        );
-      });
-
-      // Hide geometries on exit
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: '#stats-counter',
-          start: 'top bottom',
-          end: 'top 30%',
-          scrub: SCRUB_SPEED,
-        },
-      }).to(
-        geometries.map((g) => g.scale),
-        { x: 0.0001, y: 0.0001, z: 0.0001, ease: 'power2.in' }
-      );
-    }
-
-    // ========================================================================
-    // 5. LIVE TELEMETRY & STATS (Camera z: -680 -> -920)
-    // ========================================================================
-    if (document.querySelector('#stats-counter')) {
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: '#stats-counter',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: SCRUB_SPEED,
-        },
-      }).to(camera.position, {
-        x: 2,
-        y: -0.8,
-        z: -920,
-        ease: 'none',
-      });
-    }
-
-    // ========================================================================
-    // 6. DEEP SPACE ARCHIVE / GALLERY (Camera z: -920 -> -1180)
-    // ========================================================================
-    if (document.querySelector('#gallery')) {
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: '#gallery',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: SCRUB_SPEED,
-        },
-      }).to(camera.position, {
-        x: -1.5,
-        y: 0.4,
-        z: -1180,
-        ease: 'none',
-      });
-    }
-
-    // ========================================================================
-    // 7. PRICING & FOOTER (Camera z: -1180 -> -1420)
-    // ========================================================================
-    if (document.querySelector('#pricing')) {
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: '#pricing',
-          start: 'top bottom',
-          end: 'bottom bottom',
-          scrub: SCRUB_SPEED,
-        },
-      }).to(camera.position, {
-        x: 0,
-        y: -1.8,
-        z: -1420,
-        ease: 'none',
-      });
-    }
-  });
-
-  return () => {
-    ctx.revert();
-  };
-}
-
 export function setupScrollTriggers() {
+  initSmoothScroll();
+  const canvasEngine = getCanvasEngine();
+
   const ctx = gsap.context(() => {
-    // ========================================================================
-    // 1. HERO PARALLAX & STAGGER
-    // ========================================================================
+    // 0. Mission Flight Progress Trail Tracking
+    const trailSteps = gsap.utils.toArray('.trail-step');
+    const sections = gsap.utils.toArray('section');
+
+    sections.forEach((sec, idx) => {
+      ScrollTrigger.create({
+        trigger: sec,
+        start: 'top 50%',
+        end: 'bottom 50%',
+        onEnter: () => updateTrail(idx),
+        onEnterBack: () => updateTrail(idx),
+      });
+    });
+
+    function updateTrail(activeIndex) {
+      trailSteps.forEach((step, i) => {
+        if (i === activeIndex) {
+          step.classList.add('active');
+        } else {
+          step.classList.remove('active');
+        }
+      });
+
+      const fill = document.querySelector('.trail-progress-fill');
+      if (fill && sections.length > 1) {
+        const pct = (activeIndex / (sections.length - 1)) * 100;
+        fill.style.height = `${pct}%`;
+      }
+    }
+
+    // 1. Hero Section Exit
     gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom 20%',
-        scrub: 1.0,
+        scrub: 0.8,
+        onLeave: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(12, 10, 30);
+        },
+        onEnterBack: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(6, 9, 24);
+        }
       },
     })
-      .to('#hero .hero-badge', { y: -30, opacity: 0, duration: 0.6 }, 0)
+      .to('#hero .story-chapter-badge', { y: -30, opacity: 0, duration: 0.6 }, 0)
       .to('#hero .hero-title', { y: -50, opacity: 0, duration: 0.8 }, 0)
       .to('#hero .subtitle', { y: -35, opacity: 0, duration: 0.7 }, 0.05)
       .to('#hero .hero-actions', { y: -25, opacity: 0, duration: 0.6 }, 0.1)
       .to('#hero .hero-hud-strip', { y: 30, opacity: 0, duration: 0.8 }, 0)
       .to('#hero .scroll-indicator', { opacity: 0, duration: 0.3 }, 0);
 
-    // ========================================================================
-    // 2. NEBULA DISCOVERY ENTRANCE & PARALLAX
-    // ========================================================================
+    // 2. Nebula Discovery Entrance
     gsap.timeline({
       scrollTrigger: {
         trigger: '#nebula-discovery',
         start: 'top 85%',
         toggleActions: 'play none none reverse',
+        onEnter: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(24, 10, 42);
+        },
+        onLeaveBack: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(6, 9, 24);
+        }
       },
     })
-      .fromTo('#nebula-discovery .nebula-badge', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
-      .fromTo('#nebula-discovery h2', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4')
-      .fromTo('#nebula-discovery .nebula-text', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.5')
-      .fromTo('#nebula-discovery .nebula-controls', { opacity: 0, y: 30, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.65, ease: 'power3.out' }, '-=0.4');
+      .from('#nebula-discovery .story-chapter-badge', { opacity: 0, y: 24, duration: 0.6, ease: 'power3.out' })
+      .from('#nebula-discovery h2', { opacity: 0, y: 35, duration: 0.7, ease: 'power3.out' }, '-=0.4')
+      .from('#nebula-discovery .nebula-text', { opacity: 0, y: 25, duration: 0.7, ease: 'power3.out' }, '-=0.5')
+      .from('#nebula-discovery .nebula-controls', { opacity: 0, y: 30, scale: 0.96, duration: 0.65, ease: 'power3.out' }, '-=0.4');
 
-    // ========================================================================
-    // 3. SAAS CAPABILITIES — MULTI-LAYER DEPTH PARALLAX
-    //    Columns move at different speeds as you scroll for genuine 3D depth!
-    // ========================================================================
-    const capCards = gsap.utils.toArray('.capability-card');
-    capCards.forEach((card, i) => {
-      // Entrance reveal
-      gsap.fromTo(
-        card,
-        { opacity: 0, y: 40, scale: 0.95 },
+    // 3. Chapter 03: Fluid 3D Planetary Reconnaissance Deck (Continuous Parallax - Zero Pause!)
+    const planetsSection = document.querySelector('#planets-showcase');
+    if (planetsSection) {
+      ScrollTrigger.create({
+        trigger: '#planets-showcase',
+        start: 'top 75%',
+        end: 'bottom 25%',
+        onEnter: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(8, 16, 36);
+        },
+        onLeaveBack: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(24, 10, 42);
+        }
+      });
+
+      // Continuous 3D Parallax on the holographic stage
+      gsap.to('.planet-hologram-stage', {
+        y: -40,
+        rotationY: 25,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#planets-showcase',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.0,
+        }
+      });
+
+      // Left and right telemetry columns glide with parallax depth
+      gsap.to('.telemetry-panel', {
+        y: -30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#planets-showcase',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+        }
+      });
+
+      gsap.to('.planet-selector-deck', {
+        y: -50,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#planets-showcase',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.2,
+        }
+      });
+    }
+
+    // Direct Planet Selector Card Click Handlers
+    document.querySelectorAll('.planet-select-card').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const planetKey = btn.getAttribute('data-target-planet');
+        if (planetKey) {
+          switchPlanetUI(planetKey, true);
+        }
+      });
+    });
+
+    // 3.5. Chapter 03.5: Quantum Relativity Gateway Parallax Bridge
+    const gatewaySection = document.querySelector('#quantum-gateway');
+    if (gatewaySection) {
+      ScrollTrigger.create({
+        trigger: '#quantum-gateway',
+        start: 'top 75%',
+        end: 'bottom 25%',
+        onEnter: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(4, 28, 32); // Emerald-cyan warp field
+        },
+        onLeaveBack: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(8, 16, 36);
+        }
+      });
+
+      // 3D Astrolabe Ring Parallax Expansion
+      gsap.to('.astrolabe-3d-stage', {
+        scale: 1.35,
+        rotationX: 30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#quantum-gateway',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.0,
+        }
+      });
+
+      // Left and Right Relativistic Panels glide across screen
+      gsap.fromTo('.stream-panel.panel-left',
+        { x: -60, opacity: 0.6 },
         {
+          x: 0,
           opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          delay: (i % 3) * 0.12,
-          ease: 'power3.out',
+          ease: 'power2.out',
           scrollTrigger: {
-            trigger: card,
-            start: 'top 90%',
-            toggleActions: 'play none none reverse',
-          },
+            trigger: '#quantum-gateway',
+            start: 'top 80%',
+            end: 'center center',
+            scrub: 0.8,
+          }
         }
       );
 
-      // Multi-layer scrub parallax based on column index
-      const colIndex = i % 3;
-      const yOffset = colIndex === 0 ? -35 : colIndex === 1 ? 0 : -60;
+      gsap.fromTo('.stream-panel.panel-right',
+        { x: 60, opacity: 0.6 },
+        {
+          x: 0,
+          opacity: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '#quantum-gateway',
+            start: 'top 80%',
+            end: 'center center',
+            scrub: 0.8,
+          }
+        }
+      );
+    }
 
+    // 4. Capabilities Bento Grid (Chapter 04: Quantum Systems)
+    const capSection = document.querySelector('#capabilities');
+    if (capSection) {
+      ScrollTrigger.create({
+        trigger: '#capabilities',
+        start: 'top 70%',
+        end: 'bottom 30%',
+        onEnter: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(4, 28, 30);
+        },
+        onLeaveBack: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(4, 28, 32);
+        }
+      });
+
+      // Animate the Quantum Core backdrop
+      gsap.to('.quantum-flux-ring', {
+        rotationZ: 360,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#capabilities',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.0,
+        }
+      });
+
+      gsap.fromTo('.quantum-singularity-core',
+        { scale: 0.6, opacity: 0.4 },
+        {
+          scale: 1.3,
+          opacity: 0.9,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#capabilities',
+            start: 'top 80%',
+            end: 'center center',
+            scrub: 1.0,
+          }
+        }
+      );
+    }
+
+    // Capability Cards: Clean entrance + Parallax vertical float
+    const capCards = gsap.utils.toArray('.capability-card');
+    capCards.forEach((card, i) => {
+      const colIndex = i % 3;
+      const yOffset = colIndex === 0 ? -40 : colIndex === 1 ? 0 : -50;
+
+      // Entrance animation
+      gsap.from(card, {
+        opacity: 0,
+        y: 40,
+        scale: 0.95,
+        duration: 0.6,
+        delay: colIndex * 0.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      // Parallax float
       gsap.to(card, {
         y: yOffset,
         ease: 'none',
@@ -360,95 +485,104 @@ export function setupScrollTriggers() {
           trigger: '#capabilities',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.2,
+          scrub: 1.0,
         },
       });
     });
 
-    // ========================================================================
-    // 4. STATS COUNTER — STAGGERED PARALLAX ENTRY
-    // ========================================================================
-    gsap.utils.toArray('#stats-counter .stat-card').forEach((card, i) => {
-      gsap.fromTo(
-        card,
-        { opacity: 0, y: 35, scale: 0.94 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.65,
-          delay: i * 0.1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
+    // 5. Stats Counter Cards (Chapter 05: Sensor Telemetry)
+    const statsSection = document.querySelector('#stats-counter');
+    if (statsSection) {
+      ScrollTrigger.create({
+        trigger: '#stats-counter',
+        start: 'top 70%',
+        end: 'bottom 30%',
+        onEnter: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(6, 20, 48);
+        },
+        onLeaveBack: () => {
+          if (canvasEngine) canvasEngine.setAmbientChapter(4, 28, 30);
         }
-      );
+      });
 
-      // Subtle vertical scrub offset
-      gsap.to(card, {
-        y: (i % 2 === 0 ? -20 : -40),
+      // Animate the Sensor Array backdrop
+      gsap.to('.sensor-dish-ring', {
+        rotationZ: 180,
+        scale: 1.1,
         ease: 'none',
         scrollTrigger: {
           trigger: '#stats-counter',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.2,
+          scrub: 1.5,
+        }
+      });
+    }
+
+    gsap.utils.toArray('#stats-counter .stat-card').forEach((card, i) => {
+      // Entrance
+      gsap.from(card, {
+        opacity: 0,
+        y: 35,
+        scale: 0.94,
+        duration: 0.6,
+        delay: i * 0.08,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
+      // Parallax float
+      gsap.to(card, {
+        y: i % 2 === 0 ? -20 : -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#stats-counter',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.0,
         },
       });
     });
 
-    // ========================================================================
-    // 5. GALLERY ITEMS — MULTI-SPEED STAGGER
-    // ========================================================================
+    // 6. Gallery Items (Chapter 06)
     gsap.utils.toArray('#gallery .gallery-item').forEach((item, i) => {
-      gsap.fromTo(
-        item,
-        { opacity: 0, y: 35, scale: 0.95 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.6,
-          delay: (i % 4) * 0.08,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 90%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
+      gsap.from(item, {
+        opacity: 0,
+        y: 35,
+        scale: 0.95,
+        duration: 0.6,
+        delay: (i % 4) * 0.08,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+        },
+      });
     });
 
-    // ========================================================================
-    // 6. PRICING CARDS — 3D DEPTH STAGGER
-    // ========================================================================
+    // 7. Pricing Cards (Chapter 07)
     gsap.utils.toArray('.pricing-card').forEach((card, i) => {
-      gsap.fromTo(
-        card,
-        { opacity: 0, y: 40, scale: 0.94 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          delay: i * 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
+      gsap.from(card, {
+        opacity: 0,
+        y: 40,
+        scale: 0.94,
+        duration: 0.7,
+        delay: i * 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          toggleActions: 'play none none reverse',
+        },
+      });
     });
 
-    // ========================================================================
-    // 7. FOOTER ENTRANCE
-    // ========================================================================
+    // 8. Footer Entrance
     const footerTl = gsap.timeline({
       scrollTrigger: {
         trigger: '#footer',
@@ -457,8 +591,8 @@ export function setupScrollTriggers() {
       },
     });
     footerTl
-      .fromTo('#footer .footer-cta-box', { opacity: 0, y: 35 }, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' })
-      .fromTo('#footer .footer-columns', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55 }, '-=0.35');
+      .from('#footer .footer-cta-box', { opacity: 0, y: 35, duration: 0.75, ease: 'power3.out' })
+      .from('#footer .footer-columns', { opacity: 0, y: 20, duration: 0.55 }, '-=0.35');
   });
 
   function onResize() {

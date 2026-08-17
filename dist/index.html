@@ -13,15 +13,49 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
-    <script type="module" crossorigin src="/assets/index-BLr1x42q.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/three-knZ38mWU.js">
+    <script type="module" crossorigin src="/assets/index-DEzYG3gj.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/gsap-C8IefbVz.js">
     <link rel="modulepreload" crossorigin href="/assets/anime-CMNwbS55.js">
-    <link rel="stylesheet" crossorigin href="/assets/index--Q8J2CLa.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-DGNlLvKI.css">
   </head>
   <body>
-    <!-- 3D WebGL Canvas Background -->
-    <div id="canvas-container" aria-hidden="true"></div>
+    <!-- Native 60FPS 3D Canvas Starfield & Warp Engine -->
+    <canvas id="starfield-canvas"></canvas>
+
+    <!-- Persistent Mission Journey Trail HUD (Right side) -->
+    <aside class="mission-flight-trail" aria-label="Mission Trajectory Trail">
+      <div class="trail-line">
+        <div class="trail-progress-fill"></div>
+      </div>
+      <a href="#hero" class="trail-step active" data-chapter="1" title="Chapter 01: Orbital Launch">
+        <span class="step-dot"></span>
+        <span class="step-label font-mono">01 // LAUNCH</span>
+      </a>
+      <a href="#nebula-discovery" class="trail-step" data-chapter="2" title="Chapter 02: Spectral Nebula">
+        <span class="step-dot"></span>
+        <span class="step-label font-mono">02 // NEBULA</span>
+      </a>
+      <a href="#planets-showcase" class="trail-step" data-chapter="3" title="Chapter 03: Planetary Recon">
+        <span class="step-dot"></span>
+        <span class="step-label font-mono">03 // PLANETS</span>
+      </a>
+      <a href="#capabilities" class="trail-step" data-chapter="4" title="Chapter 04: Quantum Engine">
+        <span class="step-dot"></span>
+        <span class="step-label font-mono">04 // SYSTEMS</span>
+      </a>
+      <a href="#stats-counter" class="trail-step" data-chapter="5" title="Chapter 05: Sensor Telemetry">
+        <span class="step-dot"></span>
+        <span class="step-label font-mono">05 // TELEMETRY</span>
+      </a>
+      <a href="#gallery" class="trail-step" data-chapter="6" title="Chapter 06: Cosmic Archive">
+        <span class="step-dot"></span>
+        <span class="step-label font-mono">06 // ARCHIVE</span>
+      </a>
+      <a href="#pricing" class="trail-step" data-chapter="7" title="Chapter 07: Mission Deploy">
+        <span class="step-dot"></span>
+        <span class="step-label font-mono">07 // DEPLOY</span>
+      </a>
+    </aside>
 
     <!-- SaaS Navigation Bar -->
     <header class="navbar" role="banner">
@@ -72,12 +106,13 @@
     </header>
 
     <main role="main">
-      <!-- 1. Hero Section -->
+      <!-- 1. Hero Section (Chapter 01) -->
       <section role="region" aria-label="Hero" id="hero">
         <div class="hero-content content-wrapper">
-          <div class="hero-badge">
-            <span class="pulse-dot"></span>
-            <span>v3.8 ASTROPHYSICS INTELLIGENCE ENGINE ONLINE</span>
+          <div class="story-chapter-badge">
+            <span class="chapter-num font-mono">CHAPTER 01</span>
+            <span class="chapter-divider">//</span>
+            <span class="chapter-title font-mono">ORBITAL DEPARTURE & IGNITION</span>
           </div>
 
           <h1 class="hero-title">Explore the Infinite <span class="gradient-text">Cosmos</span></h1>
@@ -129,12 +164,13 @@
         </div>
       </section>
 
-      <!-- 2. Nebula Discovery Section -->
+      <!-- 2. Nebula Discovery Section (Chapter 02) -->
       <section role="region" aria-label="Nebula Discovery" id="nebula-discovery">
         <div class="content-wrapper">
-          <div class="section-badge nebula-badge">
-            <span class="badge-dot"></span>
-            <span>VOLUMETRIC SHADER MATRIX</span>
+          <div class="story-chapter-badge">
+            <span class="chapter-num font-mono">CHAPTER 02</span>
+            <span class="chapter-divider">//</span>
+            <span class="chapter-title font-mono">SPECTRAL NEBULA CORRIDOR</span>
           </div>
           <h2 class="nebula-heading">Volumetric <span class="accent-violet">Resonance</span></h2>
           <p class="nebula-text">
@@ -165,70 +201,288 @@
         </div>
       </section>
 
-      <!-- 3. Planetary Systems (Pinned Horizontal Scroll) -->
-      <section role="region" aria-label="Planets Showcase" id="planets-showcase" class="planets-section">
-        <div class="section-header">
-          <div class="section-badge">
-            <span class="badge-dot"></span>
-            <span>INTERACTIVE ORBITAL TELEMETRY</span>
+      <!-- 3. Chapter 03: Planetary Reconnaissance Command Deck -->
+      <section role="region" aria-label="Planetary Reconnaissance" id="planets-showcase" class="planets-mission-section">
+        <div class="mission-container content-wrapper">
+          <!-- Section Header with Story Badge -->
+          <div class="section-header">
+            <div class="story-chapter-badge">
+              <span class="chapter-num font-mono">CHAPTER 03</span>
+              <span class="chapter-divider">//</span>
+              <span class="chapter-title font-mono">EXOPLANETARY RECONNAISSANCE</span>
+            </div>
+            <h2>Planetary <span class="accent-rose">Classifications</span></h2>
+            <p class="subtitle">
+              Continuous orbital survey of charted exoplanetary systems. Real-time atmospheric spectrometry, gravitational density, and surface scans.
+            </p>
           </div>
-          <h2>Planetary <span class="accent-rose">Classifications</span></h2>
-          <p class="subtitle">
-            Survey charted exoplanets featuring procedural thermal shaders, atmospheric Rayleigh scattering, and orbiting debris rings.
-          </p>
-        </div>
 
-        <div class="planets-track-wrapper">
-          <div class="planets-track">
-            <!-- Planet 1: Azurea (Earth Model) -->
-            <div class="planet-card card" data-planet="azurea">
-              <div class="planet-card-header">
-                <span class="planet-type-badge ocean-badge">OCEAN SUPER-EARTH</span>
-                <span class="planet-dist font-mono">1.12 AU</span>
+          <!-- Pinned 3-Column Command Center Deck -->
+          <div class="planetary-deck-wrapper">
+            <!-- Left Column: Planetary Telemetry & Bio-Spectrometry -->
+            <div class="telemetry-panel card">
+              <div class="panel-header">
+                <span class="panel-tag font-mono">ORBITAL TELEMETRY</span>
+                <span class="live-status"><span class="pulse-dot"></span> SCANNING</span>
               </div>
-              <h3>Azurea Prime</h3>
-              <p>A colossal ocean giant shrouded in atmospheric turquoise haze with rotating cloud decks, dynamic sun glint, and night-side bio-luminescence.</p>
-              <div class="planet-specs">
-                <div class="spec-row"><span>Ocean Depth:</span><strong class="font-mono">120 km Liquid</strong></div>
-                <div class="spec-row"><span>Gravitational Field:</span><strong class="font-mono">0.98 g</strong></div>
-                <div class="spec-row"><span>Biosignatures:</span><strong class="accent-cyan font-mono">94.2% Probable</strong></div>
-                <div class="spec-row"><span>Habitability Index:</span><strong class="accent-emerald font-mono">Class-A Prime</strong></div>
+
+              <div class="target-planet-info">
+                <span class="target-label font-mono">ACTIVE TARGET</span>
+                <h3 id="planet-target-name" class="target-name">Azurea Prime</h3>
+                <span id="planet-target-type" class="target-class ocean-badge">OCEAN SUPER-EARTH</span>
               </div>
-              <button class="planet-scan-btn cta-button primary-cta" data-planet="azurea" type="button">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
-                <span>Perform Surface Scan</span>
-              </button>
+
+              <!-- Atmospheric Gas Ratio Bar Chart -->
+              <div class="gas-composition-box">
+                <span class="box-title font-mono">ATMOSPHERIC SPECTROSCOPY</span>
+                <div class="gas-bars">
+                  <div class="gas-bar-row">
+                    <div class="gas-label"><span>H₂O (Water Vapor)</span><strong id="gas-val-1" class="font-mono">78.4%</strong></div>
+                    <div class="bar-track"><div id="gas-bar-1" class="bar-fill cyan-fill" style="width: 78.4%"></div></div>
+                  </div>
+                  <div class="gas-bar-row">
+                    <div class="gas-label"><span>N₂ (Nitrogen)</span><strong id="gas-val-2" class="font-mono">14.2%</strong></div>
+                    <div class="bar-track"><div id="gas-bar-2" class="bar-fill blue-fill" style="width: 14.2%"></div></div>
+                  </div>
+                  <div class="gas-bar-row">
+                    <div class="gas-label"><span>O₂ (Oxygen)</span><strong id="gas-val-3" class="font-mono">5.8%</strong></div>
+                    <div class="bar-track"><div id="gas-bar-3" class="bar-fill emerald-fill" style="width: 5.8%"></div></div>
+                  </div>
+                  <div class="gas-bar-row">
+                    <div class="gas-label"><span>Xe (Rare Xenon)</span><strong id="gas-val-4" class="font-mono">1.6%</strong></div>
+                    <div class="bar-track"><div id="gas-bar-4" class="bar-fill violet-fill" style="width: 1.6%"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quantitative Metrics Grid -->
+              <div class="planet-metrics-grid font-mono">
+                <div class="metric-cell">
+                  <span class="metric-lbl">DISTANCE</span>
+                  <strong id="planet-metric-dist" class="metric-val">1.12 AU</strong>
+                </div>
+                <div class="metric-cell">
+                  <span class="metric-lbl">GRAVITY</span>
+                  <strong id="planet-metric-grav" class="metric-val">0.98 g</strong>
+                </div>
+                <div class="metric-cell">
+                  <span class="metric-lbl">SURFACE TEMP</span>
+                  <strong id="planet-metric-temp" class="metric-val">19.4 °C</strong>
+                </div>
+                <div class="metric-cell">
+                  <span class="metric-lbl">BIOSIGNATURE</span>
+                  <strong id="planet-metric-bio" class="metric-val accent-emerald">94.2%</strong>
+                </div>
+              </div>
             </div>
 
-            <!-- Planet 2: Vesperion (Ringed Titan) -->
-            <div class="planet-card card" data-planet="vesperion">
-              <div class="planet-card-header">
-                <span class="planet-type-badge ringed-badge">RINGED GAS GIANT</span>
-                <span class="planet-dist font-mono">3.45 AU</span>
+            <!-- Center Column: Holographic Planet Stage -->
+            <div class="hologram-stage-panel">
+              <div class="radar-scan-reticle">
+                <div class="reticle-ring ring-outer"></div>
+                <div class="reticle-ring ring-mid"></div>
+                <div class="reticle-ring ring-inner"></div>
+                <div class="reticle-axis-x"></div>
+                <div class="reticle-axis-y"></div>
+                <div class="reticle-sweep"></div>
               </div>
-              <h3>Vesperion</h3>
-              <p>High-energy violet winds carve atmospheric storms beneath shimmering dual ice rings, polar auroras, and orbiting moon systems.</p>
-              <div class="planet-specs">
-                <div class="spec-row"><span>Zonal Wind Velocity:</span><strong class="font-mono">1,800 km/h</strong></div>
-                <div class="spec-row"><span>Planetary Rings:</span><strong class="font-mono">Dual Cassini Bands</strong></div>
-                <div class="spec-row"><span>Natural Satellites:</span><strong class="font-mono">2 Mapped Moons</strong></div>
-                <div class="spec-row"><span>Magnetic Field:</span><strong class="accent-violet font-mono">14.8 Gauss</strong></div>
+
+              <!-- Dynamic Planet Hologram Sphere -->
+              <div id="hologram-planet-core" class="planet-hologram-sphere planet-azurea-stage">
+                <div class="planet-atmosphere-glow"></div>
+                <div class="planet-surface-texture"></div>
+                <div class="planet-cloud-layer"></div>
+                <div class="planet-ring-system"></div>
               </div>
-              <button class="planet-scan-btn cta-button primary-cta" data-planet="vesperion" type="button">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
-                <span>Perform Surface Scan</span>
-              </button>
+
+              <!-- Satellite Orbital Tracker -->
+              <div class="satellite-orbit-track">
+                <div class="orbit-probe probe-1">
+                  <span class="probe-dot"></span>
+                  <span class="probe-label font-mono">SURVEY-PROBE A</span>
+                </div>
+                <div class="orbit-probe probe-2">
+                  <span class="probe-dot"></span>
+                  <span class="probe-label font-mono">SPECTRA-IX</span>
+                </div>
+              </div>
+
+              <div class="stage-footer-telemetry font-mono">
+                <span>ORBITAL INCLINATION: <strong id="stage-orbit-inc">14.82°</strong></span>
+                <span>SCAN MATRIX: <strong class="accent-cyan">SYNCHRONIZED</strong></span>
+              </div>
+            </div>
+
+            <!-- Right Column: Planet Selector Deck & Deep Scan Controller -->
+            <div class="selector-deck-panel">
+              <div class="panel-header">
+                <span class="panel-tag font-mono">SYSTEM TARGETS</span>
+                <span class="font-mono text-muted">4 DETECTED</span>
+              </div>
+
+              <div class="planet-selector-list">
+                <!-- Planet 1 -->
+                <button class="planet-select-card active" data-target-planet="azurea" type="button">
+                  <div class="card-orb orb-azurea"></div>
+                  <div class="card-details">
+                    <div class="card-top">
+                      <span class="p-index font-mono">01</span>
+                      <strong class="p-name">Azurea Prime</strong>
+                    </div>
+                    <span class="p-type ocean-badge">OCEAN SUPER-EARTH</span>
+                  </div>
+                  <div class="card-arrow">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </div>
+                </button>
+
+                <!-- Planet 2 -->
+                <button class="planet-select-card" data-target-planet="vesperion" type="button">
+                  <div class="card-orb orb-vesperion"></div>
+                  <div class="card-details">
+                    <div class="card-top">
+                      <span class="p-index font-mono">02</span>
+                      <strong class="p-name">Vesperion</strong>
+                    </div>
+                    <span class="p-type ringed-badge">RINGED GAS TITAN</span>
+                  </div>
+                  <div class="card-arrow">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </div>
+                </button>
+
+                <!-- Planet 3 -->
+                <button class="planet-select-card" data-target-planet="ignis" type="button">
+                  <div class="card-orb orb-ignis"></div>
+                  <div class="card-details">
+                    <div class="card-top">
+                      <span class="p-index font-mono">03</span>
+                      <strong class="p-name">Ignis-9</strong>
+                    </div>
+                    <span class="p-type lava-badge">MOLTEN LAVA CORE</span>
+                  </div>
+                  <div class="card-arrow">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </div>
+                </button>
+
+                <!-- Planet 4 -->
+                <button class="planet-select-card" data-target-planet="glacies" type="button">
+                  <div class="card-orb orb-glacies"></div>
+                  <div class="card-details">
+                    <div class="card-top">
+                      <span class="p-index font-mono">04</span>
+                      <strong class="p-name">Glacies-X</strong>
+                    </div>
+                    <span class="p-type cryo-badge">CRYOGENIC ICE GIANT</span>
+                  </div>
+                  <div class="card-arrow">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </div>
+                </button>
+              </div>
+
+              <div class="scan-action-box card">
+                <div class="scan-status-line">
+                  <span class="font-mono text-muted">SURFACE RESOLUTION:</span>
+                  <strong class="font-mono accent-cyan">0.05m LiDAR</strong>
+                </div>
+                <button id="main-planet-scan-btn" class="cta-button primary-cta" type="button">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                  <span>Initiate Deep Surface Scan</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 4. SaaS Capabilities Bento Grid -->
+      <!-- 3.5. Relativity Gateway & Quantum Astrolabe (Inter-Chapter Parallax Bridge) -->
+      <section role="region" aria-label="Quantum Relativity Gateway" id="quantum-gateway" class="quantum-gateway-section">
+        <div class="gateway-container">
+          <div class="story-chapter-badge">
+            <span class="chapter-num font-mono">WARP TRANSIT</span>
+            <span class="chapter-divider">//</span>
+            <span class="chapter-title font-mono">RELATIVITY GATEWAY & TENSOR MANIFOLD</span>
+          </div>
+
+          <h2 class="gateway-heading">Traversing the <span class="accent-cyan">Einstein-Rosen</span> Bridge</h2>
+          <p class="subtitle">Continuous 4D space-time contraction. Quantum tensor calculations warping spacetime geometry.</p>
+
+          <!-- 3D Gyroscopic Astrolabe Stage -->
+          <div class="astrolabe-3d-stage">
+            <div class="astrolabe-ring ring-outer">
+              <div class="astrolabe-node node-1 font-mono">ALPHA-1</div>
+              <div class="astrolabe-node node-2 font-mono">ALPHA-2</div>
+            </div>
+            <div class="astrolabe-ring ring-middle">
+              <div class="astrolabe-node node-3 font-mono">TENSOR-IX</div>
+              <div class="astrolabe-node node-4 font-mono">FLUX-IV</div>
+            </div>
+            <div class="astrolabe-ring ring-inner"></div>
+            
+            <!-- Central Hyper-Cube / Event Horizon Core -->
+            <div class="singularity-core-stage">
+              <div class="photon-orbit-ring"></div>
+              <div class="tesseract-cube">
+                <div class="cube-face front">TENSOR</div>
+                <div class="cube-face back">QUANTUM</div>
+                <div class="cube-face left">WARP</div>
+                <div class="cube-face right">CURVATURE</div>
+                <div class="cube-face top">LIGHT</div>
+                <div class="cube-face bottom">SINGULARITY</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parallax Floating Relativistic Data Panels -->
+          <div class="gateway-data-stream">
+            <div class="stream-panel panel-left card">
+              <div class="stream-header font-mono">
+                <span class="pulse-dot"></span>
+                <span class="accent-cyan">ALCUBIERRE WARP METRIC</span>
+              </div>
+              <div class="stream-formula font-mono">ds² = -c²dt² + [dx - v(t)f(r)dt]² + dy² + dz²</div>
+              <p>Spacetime contracted ahead of hull, expanded behind. Negative energy density stabilized at 0.002% variance.</p>
+              <div class="stream-footer font-mono">
+                <span>WARP FACTOR: <strong>9.94c</strong></span>
+                <span class="accent-emerald">TENSOR: STABLE</span>
+              </div>
+            </div>
+
+            <div class="stream-panel panel-right card">
+              <div class="stream-header font-mono">
+                <span class="pulse-dot"></span>
+                <span class="accent-violet">1,024-QUBIT TENSOR MATRIX</span>
+              </div>
+              <div class="stream-formula font-mono">|Ψ⟩ = α|00...0⟩ + β|11...1⟩ (Entangled)</div>
+              <p>Real-time orbital perturbation & micro-blackhole trajectory solver operating across 128 parallel dimensions.</p>
+              <div class="stream-footer font-mono">
+                <span>LATENCY: <strong>0.04 ms</strong></span>
+                <span class="accent-cyan">COHERENCE: 99.98%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. SaaS Capabilities Bento Grid (Chapter 04) -->
       <section role="region" aria-label="Capabilities" id="capabilities">
+        <!-- Central Quantum Core Parallax Hologram Backdrop -->
+        <div class="quantum-core-backdrop" aria-hidden="true">
+          <div class="quantum-singularity-core"></div>
+          <div class="quantum-flux-ring ring-alpha"></div>
+          <div class="quantum-flux-ring ring-beta"></div>
+          <div class="quantum-flux-ring ring-gamma"></div>
+          <div class="quantum-energy-rays"></div>
+          <div class="quantum-circuit-grid"></div>
+        </div>
+
         <div class="content-wrapper">
-          <div class="section-badge">
-            <span class="badge-dot"></span>
-            <span>ENTERPRISE ASTROPHYSICS STACK</span>
+          <div class="story-chapter-badge">
+            <span class="chapter-num font-mono">CHAPTER 04</span>
+            <span class="chapter-divider">//</span>
+            <span class="chapter-title font-mono">QUANTUM DRIVE ARCHITECTURE</span>
           </div>
           <h2>SaaS-Grade Space <span class="accent-cyan">Capabilities</span></h2>
           <p class="subtitle">
@@ -293,12 +547,22 @@
         </div>
       </section>
 
-      <!-- 5. Telemetry & Stats Section -->
+      <!-- 5. Telemetry & Stats Section (Chapter 05) -->
       <section role="region" aria-label="Stats Counter" id="stats-counter">
+        <!-- Sensor Array Hologram Backdrop -->
+        <div class="sensor-array-backdrop" aria-hidden="true">
+          <div class="sensor-dish-ring dish-outer"></div>
+          <div class="sensor-dish-ring dish-mid"></div>
+          <div class="sensor-dish-ring dish-inner"></div>
+          <div class="sensor-signal-wave wave-1"></div>
+          <div class="sensor-signal-wave wave-2"></div>
+        </div>
+
         <div class="content-wrapper">
-          <div class="section-badge">
-            <span class="badge-dot"></span>
-            <span>LIVE QUANTUM TELEMETRY</span>
+          <div class="story-chapter-badge">
+            <span class="chapter-num font-mono">CHAPTER 05</span>
+            <span class="chapter-divider">//</span>
+            <span class="chapter-title font-mono">DEEP SPACE SENSOR ARRAY</span>
           </div>
           <h2>Cosmos by the <span class="accent-cyan">Numbers</span></h2>
           <p class="nebula-text">Continuous telemetry streaming across distributed quantum astronomical nodes.</p>
@@ -340,12 +604,13 @@
         </div>
       </section>
 
-      <!-- 6. Observational Archive (Gallery) -->
+      <!-- 6. Observational Archive (Chapter 06) -->
       <section role="region" aria-label="Gallery" id="gallery">
         <div class="content-wrapper">
-          <div class="section-badge">
-            <span class="badge-dot"></span>
-            <span>HIGH-RESOLUTION DEEP SPACE ARCHIVE</span>
+          <div class="story-chapter-badge">
+            <span class="chapter-num font-mono">CHAPTER 06</span>
+            <span class="chapter-divider">//</span>
+            <span class="chapter-title font-mono">COSMIC EXPLORATION ARCHIVE</span>
           </div>
           <h2>Observatory <span class="accent-violet">Archive</span></h2>
           <p class="nebula-text">Fragments of deep space captured across multi-spectral wavelengths. Click any card to inspect in high-resolution.</p>
@@ -373,12 +638,13 @@
         </div>
       </section>
 
-      <!-- 7. SaaS Pricing Plans Section -->
+      <!-- 7. SaaS Pricing Plans Section (Chapter 07) -->
       <section role="region" aria-label="Pricing" id="pricing">
         <div class="content-wrapper">
-          <div class="section-badge">
-            <span class="badge-dot"></span>
-            <span>FLEXIBLE ENTERPRISE LICENSING</span>
+          <div class="story-chapter-badge">
+            <span class="chapter-num font-mono">CHAPTER 07</span>
+            <span class="chapter-divider">//</span>
+            <span class="chapter-title font-mono">MISSION DEPLOYMENT & COMMAND</span>
           </div>
           <h2>Scalable Plans for <span class="accent-rose">Every Mission</span></h2>
           <p class="subtitle">Choose the computational capacity and deep space sensor bandwidth for your observatory.</p>
@@ -623,12 +889,55 @@
       </div>
     </div>
 
+    <!-- Surface Radar Holographic Scan Modal -->
+    <div id="planet-scan-modal" class="cosmos-modal" role="dialog" aria-modal="true" aria-label="Planetary Radar Scan">
+      <div class="modal-card scan-modal-card">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <div class="scan-modal-content">
+          <div class="scan-modal-header">
+            <div class="section-badge font-mono">HIGH-RESOLUTION SPECTRAL RADAR</div>
+            <h2 id="scan-modal-planet-name">Azurea Prime — Surface Scan</h2>
+            <p id="scan-modal-planet-desc">Decomposing orbital atmospheric tomography and tectonic signatures...</p>
+          </div>
+
+          <div class="scan-visual-stage">
+            <div class="scan-beam-line"></div>
+            <div id="scan-sphere-preview" class="scan-sphere-render orb-azurea"></div>
+            <div class="scan-matrix-crosshairs"></div>
+          </div>
+
+          <div class="scan-data-columns font-mono">
+            <div class="scan-col">
+              <span class="col-lbl">CRUST COMPOSITION</span>
+              <strong id="scan-res-crust">Silicate Basin / 92% H₂O</strong>
+            </div>
+            <div class="scan-col">
+              <span class="col-lbl">SURFACE PRESSURE</span>
+              <strong id="scan-res-pres">1.14 bar (Earth Equiv)</strong>
+            </div>
+            <div class="scan-col">
+              <span class="col-lbl">ATMOSPHERE DEPTH</span>
+              <strong id="scan-res-atmo">280 km Troposphere</strong>
+            </div>
+            <div class="scan-col">
+              <span class="col-lbl">HABITABILITY INDEX</span>
+              <strong id="scan-res-hab" class="accent-emerald">Class-A Prime (94%)</strong>
+            </div>
+          </div>
+
+          <div class="scan-modal-footer">
+            <button class="cta-button primary-cta modal-close-btn" type="button">Export Telemetry Packet 💾</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Persistent Floating HUD (Bottom Left) -->
     <div class="floating-hud font-mono" aria-hidden="true">
       <div class="hud-dot"></div>
       <div class="hud-text">
         <span class="hud-sec">SECTOR: CYGNUS-OB2</span>
-        <span class="hud-fps">TELEMETRY: NOMINAL (0.8ms)</span>
+        <span id="hud-warp-speed" class="hud-fps">VELOCITY: 0.85c [STABLE]</span>
       </div>
     </div>
 
