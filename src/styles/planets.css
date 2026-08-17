@@ -5,7 +5,8 @@
   justify-content: center;
   overflow: hidden;
   position: relative;
-  padding: calc(60px + var(--spacing-md)) var(--spacing-md) var(--spacing-md);
+  padding: calc(70px + var(--spacing-md)) 0 var(--spacing-lg);
+  background: transparent;
 }
 
 .planets-section .section-header {
@@ -14,6 +15,7 @@
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 var(--spacing-md);
 }
 
 .planets-section .subtitle {
@@ -23,16 +25,17 @@
 
 .planets-track-wrapper {
   width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
-  overflow: visible;
+  overflow: hidden;
   display: flex;
   align-items: center;
+  padding: 20px 0;
 }
 
 .planets-track {
   display: flex;
-  gap: 40vw;
+  gap: 45vw;
+  padding-left: 8vw;
+  padding-right: 8vw;
   width: auto;
   will-change: transform;
 }
@@ -51,12 +54,7 @@
   gap: var(--spacing-sm);
   box-shadow: var(--shadow-card);
   position: relative;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.planet-card[data-planet="meridian"] {
-  border-color: rgba(244, 63, 94, 0.35);
-  box-shadow: 0 10px 40px -10px rgba(244, 63, 94, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
 }
 
 .planet-card[data-planet="azurea"] {
@@ -82,12 +80,6 @@
   padding: 3px 8px;
   border-radius: var(--radius-sm);
   letter-spacing: 0.05em;
-}
-
-.molten-badge {
-  background: rgba(244, 63, 94, 0.15);
-  color: #fb7185;
-  border: 1px solid rgba(244, 63, 94, 0.4);
 }
 
 .ocean-badge {
@@ -148,8 +140,15 @@
 }
 
 @media (max-width: 768px) {
+  .planets-track {
+    gap: 20vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+
   .planet-card {
-    flex: 0 0 320px;
+    flex: 0 0 84vw;
+    max-width: 84vw;
     padding: var(--spacing-md);
   }
 }
