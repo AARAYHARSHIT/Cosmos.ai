@@ -1,67 +1,7 @@
 import * as THREE from 'three';
 
 // ============================================================================
-// 1. PROCEDURAL 8K DEEP SPACE COSMIC SKYBOX SHADER (Zero Blur, Zero Warping)
-// ============================================================================
-const SKYBOX_VERTEX_SHADER = `
-  varying vec3 vWorldPosition;
-  void main() {
-    vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const SKYBOX_FRAGMENT_SHADER = `
-  uniform float uTime;
-  uniform float uWarp;
-  varying vec3 vWorldPosition;
-
-  // High-precision 3D hash & noise
-  float hash(vec3 p) {
-    p = fract(p * 0.3183099 + 0.1);
-    p *= 17.0;
-    return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
-  }
-
-  float noise3D(vec3 p) {
-    vec3 i = floor(p);
-    vec3 f = fract(p);
-    f = f * f * (3.0 - 2.0 * f);
-    return mix(
-      mix(mix(hash(i + vec3(0,0,0)), hash(i + vec3(1,0,0)), f.x),
-          mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
-      mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x),
-          mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y), f.z);
-  }
-
-  void main() {
-    vec3 dir = normalize(vWorldPosition);
-
-    // Deep space obsidian base
-    vec3 baseVoid = vec3(0.012, 0.02, 0.045);
-
-    // Cosmic dust lanes & galactic core glow
-    float t = uTime * (0.015 + uWarp * 0.05);
-    float n1 = noise3D(dir * 2.5 + vec3(t, t * 0.5, 0.0));
-    float n2 = noise3D(dir * 5.0 - vec3(0.0, t * 0.7, t));
-    float dust = smoothstep(0.35, 0.75, n1 * 0.65 + n2 * 0.35);
-
-    // Deep violet to electric indigo gradient
-    vec3 dustColor1 = vec3(0.12, 0.04, 0.25); // Violet dust
-    vec3 dustColor2 = vec3(0.02, 0.15, 0.28); // Cyan dust
-    vec3 dustColor3 = vec3(0.22, 0.05, 0.18); // Magenta lane
-
-    vec3 nebulaGlow = mix(dustColor1, dustColor2, dir.y * 0.5 + 0.5);
-    nebulaGlow = mix(nebulaGlow, dustColor3, smoothstep(0.4, 0.8, n2));
-
-    vec3 finalCosmos = baseVoid + nebulaGlow * dust * 0.65;
-
-    gl_FragColor = vec4(finalCosmos, 1.0);
-  }
-`;
-
-// ============================================================================
-// 2. PINPOINT OPTICAL STAR SHADER (Ultra-Sharp Diamond Clarity)
+// 1. PINPOINT DIAMOND STAR SHADER (Crisp, Ultra-Sharp, Multi-Depth Twinkle)
 // ============================================================================
 const STAR_VERTEX_SHADER = `
   uniform float uTime;
@@ -77,20 +17,21 @@ const STAR_VERTEX_SHADER = `
     vColor = aColor;
     vec3 pos = position;
 
-    // Relativistic Warp displacement along Z
+    // Relativistic Warp displacement
     if (uWarp > 0.01) {
-      pos.z += mod(uTime * 650.0 * uWarp + pos.z, 4500.0) - 2250.0;
+      pos.z += mod(uTime * 650.0 * uWarp + pos.z, 4000.0) - 2000.0;
     }
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mvPosition;
 
-    // Smooth sinusoidal twinkle
-    float twinkle = 0.65 + 0.35 * sin(uTime * aTwinkleSpeed + aTwinklePhase);
+    // Crisp sinusoidal twinkle
+    float twinkle = 0.7 + 0.3 * sin(uTime * aTwinkleSpeed + aTwinklePhase);
     vTwinkle = twinkle;
 
-    float sizeFactor = (260.0 / -mvPosition.z);
-    gl_PointSize = clamp(aSize * sizeFactor * twinkle * (1.0 + uWarp * 0.6), 1.0, 14.0);
+    // Razor-sharp point size (capped to avoid blurry bokeh blobs)
+    float sizeFactor = (200.0 / -mvPosition.z);
+    gl_PointSize = clamp(aSize * sizeFactor * twinkle * (1.0 + uWarp * 0.5), 1.0, 4.5);
   }
 `;
 
@@ -104,24 +45,23 @@ const STAR_FRAGMENT_SHADER = `
     float dist = length(uv);
     if (dist > 0.5) discard;
 
-    // Razor-sharp optical point with diamond core
-    float core = exp(-dist * dist * 56.0);
-    float halo = exp(-dist * 10.0) * 0.2;
+    // Razor-sharp Gaussian core
+    float core = exp(-dist * dist * 64.0);
 
-    // 4-point cross diffraction spike
-    float spikeH = exp(-abs(uv.y) * 36.0) * exp(-abs(uv.x) * 4.5);
-    float spikeV = exp(-abs(uv.x) * 36.0) * exp(-abs(uv.y) * 4.5);
-    float spikes = (spikeH + spikeV) * 0.3;
+    // Subtle 4-point cross flare
+    float spikeH = exp(-abs(uv.y) * 42.0) * exp(-abs(uv.x) * 6.0);
+    float spikeV = exp(-abs(uv.x) * 42.0) * exp(-abs(uv.y) * 6.0);
+    float spikes = (spikeH + spikeV) * 0.35;
 
-    float intensity = core + halo + spikes;
-    vec3 finalColor = vColor * (1.0 + vTwinkle * 0.35 + uWarp * 0.8);
+    float intensity = core + spikes;
+    vec3 finalColor = vColor * (1.0 + vTwinkle * 0.4 + uWarp * 0.6);
 
-    gl_FragColor = vec4(finalColor, clamp(intensity * vTwinkle, 0.0, 1.0));
+    gl_FragColor = vec4(finalColor, clamp(intensity * (0.85 + vTwinkle * 0.15), 0.0, 1.0));
   }
 `;
 
 // ============================================================================
-// 3. CLOSE PROXIMITY LUMINESCENT STARDUST EMBERS
+// 2. ELEGANT FLOATING STARDUST EMBERS (Subtle, Clean Depth Layer)
 // ============================================================================
 const DUST_VERTEX_SHADER = `
   uniform float uTime;
@@ -135,14 +75,14 @@ const DUST_VERTEX_SHADER = `
     vec3 pos = position;
 
     // Gentle 3D floating drift
-    pos.x += sin(uTime * 0.3 + pos.z * 0.02) * 4.0;
-    pos.y += cos(uTime * 0.25 + pos.x * 0.02) * 4.0;
+    pos.x += sin(uTime * 0.25 + pos.z * 0.02) * 3.0;
+    pos.y += cos(uTime * 0.2 + pos.x * 0.02) * 3.0;
 
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mv;
 
-    gl_PointSize = clamp(aSize * (150.0 / -mv.z), 1.0, 7.0);
-    vAlpha = smoothstep(1200.0, 40.0, -mv.z) * 0.5;
+    gl_PointSize = clamp(aSize * (120.0 / -mv.z), 1.0, 3.5);
+    vAlpha = smoothstep(1200.0, 50.0, -mv.z) * 0.45;
   }
 `;
 
@@ -155,33 +95,15 @@ const DUST_FRAGMENT_SHADER = `
     float d = length(uv);
     if (d > 0.5) discard;
     float alpha = smoothstep(0.5, 0.0, d) * vAlpha;
-    gl_FragColor = vec4(vColor * 1.3, alpha);
+    gl_FragColor = vec4(vColor * 1.2, alpha);
   }
 `;
 
-export function createStarField(scene, { count = 6500 } = {}) {
+export function createStarField(scene, { count = 6000 } = {}) {
   const rootGroup = new THREE.Group();
 
   // --------------------------------------------------------------------------
-  // 1. Procedural 8K Deep Space Celestial Skybox (Crisp, High-Resolution)
-  // --------------------------------------------------------------------------
-  const skyboxGeo = new THREE.SphereGeometry(4500, 64, 64);
-  const skyboxMat = new THREE.ShaderMaterial({
-    vertexShader: SKYBOX_VERTEX_SHADER,
-    fragmentShader: SKYBOX_FRAGMENT_SHADER,
-    uniforms: {
-      uTime: { value: 0 },
-      uWarp: { value: 0 },
-    },
-    side: THREE.BackSide,
-    depthWrite: false,
-  });
-
-  const skyboxMesh = new THREE.Mesh(skyboxGeo, skyboxMat);
-  rootGroup.add(skyboxMesh);
-
-  // --------------------------------------------------------------------------
-  // 2. High-Precision Starfield Points across the full 4500-unit corridor
+  // 1. High-Precision Pinpoint Starfield Points (Deep layered cosmos)
   // --------------------------------------------------------------------------
   const starPositions = new Float32Array(count * 3);
   const starColors = new Float32Array(count * 3);
@@ -190,26 +112,25 @@ export function createStarField(scene, { count = 6500 } = {}) {
   const twinklePhases = new Float32Array(count);
 
   const spectralPalette = [
-    new THREE.Color(0xffffff), // Pure diamond white (Class A)
-    new THREE.Color(0x90e0ef), // Electric cyan-blue (Class O/B)
-    new THREE.Color(0x38bdf8), // Cyan Ionized
-    new THREE.Color(0xffd166), // Solar Golden (Class G)
-    new THREE.Color(0xffaa5e), // Warm Amber (Class K)
-    new THREE.Color(0xc084fc), // Violet M-Dwarf
+    new THREE.Color(0xffffff), // Diamond white
+    new THREE.Color(0xd8b4fe), // Ethereal violet
+    new THREE.Color(0x7dd3fc), // Electric sky cyan
+    new THREE.Color(0xa5b4fc), // Indigo starlight
+    new THREE.Color(0xfde68a), // Soft gold
   ];
 
   for (let i = 0; i < count; i++) {
     starPositions[i * 3 + 0] = (Math.random() - 0.5) * 1000;
     starPositions[i * 3 + 1] = (Math.random() - 0.5) * 1000;
-    starPositions[i * 3 + 2] = Math.random() * -4500 + 150;
+    starPositions[i * 3 + 2] = Math.random() * -3800 + 120;
 
     const chosenColor = spectralPalette[Math.floor(Math.random() * spectralPalette.length)];
     starColors[i * 3 + 0] = chosenColor.r;
     starColors[i * 3 + 1] = chosenColor.g;
     starColors[i * 3 + 2] = chosenColor.b;
 
-    starSizes[i] = 1.0 + Math.random() * 2.4;
-    twinkleSpeeds[i] = 1.2 + Math.random() * 3.5;
+    starSizes[i] = 0.8 + Math.random() * 1.5; // Pinpoint crisp
+    twinkleSpeeds[i] = 1.0 + Math.random() * 2.8;
     twinklePhases[i] = Math.random() * Math.PI * 2;
   }
 
@@ -237,9 +158,9 @@ export function createStarField(scene, { count = 6500 } = {}) {
   rootGroup.add(starPoints);
 
   // --------------------------------------------------------------------------
-  // 3. Volumetric Stardust Embers (Floating Particle Motes)
+  // 2. Floating Stardust Embers (Microscopic, Smooth Depth Layer)
   // --------------------------------------------------------------------------
-  const dustCount = 1500;
+  const dustCount = 900;
   const dustPositions = new Float32Array(dustCount * 3);
   const dustColors = new Float32Array(dustCount * 3);
   const dustSizes = new Float32Array(dustCount);
@@ -247,13 +168,13 @@ export function createStarField(scene, { count = 6500 } = {}) {
   for (let i = 0; i < dustCount; i++) {
     dustPositions[i * 3 + 0] = (Math.random() - 0.5) * 350;
     dustPositions[i * 3 + 1] = (Math.random() - 0.5) * 350;
-    dustPositions[i * 3 + 2] = Math.random() * -4200 + 100;
+    dustPositions[i * 3 + 2] = Math.random() * -3600 + 80;
 
-    const c = Math.random() > 0.5 ? new THREE.Color(0x38bdf8) : new THREE.Color(0xa855f7);
+    const c = Math.random() > 0.5 ? new THREE.Color(0xa855f7) : new THREE.Color(0x38bdf8);
     dustColors[i * 3 + 0] = c.r;
     dustColors[i * 3 + 1] = c.g;
     dustColors[i * 3 + 2] = c.b;
-    dustSizes[i] = 1.4 + Math.random() * 2.8;
+    dustSizes[i] = 1.0 + Math.random() * 1.4;
   }
 
   const dustGeo = new THREE.BufferGeometry();
@@ -275,16 +196,16 @@ export function createStarField(scene, { count = 6500 } = {}) {
   rootGroup.add(dustPoints);
 
   // --------------------------------------------------------------------------
-  // 4. Shooting Stars / Comets Dynamic Engine
+  // 3. Shooting Stars Dynamic Engine
   // --------------------------------------------------------------------------
   const shootingStars = [];
-  for (let s = 0; s < 4; s++) {
+  for (let s = 0; s < 3; s++) {
     const shootGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(6);
     shootGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const shootMat = new THREE.LineBasicMaterial({
-      color: 0x90e0ef,
+      color: 0xc084fc,
       transparent: true,
       opacity: 0,
       blending: THREE.AdditiveBlending,
@@ -299,7 +220,7 @@ export function createStarField(scene, { count = 6500 } = {}) {
       geo: shootGeo,
       mat: shootMat,
       active: false,
-      timer: Math.random() * 3 + s * 2.5,
+      timer: Math.random() * 3 + s * 3.0,
       head: new THREE.Vector3(),
       tail: new THREE.Vector3(),
       velocity: new THREE.Vector3(),
@@ -312,37 +233,31 @@ export function createStarField(scene, { count = 6500 } = {}) {
   // Render Loop Update
   // --------------------------------------------------------------------------
   rootGroup.userData.update = (delta, time, { warpProgress = 0 } = {}) => {
-    // 1. Skybox slow cosmic drift & shader time
-    skyboxMat.uniforms.uTime.value = time;
-    skyboxMat.uniforms.uWarp.value = warpProgress;
-    skyboxMesh.rotation.y += 0.00012 + warpProgress * 0.002;
-    skyboxMesh.rotation.x = Math.sin(time * 0.02) * 0.03;
-
-    // 2. Update Star & Dust Shaders
+    // 1. Update Shader Uniforms
     starShaderMat.uniforms.uTime.value = time;
     starShaderMat.uniforms.uWarp.value = warpProgress;
     dustMat.uniforms.uTime.value = time;
 
-    // 3. Update Shooting Stars
+    // 2. Update Shooting Stars
     shootingStars.forEach((star) => {
       if (!star.active) {
         star.timer -= delta;
         if (star.timer <= 0) {
           star.active = true;
           star.life = 0;
-          star.maxLife = 0.8 + Math.random() * 0.8;
+          star.maxLife = 0.8 + Math.random() * 0.7;
 
-          const startX = (Math.random() - 0.5) * 250;
-          const startY = 80 + Math.random() * 60;
-          const startZ = -200 - Math.random() * 900;
+          const startX = (Math.random() - 0.5) * 200;
+          const startY = 60 + Math.random() * 40;
+          const startZ = -150 - Math.random() * 600;
 
           star.head.set(startX, startY, startZ);
           star.tail.copy(star.head);
 
           star.velocity.set(
-            (Math.random() - 0.5) * 120 - 80,
-            -180 - Math.random() * 100,
-            (Math.random() - 0.5) * 80
+            (Math.random() - 0.5) * 100 - 60,
+            -150 - Math.random() * 80,
+            (Math.random() - 0.5) * 60
           );
         }
       } else {
@@ -352,10 +267,10 @@ export function createStarField(scene, { count = 6500 } = {}) {
         if (progress >= 1) {
           star.active = false;
           star.mat.opacity = 0;
-          star.timer = 1.5 + Math.random() * 5;
+          star.timer = 2.0 + Math.random() * 5;
         } else {
           star.head.addScaledVector(star.velocity, delta);
-          star.tail.copy(star.head).subScaledVector(star.velocity, 0.06);
+          star.tail.copy(star.head).subScaledVector(star.velocity, 0.05);
 
           const posArr = star.geo.attributes.position.array;
           posArr[0] = star.head.x;
@@ -366,7 +281,7 @@ export function createStarField(scene, { count = 6500 } = {}) {
           posArr[5] = star.tail.z;
           star.geo.attributes.position.needsUpdate = true;
 
-          star.mat.opacity = Math.sin(progress * Math.PI) * 0.95;
+          star.mat.opacity = Math.sin(progress * Math.PI) * 0.9;
         }
       }
     });

@@ -269,7 +269,7 @@ function setupPlanetCardInteractions(planets) {
   scanButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const targetPlanet = btn.dataset.planet || 'meridian';
+      const targetPlanet = btn.dataset.planet || 'azurea';
       playBeep('activate');
       showToast(`Full multispectral scan initiated on ${targetPlanet.toUpperCase()}`, { title: 'Planetary Radar', type: 'scan' });
 

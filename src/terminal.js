@@ -21,7 +21,7 @@ const ASCII_BANNER = `
 
 const COMMANDS = {
   help: 'Display all available mission commands and flight telemetry functions.',
-  scan: 'Initiate deep spectral scan on targeted celestial body (e.g. `scan meridian`, `scan azurea`, `scan vesperion`).',
+  scan: 'Initiate deep spectral scan on targeted celestial body (e.g. `scan azurea`, `scan vesperion`).',
   warp: 'Toggle warp speed hyperspace propulsion (`warp on` / `warp off`).',
   telemetry: 'Display real-time orbital telemetry, camera vector coordinates, and WebGL metrics.',
   planets: 'List all currently mapped worlds and stellar coordinates.',
@@ -138,18 +138,15 @@ export function executeCommand(rawCmd) {
 
     case 'scan':
       if (!arg) {
-        printLine('Scan initiated on global sector. Target celestial body: meridian, azurea, or vesperion.', 'warning');
+        printLine('Scan initiated on global sector. Target celestial body: azurea or vesperion.', 'warning');
       } else {
         printLine(`[SCANNING] Locking sensors on sector target: ${arg.toUpperCase()}...`, 'system');
         setTimeout(() => {
-          if (arg === 'meridian') {
-            printLine('✓ MERIDIAN: Scorched core planet. Temp: 840K. Minerals: Titanium, Hyper-quartz. Atmosphere: Sulfur/Argon.', 'success');
-            showToast('Scan complete: Meridian telemetry updated.', { title: 'Spectrometry Scanner', type: 'scan' });
-          } else if (arg === 'azurea') {
-            printLine('✓ AZUREA: Ocean super-earth. Depth: 120km liquid ocean. Atmosphere: Nitrogen/Oxygen/Water vapor. Biosignatures: Probable.', 'success');
+          if (arg === 'azurea') {
+            printLine('✓ AZUREA PRIME: Ocean super-earth. Depth: 120km liquid ocean. Atmosphere: Nitrogen/Oxygen/Water vapor. Biosignatures: 94.2% Probable.', 'success');
             showToast('Scan complete: Azurea oceanic biosignatures detected.', { title: 'Spectrometry Scanner', type: 'scan' });
           } else if (arg === 'vesperion') {
-            printLine('✓ VESPERION: Gas world with crystalline rings. Winds: 1,800 km/h. High-energy violet aurora mapped.', 'success');
+            printLine('✓ VESPERION: Gas giant with dual Cassini rings. Winds: 1,800 km/h. High-energy violet aurora mapped.', 'success');
             showToast('Scan complete: Vesperion ring topology mapped.', { title: 'Spectrometry Scanner', type: 'scan' });
           } else {
             printLine(`Target "${arg}" analyzed. Sector coordinates recorded.`, 'normal');
@@ -171,15 +168,14 @@ export function executeCommand(rawCmd) {
       printLine('--- LIVE DEEP SPACE TELEMETRY ---', 'system');
       printLine(`• Sector Coordinates: RA 18h 36m 56s | Dec +38° 47′ 01″`, 'normal');
       printLine(`• Relativistic Velocity: 0.85c (254,827 km/s)`, 'normal');
-      printLine(`• Active Stars in Buffer: 3,000 instanced entities`, 'normal');
+      printLine(`• Active Stars in Buffer: 5,500 diamond entities`, 'normal');
       printLine(`• Quantum Sensor Latency: 0.8ms`, 'normal');
       printLine(`• Engine Status: All systems nominal (100% operational)`, 'success');
       break;
 
     case 'planets':
-      printLine('1. Meridian  - Orbital Radius: 0.38 AU | Radius: 8,400 km | Type: Molten Core', 'normal');
-      printLine('2. Azurea    - Orbital Radius: 1.12 AU | Radius: 12,800 km | Type: Ocean Super-Earth', 'normal');
-      printLine('3. Vesperion - Orbital Radius: 3.45 AU | Radius: 42,000 km | Type: Ringed Giant', 'normal');
+      printLine('1. Azurea Prime - Orbital Radius: 1.12 AU | Radius: 12,800 km | Type: Ocean Super-Earth (Class-A)', 'normal');
+      printLine('2. Vesperion    - Orbital Radius: 3.45 AU | Radius: 54,000 km | Type: Ringed Gas Giant', 'normal');
       break;
 
     case 'nebula':

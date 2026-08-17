@@ -26,21 +26,22 @@ const VERTEX_SHADER = `
     vec3 pos = position;
 
     // Organic volumetric turbulence
-    float t = uTime * (0.04 + uWarp * 0.15);
-    float n1 = noise(pos.xz * 0.015 + aSeed + t);
-    float n2 = noise(pos.xy * 0.02 - aSeed + t * 0.7);
-    pos.x += (n1 - 0.5) * 45.0;
-    pos.y += (n2 - 0.5) * 35.0;
+    float t = uTime * (0.03 + uWarp * 0.1);
+    float n1 = noise(pos.xz * 0.02 + aSeed + t);
+    float n2 = noise(pos.xy * 0.025 - aSeed + t * 0.6);
+    pos.x += (n1 - 0.5) * 25.0;
+    pos.y += (n2 - 0.5) * 20.0;
 
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mv;
 
-    float sizeFactor = 380.0 / -mv.z;
-    gl_PointSize = clamp(aSize * sizeFactor * (1.0 + uWarp * 0.4), 1.0, 180.0);
+    // Tight, crisp particle size (eliminating giant blurry bokeh blobs)
+    float sizeFactor = 120.0 / -mv.z;
+    gl_PointSize = clamp(aSize * sizeFactor * (1.0 + uWarp * 0.3), 1.0, 14.0);
     
-    // Soft depth fade
-    vAlpha = smoothstep(1200.0, 150.0, -mv.z) * 0.65;
-    vDist = length(pos.xy) / 280.0;
+    // Depth fade: Only visible when camera is near nebula (z = -150 to -400)
+    vAlpha = smoothstep(550.0, 250.0, -mv.z) * smoothstep(50.0, 120.0, -mv.z) * 0.55;
+    vDist = length(pos.xy) / 220.0;
   }
 `;
 
@@ -57,54 +58,53 @@ const FRAGMENT_SHADER = `
     float d = length(uv);
     if (d > 0.5) discard;
 
-    // Smooth Gaussian particle cloud falloff
-    float shape = exp(-d * d * 18.0) * smoothstep(0.5, 0.0, d);
+    // Smooth Gaussian particle core
+    float shape = exp(-d * d * 24.0) * smoothstep(0.5, 0.0, d);
 
     // Multi-color ionized gradient
-    vec3 color = mix(uColor1, uColor2, clamp(d * 1.6 + vDist * 0.7, 0.0, 1.0));
+    vec3 color = mix(uColor1, uColor2, clamp(d * 1.4 + vDist * 0.6, 0.0, 1.0));
     if (vSeed > 60.0) {
-      color = mix(color, uColor3, 0.4);
+      color = mix(color, uColor3, 0.35);
     }
 
     float finalAlpha = shape * vAlpha;
-    gl_FragColor = vec4(color * 1.3, finalAlpha);
+    gl_FragColor = vec4(color * 1.2, finalAlpha);
   }
 `;
 
 const COLOR_PRESETS = {
   violet: {
-    c1: new THREE.Color(0x00ffdc), // Radiant Cyan
-    c2: new THREE.Color(0x9d4edd), // Deep Violet
-    c3: new THREE.Color(0xff007f), // Hot Magenta
+    c1: new THREE.Color(0x38bdf8), // Sky Cyan
+    c2: new THREE.Color(0xa855f7), // Electric Violet
+    c3: new THREE.Color(0xf43f5e), // Rose
   },
   emerald: {
-    c1: new THREE.Color(0x00f5d4), // Emerald Mint
-    c2: new THREE.Color(0x0077b6), // Ocean Blue
-    c3: new THREE.Color(0x70e000), // Lime Glow
+    c1: new THREE.Color(0x2dd4bf), // Mint Teal
+    c2: new THREE.Color(0x0284c7), // Ocean Blue
+    c3: new THREE.Color(0x10b981), // Emerald
   },
   gold: {
-    c1: new THREE.Color(0xffb703), // Amber Gold
-    c2: new THREE.Color(0xfb8500), // Solar Orange
-    c3: new THREE.Color(0xd00000), // Crimson Red
+    c1: new THREE.Color(0xfbbf24), // Amber Gold
+    c2: new THREE.Color(0xf97316), // Solar Orange
+    c3: new THREE.Color(0xef4444), // Crimson
   },
   cyan: {
-    c1: new THREE.Color(0x00ffff), // Pure Cyan
-    c2: new THREE.Color(0x4361ee), // Electric Blue
-    c3: new THREE.Color(0x3a0ca3), // Deep Indigo
+    c1: new THREE.Color(0x00f0ff), // Pure Cyan
+    c2: new THREE.Color(0x6366f1), // Electric Indigo
+    c3: new THREE.Color(0x3b82f6), // Deep Sky
   },
 };
 
-export function createNebula(scene, { count = 1800 } = {}) {
+export function createNebula(scene, { count = 600 } = {}) {
   const positions = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
   const seeds = new Float32Array(count);
 
   for (let i = 0; i < count; i++) {
-    // Spread wide across the field of view in section 2
-    positions[i * 3 + 0] = (Math.random() - 0.5) * 600;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 400;
-    positions[i * 3 + 2] = Math.random() * -600 - 250;
-    sizes[i] = 18 + Math.random() * 45;
+    positions[i * 3 + 0] = (Math.random() - 0.5) * 400;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 300;
+    positions[i * 3 + 2] = Math.random() * -300 - 150;
+    sizes[i] = 4.0 + Math.random() * 8.0; // Small, refined particle sizes
     seeds[i] = Math.random() * 100;
   }
 

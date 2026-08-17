@@ -7,36 +7,43 @@ let renderer = null;
 
 let lastTime = 0;
 let resizeTimer = null;
+let lastFov = 75;
 
-// Mouse parallax state
+// Mouse parallax state — uses a separate pivot so it doesn't fight GSAP scroll position
 const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
 let isWarpActive = false;
 let warpProgress = 0;
+
+// Separate group for mouse-driven subtle rotation so it never conflicts with scroll-driven camera.position
+let cameraRig = null;
 
 export function initScene() {
   if (scene) return scene;
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x010308);
-  scene.fog = new THREE.FogExp2(0x010308, 0.0003);
+  scene.background = new THREE.Color(0x030014);
+  scene.fog = new THREE.FogExp2(0x030014, 0.00035);
 
   // High-Dynamic Lighting
-  const ambientLight = new THREE.AmbientLight(0x445577, 0.75);
+  const ambientLight = new THREE.AmbientLight(0x4c1d95, 0.45);
   scene.add(ambientLight);
 
-  const mainLight = new THREE.DirectionalLight(0x00ffdc, 1.4);
-  mainLight.position.set(120, 100, 60);
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.3);
+  mainLight.position.set(100, 80, 50);
   scene.add(mainLight);
 
-  const rimLight = new THREE.DirectionalLight(0x9d4edd, 1.2);
-  rimLight.position.set(-120, -60, -120);
+  const rimLight = new THREE.DirectionalLight(0xa855f7, 1.2);
+  rimLight.position.set(-100, -50, -100);
   scene.add(rimLight);
 
-  const warmSunLight = new THREE.DirectionalLight(0xffaa44, 0.8);
-  warmSunLight.position.set(0, -80, 100);
-  scene.add(warmSunLight);
+  const cyanFill = new THREE.DirectionalLight(0x38bdf8, 0.6);
+  cyanFill.position.set(0, -60, 80);
+  scene.add(cyanFill);
 
-  // Camera
+  // Camera Rig: outer group handles mouse parallax, inner camera handles GSAP scroll position
+  cameraRig = new THREE.Group();
+  scene.add(cameraRig);
+
   camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -44,13 +51,13 @@ export function initScene() {
     6000
   );
   camera.position.set(0, 0, 80);
+  cameraRig.add(camera);
 
   // WebGL Renderer with ACESFilmic HDR Tone Mapping
   renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
     powerPreference: 'high-performance',
-    logarithmicDepthBuffer: true,
   });
 
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -107,24 +114,33 @@ export function animate(callback) {
     requestAnimationFrame(frame);
 
     const elapsedTime = time * 0.001;
-    const deltaTime = Math.min(lastTime === 0 ? 0 : elapsedTime - lastTime, 0.1);
+    const deltaTime = Math.min(lastTime === 0 ? 0.016 : elapsedTime - lastTime, 0.1);
     lastTime = elapsedTime;
 
-    // Smooth mouse damping
-    mouse.x += (mouse.targetX - mouse.x) * 0.04;
-    mouse.y += (mouse.targetY - mouse.y) * 0.04;
+    // Smooth mouse damping (lerp factor scaled by deltaTime for frame-rate independence)
+    const lerpFactor = 1.0 - Math.pow(0.92, deltaTime * 60);
+    mouse.x += (mouse.targetX - mouse.x) * lerpFactor;
+    mouse.y += (mouse.targetY - mouse.y) * lerpFactor;
 
-    // Smooth warp FOV transition
+    // Smooth warp FOV transition (frame-rate independent)
     const targetWarp = isWarpActive ? 1 : 0;
-    warpProgress += (targetWarp - warpProgress) * 0.08;
+    const warpLerp = 1.0 - Math.pow(0.88, deltaTime * 60);
+    warpProgress += (targetWarp - warpProgress) * warpLerp;
 
+    // Apply mouse parallax to the camera rig (not to camera.position which GSAP controls)
+    if (cameraRig) {
+      cameraRig.rotation.y = -mouse.x * 0.025;
+      cameraRig.rotation.x = mouse.y * 0.025;
+    }
+
+    // Only update projection matrix when FOV actually changes
     if (camera) {
-      camera.fov = 75 + warpProgress * 22;
-      camera.updateProjectionMatrix();
-
-      // Subtle parallax tilt
-      camera.rotation.y = -mouse.x * 0.035;
-      camera.rotation.x = mouse.y * 0.035;
+      const newFov = 75 + warpProgress * 22;
+      if (Math.abs(newFov - lastFov) > 0.01) {
+        camera.fov = newFov;
+        camera.updateProjectionMatrix();
+        lastFov = newFov;
+      }
     }
 
     if (renderer && scene && camera) {

@@ -11,13 +11,14 @@ export function initSmoothScroll() {
   if (lenisInstance) return lenisInstance;
 
   lenisInstance = new Lenis({
-    duration: 1.0,
+    duration: 1.4,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
-    wheelMultiplier: 1.0,
+    wheelMultiplier: 0.9,
     touchMultiplier: 1.5,
+    infinite: false,
   });
 
   lenisInstance.on('scroll', ScrollTrigger.update);
@@ -38,37 +39,40 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
   // Initialize buttery smooth scrolling
   initSmoothScroll();
 
+  // Higher scrub value = more smoothing = less jitter (1.5-2.0 is ideal for 3D scenes)
+  const SCRUB_SMOOTH = 1.8;
+
   const ctx = gsap.context(() => {
-    // 1. Hero -> Nebula Discovery
+    // 1. Hero -> Nebula Discovery Flight
     gsap.timeline({
       scrollTrigger: {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom top',
-        scrub: 0.8,
+        scrub: SCRUB_SMOOTH,
       },
     }).fromTo(
       camera.position,
       { x: 0, y: 0, z: 80 },
-      { x: 0, y: 1, z: -60, ease: 'power1.inOut' }
+      { x: 0, y: 0.5, z: -40, ease: 'none' }
     );
 
-    // 2. Nebula Discovery: Dive into nebula center
+    // 2. Nebula Discovery: Dive into nebula resonance
     gsap.timeline({
       scrollTrigger: {
         trigger: '#nebula-discovery',
         start: 'top bottom',
         end: 'bottom top',
-        scrub: 1.0,
+        scrub: SCRUB_SMOOTH,
       },
     }).to(camera.position, {
       x: 0,
       y: 0,
-      z: -200,
-      ease: 'power2.inOut',
+      z: -180,
+      ease: 'none',
     });
 
-    // 3. Horizontal Planets Showcase: Synchronized Camera & Card Navigation
+    // 3. Horizontal Planets Showcase (Azurea Earth -> Vesperion Ringed Titan)
     const planetsSection = document.querySelector('#planets-showcase');
     const planetsTrack = document.querySelector('.planets-track');
     const planetCards = document.querySelectorAll('.planet-card');
@@ -77,153 +81,81 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
       const cardCount = planetCards.length;
       const totalPercent = (cardCount - 1) * 100;
 
-      // Scale in planets smoothly as user enters planets section
-      planets.forEach((planetGroup) => {
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: '#planets-showcase',
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: 0.8,
-          },
-        }).to(planetGroup.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'power2.out',
-        });
-
-        // Scale down planets as user exits showcase into capabilities
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: '#capabilities',
-            start: 'top bottom',
-            end: 'top 40%',
-            scrub: 0.8,
-          },
-        }).to(planetGroup.scale, {
-          x: 0.001,
-          y: 0.001,
-          z: 0.001,
-          ease: 'power2.in',
-        });
-      });
-
-      // Tight, responsive pin distance (1600px instead of 4200px)
       const planetTl = gsap.timeline({
         scrollTrigger: {
           trigger: '#planets-showcase',
           start: 'top top',
-          end: '+=1600',
+          end: '+=900',
           pin: true,
-          scrub: 0.8,
+          scrub: SCRUB_SMOOTH,
           anticipatePin: 1,
-          snap: {
-            snapTo: 1 / (cardCount - 1),
-            duration: { min: 0.2, max: 0.4 },
-            delay: 0.05,
-            ease: 'power2.out',
-          },
+          // Removed snap entirely — it causes the "sudden stop" jerks
         },
       });
 
-      // Track horizontal movement
+      // Track horizontal slide
       planetTl.to(planetsTrack, {
         xPercent: -totalPercent,
         ease: 'none',
       }, 0);
 
-      // Camera smoothly glides from Meridian (z = -380) -> Azurea (z = -620) -> Vesperion (z = -860)
+      // Camera smoothly glides from Azurea Earth (z = -280) to Vesperion (z = -480)
       planetTl.fromTo(
         camera.position,
-        { x: -2, y: 0, z: -310 },
-        { x: -2, y: 0, z: -550, ease: 'power1.inOut' },
+        { x: -3.5, y: 0, z: -220 },
+        { x: 3.5, y: 0, z: -420, ease: 'none' },
         0
-      ).to(
-        camera.position,
-        { x: -2, y: 0, z: -780, ease: 'power1.inOut' },
-        0.5
       );
     }
 
-    // 4. Capabilities / Tech Lab: Scale In Geometries & Camera Move
+    // 4. Capabilities / Tech Lab: Crystalline Geometries Flight
     if (document.querySelector('#capabilities')) {
-      geometries.forEach((geomGroup) => {
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: '#capabilities',
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 0.8,
-          },
-        }).to(geomGroup.scale, {
-          x: 1,
-          y: 1,
-          z: 1,
-          ease: 'power2.out',
-        });
-
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: '#stats-counter',
-            start: 'top bottom',
-            end: 'top top',
-            scrub: 0.8,
-          },
-        }).to(geomGroup.scale, {
-          x: 0.001,
-          y: 0.001,
-          z: 0.001,
-          ease: 'power2.in',
-        });
-      });
-
       gsap.timeline({
         scrollTrigger: {
           trigger: '#capabilities',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.0,
+          scrub: SCRUB_SMOOTH,
         },
       }).to(camera.position, {
         x: 0,
         y: 2,
-        z: -1140,
-        ease: 'power2.inOut',
+        z: -680,
+        ease: 'none',
       });
     }
 
-    // 5. Telemetry Stats: Camera in deep telemetry starfield
+    // 5. Telemetry Stats
     if (document.querySelector('#stats-counter')) {
       gsap.timeline({
         scrollTrigger: {
           trigger: '#stats-counter',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.0,
+          scrub: SCRUB_SMOOTH,
         },
       }).to(camera.position, {
         x: 2,
         y: -1,
-        z: -1420,
-        ease: 'power1.inOut',
+        z: -920,
+        ease: 'none',
       });
     }
 
-    // 6. Gallery / Deep Space Archive: Serene observatory vantage
+    // 6. Gallery / Deep Space Archive
     if (document.querySelector('#gallery')) {
       gsap.timeline({
         scrollTrigger: {
           trigger: '#gallery',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.0,
+          scrub: SCRUB_SMOOTH,
         },
       }).to(camera.position, {
         x: 0,
         y: 0,
-        z: -1720,
-        ease: 'power2.inOut',
+        z: -1180,
+        ease: 'none',
       });
     }
 
@@ -234,13 +166,13 @@ export function setupScrollCamera({ stars, planets = [], geometries = [], nebula
           trigger: '#pricing',
           start: 'top bottom',
           end: 'bottom bottom',
-          scrub: 1.0,
+          scrub: SCRUB_SMOOTH,
         },
       }).to(camera.position, {
         x: 0,
         y: -2,
-        z: -2020,
-        ease: 'power1.inOut',
+        z: -1420,
+        ease: 'none',
       });
     }
   });
@@ -258,7 +190,7 @@ export function setupScrollTriggers() {
         trigger: '#hero',
         start: 'top top',
         end: 'bottom 40%',
-        scrub: 0.6,
+        scrub: 1.2,
       },
     })
       .to('#hero .hero-content', { opacity: 0, y: -40, duration: 1 }, 0)
