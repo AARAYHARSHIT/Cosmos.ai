@@ -13,14 +13,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
-    <script type="module" crossorigin src="/assets/index-DEzYG3gj.js"></script>
+    <script type="module" crossorigin src="/assets/index-Bz3OSLFF.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/gsap-C8IefbVz.js">
     <link rel="modulepreload" crossorigin href="/assets/anime-CMNwbS55.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-DGNlLvKI.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-D4EZCYZ6.css">
   </head>
   <body>
     <!-- Native 60FPS 3D Canvas Starfield & Warp Engine -->
     <canvas id="starfield-canvas"></canvas>
+
+    <!-- Interactive Cybernetic Targeting Reticle Cursor -->
+    <div id="cyber-cursor" class="cyber-cursor" aria-hidden="true">
+      <div class="cursor-ring"></div>
+      <div class="cursor-dot"></div>
+      <div class="cursor-crosshair crosshair-top"></div>
+      <div class="cursor-crosshair crosshair-bottom"></div>
+      <div class="cursor-crosshair crosshair-left"></div>
+      <div class="cursor-crosshair crosshair-right"></div>
+      <div class="cursor-target-label font-mono">LOCKED</div>
+    </div>
 
     <!-- Persistent Mission Journey Trail HUD (Right side) -->
     <aside class="mission-flight-trail" aria-label="Mission Trajectory Trail">
@@ -79,9 +90,11 @@
         </a>
 
         <nav class="nav-links" role="navigation" aria-label="Primary Navigation">
+          <div class="nav-indicator-pill"></div>
           <a href="#hero" class="active">Engine</a>
           <a href="#nebula-discovery">Nebula</a>
           <a href="#planets-showcase">Planets</a>
+          <a href="#quantum-gateway">Gateway</a>
           <a href="#capabilities">Capabilities</a>
           <a href="#stats-counter">Telemetry</a>
           <a href="#gallery">Archive</a>
@@ -108,6 +121,19 @@
     <main role="main">
       <!-- 1. Hero Section (Chapter 01) -->
       <section role="region" aria-label="Hero" id="hero">
+        <!-- 3D Parallax Floating Cockpit Telemetry Wings -->
+        <div class="hero-telemetry-wing wing-left card" aria-hidden="true">
+          <div class="wing-badge font-mono"><span class="pulse-dot"></span> ORBITAL APOGEE</div>
+          <div class="wing-value font-mono">428.6 km <span class="accent-cyan">[LEO-4]</span></div>
+          <div class="wing-sub font-mono">VECTOR: 7.66 km/s • STABLE</div>
+        </div>
+
+        <div class="hero-telemetry-wing wing-right card" aria-hidden="true">
+          <div class="wing-badge font-mono"><span class="pulse-dot"></span> SOLAR FLUX LINK</div>
+          <div class="wing-value font-mono">1,361 W/m² <span class="accent-violet">[99.8%]</span></div>
+          <div class="wing-sub font-mono">ION DRIVE HARMONICS: ACTIVE</div>
+        </div>
+
         <div class="hero-content content-wrapper">
           <div class="story-chapter-badge">
             <span class="chapter-num font-mono">CHAPTER 01</span>
@@ -164,8 +190,33 @@
         </div>
       </section>
 
+      <!-- Kinetic Typography Parallax Transition Corridor (Bridge 01 -> 02) -->
+      <div class="hero-nebula-transition-corridor" aria-hidden="true">
+        <div class="kinetic-text-track track-upper">
+          <span class="kinetic-giant-text font-heading text-outline">INTERSTELLAR</span>
+          <span class="kinetic-giant-text font-heading text-gradient">VELOCITY</span>
+          <span class="kinetic-giant-text font-heading text-outline">HORIZON</span>
+          <span class="kinetic-giant-text font-heading text-gradient">WARP</span>
+        </div>
+        
+        <div class="kinetic-text-track track-lower">
+          <span class="kinetic-giant-text font-heading text-gradient">VOLUMETRIC</span>
+          <span class="kinetic-giant-text font-heading text-outline">NEBULA</span>
+          <span class="kinetic-giant-text font-heading text-gradient">CORRIDOR</span>
+          <span class="kinetic-giant-text font-heading text-outline">NURSERY</span>
+        </div>
+        
+        <!-- Central Spacetime Metric Zoom Flight Badge -->
+        <div class="kinetic-zoom-core">
+          <div class="zoom-metric-badge font-mono">
+            <span class="pulse-dot"></span> ESCAPE VELOCITY ACHIEVED // 11.2 km/s
+          </div>
+          <div class="zoom-laser-line"></div>
+        </div>
+      </div>
+
       <!-- 2. Nebula Discovery Section (Chapter 02) -->
-      <section role="region" aria-label="Nebula Discovery" id="nebula-discovery">
+      <section role="region" aria-label="Volumetric Nebula Discovery" id="nebula-discovery">
         <div class="content-wrapper">
           <div class="story-chapter-badge">
             <span class="chapter-num font-mono">CHAPTER 02</span>

@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { getCanvasEngine } from './canvas-engine.js';
 import { playSound } from './audio.js';
+import { decryptText } from './cipher-engine.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -111,27 +112,27 @@ export function switchPlanetUI(planetKey, animateStage = true) {
 
   currentActivePlanet = planetKey;
 
-  // Update target labels
+  // Update target labels with cipher decryption
   const nameEl = document.getElementById('planet-target-name');
   const typeEl = document.getElementById('planet-target-type');
-  if (nameEl) nameEl.textContent = data.name;
+  if (nameEl) decryptText(nameEl, data.name, { duration: 380, speed: 20 });
   if (typeEl) {
-    typeEl.textContent = data.type;
     typeEl.className = `target-class ${data.badgeClass}`;
+    decryptText(typeEl, data.type, { duration: 420, speed: 20 });
   }
 
-  // Update metrics
+  // Update metrics with cipher decryption
   const distEl = document.getElementById('planet-metric-dist');
   const gravEl = document.getElementById('planet-metric-grav');
   const tempEl = document.getElementById('planet-metric-temp');
   const bioEl = document.getElementById('planet-metric-bio');
   const incEl = document.getElementById('stage-orbit-inc');
 
-  if (distEl) distEl.textContent = data.dist;
-  if (gravEl) gravEl.textContent = data.gravity;
-  if (tempEl) tempEl.textContent = data.temp;
-  if (bioEl) bioEl.textContent = data.biosignature;
-  if (incEl) incEl.textContent = data.inclination;
+  if (distEl) decryptText(distEl, data.dist, { duration: 320, speed: 20 });
+  if (gravEl) decryptText(gravEl, data.gravity, { duration: 320, speed: 20 });
+  if (tempEl) decryptText(tempEl, data.temp, { duration: 320, speed: 20 });
+  if (bioEl) decryptText(bioEl, data.biosignature, { duration: 320, speed: 20 });
+  if (incEl) decryptText(incEl, data.inclination, { duration: 320, speed: 20 });
 
   // Update Gas Composition Bars
   data.gases.forEach((g, i) => {
@@ -270,7 +271,53 @@ export function setupScrollTriggers() {
       .to('#hero .subtitle', { y: -35, opacity: 0, duration: 0.7 }, 0.05)
       .to('#hero .hero-actions', { y: -25, opacity: 0, duration: 0.6 }, 0.1)
       .to('#hero .hero-hud-strip', { y: 30, opacity: 0, duration: 0.8 }, 0)
+      .to('#hero .hero-telemetry-wing.wing-left', { x: -160, z: -80, opacity: 0, rotationY: 45, duration: 0.7 }, 0)
+      .to('#hero .hero-telemetry-wing.wing-right', { x: 160, z: -80, opacity: 0, rotationY: -45, duration: 0.7 }, 0)
       .to('#hero .scroll-indicator', { opacity: 0, duration: 0.3 }, 0);
+
+    // 1.5. Kinetic Typography Parallax Corridor (Bridge 01 -> 02)
+    const kineticCorridor = document.querySelector('.hero-nebula-transition-corridor');
+    if (kineticCorridor) {
+      gsap.to('.track-upper', {
+        xPercent: -35,
+        scale: 1.15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero-nebula-transition-corridor',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+        }
+      });
+
+      gsap.to('.track-lower', {
+        xPercent: 35,
+        scale: 1.15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero-nebula-transition-corridor',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+        }
+      });
+
+      gsap.fromTo('.kinetic-zoom-core',
+        { scale: 0.8, opacity: 0.4, z: -100 },
+        {
+          scale: 1.8,
+          opacity: 1,
+          z: 120,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.hero-nebula-transition-corridor',
+            start: 'top 85%',
+            end: 'center center',
+            scrub: 0.6,
+          }
+        }
+      );
+    }
 
     // 2. Nebula Discovery Entrance
     gsap.timeline({

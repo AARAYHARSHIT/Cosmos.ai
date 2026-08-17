@@ -696,9 +696,9 @@ p {
   text-shadow: 0 0 20px rgba(255, 80, 150, 0.4);
 }
 
-/* Glassmorphism Cards */
+/* Glassmorphism Cards with Dynamic Spotlight Sheen */
 .card {
-  background: var(--color-bg-card);
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 255, 220, 0.08), transparent 40%), var(--color-bg-card);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-glass);
@@ -709,12 +709,12 @@ p {
               border-color 0.3s ease,
               background-color 0.3s ease,
               box-shadow 0.3s ease;
+  position: relative;
 }
 
 .card:hover {
-  background: var(--color-bg-card-hover);
   border-color: var(--border-glass-bright);
-  box-shadow: 0 15px 40px -10px rgba(0, 255, 220, 0.15);
+  box-shadow: 0 15px 40px -10px rgba(0, 255, 220, 0.2);
 }
 
 /* Badges */
@@ -861,5 +861,96 @@ p {
 @media (max-width: 768px) {
   .floating-hud {
     display: none;
+  }
+}
+
+/* ==========================================================================
+   INTERACTIVE CYBERNETIC TARGETING RETICLE CURSOR
+   ========================================================================== */
+.cyber-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease, transform 0.15s ease-out;
+  opacity: 0;
+}
+
+.cursor-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 255, 220, 0.5);
+  box-shadow: 0 0 12px rgba(0, 255, 220, 0.3);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cursor-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-accent-cyan);
+  box-shadow: 0 0 8px var(--color-accent-cyan);
+}
+
+.cursor-crosshair {
+  position: absolute;
+  background: rgba(0, 255, 220, 0.6);
+}
+
+.crosshair-top    { top: -4px; left: 50%; width: 1px; height: 5px; transform: translateX(-50%); }
+.crosshair-bottom { bottom: -4px; left: 50%; width: 1px; height: 5px; transform: translateX(-50%); }
+.crosshair-left   { left: -4px; top: 50%; height: 1px; width: 5px; transform: translateY(-50%); }
+.crosshair-right  { right: -4px; top: 50%; height: 1px; width: 5px; transform: translateY(-50%); }
+
+.cursor-target-label {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--color-accent-cyan);
+  background: rgba(8, 12, 28, 0.9);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 255, 220, 0.4);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Cursor Hover Locking States */
+.cyber-cursor.hovering .cursor-ring {
+  width: 48px;
+  height: 48px;
+  margin: -6px 0 0 -6px;
+  border-color: #38bdf8;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+  border-style: dashed;
+  animation: rotate-slow 10s linear infinite;
+}
+
+.cyber-cursor.hovering .cursor-target-label {
+  opacity: 1;
+}
+
+.cyber-cursor.clicking .cursor-ring {
+  transform: scale(0.75);
+  border-color: var(--color-accent-rose);
+  box-shadow: 0 0 25px var(--color-accent-rose);
+}
+
+@media (pointer: coarse) {
+  .cyber-cursor {
+    display: none !important;
   }
 }

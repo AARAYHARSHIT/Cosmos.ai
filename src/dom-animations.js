@@ -4,6 +4,7 @@ import { showToast } from './toast.js';
 import { openTerminal, initTerminal } from './terminal.js';
 import { getLenis, PLANET_DATA } from './scroll-parallax.js';
 import { getCanvasEngine } from './canvas-engine.js';
+import { initCipherEngine, decryptText } from './cipher-engine.js';
 
 // Gallery dataset with astronomical parameters
 export const GALLERY_DATA = [
@@ -106,8 +107,11 @@ export const GALLERY_DATA = [
 ];
 
 export function setupDOMAnimations() {
+  setupCyberCursor();
+  initCipherEngine();
   setupHeroLetters();
   setupNavbarAndControls();
+  setupCardSpotlightSheen();
   setupStatCounters();
   setupLiveTelemetrySparkline();
   setupGallery();
@@ -122,6 +126,71 @@ export function setupDOMAnimations() {
       updateWarpButtonUI(val);
     },
     setNebulaColor: (preset) => {},
+  });
+}
+
+function setupCyberCursor() {
+  const cursor = document.getElementById('cyber-cursor');
+  if (!cursor) return;
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let cursorX = mouseX;
+  let cursorY = mouseY;
+  let isVisible = false;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!isVisible) {
+      isVisible = true;
+      cursor.style.opacity = '1';
+    }
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', () => {
+    isVisible = false;
+    cursor.style.opacity = '0';
+  });
+
+  window.addEventListener('mousedown', () => {
+    cursor.classList.add('clicking');
+  });
+
+  window.addEventListener('mouseup', () => {
+    cursor.classList.remove('clicking');
+  });
+
+  // Interactive Target Locking
+  const interactiveSelector = 'a, button, .card, .planet-select-card, input, select, .trail-step, .tesseract-cube';
+  document.querySelectorAll(interactiveSelector).forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('hovering');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('hovering');
+    });
+  });
+
+  function renderCursor() {
+    cursorX += (mouseX - cursorX) * 0.22;
+    cursorY += (mouseY - cursorY) * 0.22;
+    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+    requestAnimationFrame(renderCursor);
+  }
+  requestAnimationFrame(renderCursor);
+}
+
+function setupCardSpotlightSheen() {
+  const cards = document.querySelectorAll('.card, .capability-card, .stat-card, .pricing-card, .stream-panel');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    }, { passive: true });
   });
 }
 
@@ -221,9 +290,34 @@ function setupNavbarAndControls() {
     });
   });
 
-  // IntersectionObserver for High-Performance ScrollSpy (Zero forced layout reflows on scroll)
-  const sections = document.querySelectorAll('section[id], footer[id]');
+  // Dynamic Sliding Nav Indicator Pill
+  const navContainer = document.querySelector('.nav-links');
+  const navPill = document.querySelector('.nav-indicator-pill');
   const navLinks = document.querySelectorAll('.nav-links a');
+
+  function updateNavPill(activeLink) {
+    if (!activeLink || !navPill || !navContainer) return;
+    const linkRect = activeLink.getBoundingClientRect();
+    const containerRect = navContainer.getBoundingClientRect();
+    const left = linkRect.left - containerRect.left;
+    const width = linkRect.width;
+
+    navPill.style.left = `${left}px`;
+    navPill.style.width = `${width}px`;
+    navPill.style.opacity = '1';
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('mouseenter', () => updateNavPill(link));
+  });
+
+  navContainer?.addEventListener('mouseleave', () => {
+    const activeLink = document.querySelector('.nav-links a.active');
+    if (activeLink) updateNavPill(activeLink);
+  });
+
+  // IntersectionObserver for High-Performance ScrollSpy
+  const sections = document.querySelectorAll('section[id], footer[id]');
 
   const scrollSpyObserver = new IntersectionObserver(
     (entries) => {
@@ -233,6 +327,7 @@ function setupNavbarAndControls() {
           navLinks.forEach((link) => {
             if (link.getAttribute('href') === `#${id}`) {
               link.classList.add('active');
+              updateNavPill(link);
             } else {
               link.classList.remove('active');
             }
@@ -240,22 +335,45 @@ function setupNavbarAndControls() {
         }
       });
     },
-    { rootMargin: '-30% 0px -40% 0px', threshold: 0 }
+    { rootMargin: '-25% 0px -35% 0px', threshold: 0 }
   );
 
   sections.forEach((s) => scrollSpyObserver.observe(s));
 
-  // Interactive Navigation with Lenis
+  // Initial pill position
+  const initialActive = document.querySelector('.nav-links a.active');
+  if (initialActive) setTimeout(() => updateNavPill(initialActive), 150);
+
+  // Cinematic Warp-Jump Navigation with Lenis
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-      e.preventDefault();
       const targetId = this.getAttribute('href');
+      if (!targetId || targetId === '#') return;
+
+      e.preventDefault();
+      const targetEl = document.querySelector(targetId);
+      if (!targetEl) return;
+
+      const canvasEngine = getCanvasEngine();
+      if (canvasEngine) {
+        // Hyperspace speed impulse
+        canvasEngine.setScrollVelocity(45);
+        setTimeout(() => canvasEngine.setScrollVelocity(0), 900);
+      }
+
+      playSound('warp');
+
       const lenis = getLenis();
-      if (lenis && targetId !== '#') {
-        lenis.scrollTo(targetId, { duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+      if (lenis) {
+        lenis.scrollTo(targetEl, {
+          duration: 1.3,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          onComplete: () => {
+            playBeep('activate');
+          }
+        });
       } else {
-        const targetEl = document.querySelector(targetId);
-        if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+        targetEl.scrollIntoView({ behavior: 'smooth' });
       }
     });
   });

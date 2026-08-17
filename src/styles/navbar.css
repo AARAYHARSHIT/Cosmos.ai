@@ -68,40 +68,49 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.5rem;
+  position: relative;
+  background: rgba(8, 12, 28, 0.4);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.nav-indicator-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: 60px;
+  background: linear-gradient(135deg, rgba(0, 255, 220, 0.2), rgba(168, 85, 247, 0.2));
+  border: 1px solid rgba(0, 255, 220, 0.4);
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 15px rgba(0, 255, 220, 0.25);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  opacity: 0;
+  z-index: 1;
 }
 
 .nav-links a {
   color: var(--color-text-secondary);
   text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.825rem;
+  font-weight: 600;
   transition: all 0.2s ease;
   position: relative;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  z-index: 2;
 }
 
 .nav-links a:hover {
-  color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
 }
 
 .nav-links a.active {
-  color: var(--color-accent-cyan);
-  background: rgba(56, 189, 248, 0.1);
-}
-
-.nav-links a.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 2px;
-  background: var(--color-accent-cyan);
-  border-radius: 2px;
+  color: #00ffdc;
+  text-shadow: 0 0 10px rgba(0, 255, 220, 0.6);
 }
 
 /* Nav Actions */

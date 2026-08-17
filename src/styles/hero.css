@@ -193,9 +193,167 @@
   100% { opacity: 1; top: 6px; }
 }
 
+/* 3D Parallax Floating Cockpit Telemetry Wings */
+.hero-telemetry-wing {
+  position: absolute;
+  top: 38%;
+  padding: 12px 18px;
+  background: rgba(8, 12, 28, 0.82);
+  border: 1px solid rgba(0, 255, 220, 0.25);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  z-index: 3;
+  pointer-events: none;
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+.wing-left {
+  left: calc(50% - 620px);
+  transform: translateY(-50%) perspective(800px) rotateY(18deg);
+  border-left: 3px solid var(--color-accent-cyan);
+}
+
+.wing-right {
+  right: calc(50% - 620px);
+  transform: translateY(-50%) perspective(800px) rotateY(-18deg);
+  border-right: 3px solid var(--color-accent-violet);
+  text-align: right;
+}
+
+.wing-badge {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.wing-right .wing-badge {
+  justify-content: flex-end;
+}
+
+.wing-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.wing-sub {
+  font-size: 0.65rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 1280px) {
+  .hero-telemetry-wing {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-hud-strip {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-sm);
   }
+}
+
+/* ==========================================================================
+   KINETIC TYPOGRAPHY PARALLAX CORRIDOR (Bridge 01 -> 02)
+   ========================================================================== */
+.hero-nebula-transition-corridor {
+  position: relative;
+  width: 100%;
+  padding: 60px 0;
+  margin: -40px 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.kinetic-text-track {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  white-space: nowrap;
+  width: 200%;
+  will-change: transform;
+}
+
+.track-upper {
+  transform: translateX(-15%) perspective(1000px) rotateX(12deg);
+}
+
+.track-lower {
+  transform: translateX(5%) perspective(1000px) rotateX(-12deg);
+}
+
+.kinetic-giant-text {
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.9;
+  user-select: none;
+}
+
+.kinetic-giant-text.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(168, 85, 247, 0.45);
+  text-shadow: 0 0 25px rgba(168, 85, 247, 0.2);
+}
+
+.kinetic-giant-text.text-gradient {
+  background: linear-gradient(135deg, #ffffff 10%, #c084fc 50%, #00ffdc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 35px rgba(168, 85, 247, 0.5));
+}
+
+.kinetic-zoom-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+
+.zoom-metric-badge {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  color: #00ffdc;
+  background: rgba(8, 12, 28, 0.9);
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 255, 220, 0.45);
+  box-shadow: 0 0 30px rgba(0, 255, 220, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.zoom-laser-line {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(180deg, var(--color-accent-cyan), transparent);
+  box-shadow: 0 0 10px var(--color-accent-cyan);
 }
