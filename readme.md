@@ -445,6 +445,6 @@ Built with:
 
 If you found COSMOS.AI interesting, consider giving the repository a ⭐ and exploring the live experience.
 
-### 🌐 [Launch COSMOS.AI — Live Demo]((https://cosmosai-sigma.vercel.app/))
+### 🌐 [Launch COSMOS.AI — Live Demo](https://cosmosai-sigma.vercel.app/)
 
 ### 💻 [View Source Code](https://github.com/AARAYHARSHIT/Cosmos.ai)
