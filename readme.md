@@ -10,7 +10,7 @@ Rather than presenting scientific information as conventional static pages, COSM
 
 ## 🌐 Live Experience
 
-### 🚀 [Launch COSMOS.AI — Live Demo](PASTE_YOUR_VERCEL_LINK_HERE)
+### 🚀 [Launch COSMOS.AI — Live Demo](https://cosmosai-sigma.vercel.app/)
 
 **GitHub Repository:** [github.com/AARAYHARSHIT/Cosmos.ai](https://github.com/AARAYHARSHIT/Cosmos.ai)
 
@@ -445,6 +445,6 @@ Built with:
 
 If you found COSMOS.AI interesting, consider giving the repository a ⭐ and exploring the live experience.
 
-### 🌐 [Launch COSMOS.AI — Live Demo](PASTE_YOUR_VERCEL_LINK_HERE)
+### 🌐 [Launch COSMOS.AI — Live Demo]((https://cosmosai-sigma.vercel.app/))
 
 ### 💻 [View Source Code](https://github.com/AARAYHARSHIT/Cosmos.ai)
