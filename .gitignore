@@ -42,3 +42,5 @@ node_modules/.vite/
 # AGENTS.md / local config
 AGENTS.md
 CLAUDE.md
+
+.vercel/
