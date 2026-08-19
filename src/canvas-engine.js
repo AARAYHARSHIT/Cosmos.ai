@@ -34,6 +34,11 @@ class CanvasFlightEngine {
     this.targetSpeed = 0.8;
     this.scrollVelocity = 0;
 
+    // Performance: detect mobile and reduce rendering load
+    this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    this.shadowEnabled = !this.isMobile;
+    this.numStars = this.isMobile ? 350 : 650;
+
     // Mouse parallax
     this.mouseX = 0;
     this.mouseY = 0;
@@ -87,7 +92,11 @@ class CanvasFlightEngine {
   }
 
   bindEvents() {
-    window.addEventListener('resize', () => this.resize());
+    window.addEventListener('resize', () => {
+      this.resize();
+      this.isMobile = window.innerWidth < 768;
+      this.shadowEnabled = !this.isMobile;
+    });
 
     window.addEventListener('mousemove', (e) => {
       this.targetMouseX = (e.clientX / this.width - 0.5) * 50;
@@ -130,6 +139,12 @@ class CanvasFlightEngine {
   }
 
   animate() {
+    // Pause rendering when tab is hidden for performance
+    if (document.hidden) {
+      requestAnimationFrame(this.animate);
+      return;
+    }
+
     // Smooth mouse interpolation
     this.mouseX += (this.targetMouseX - this.mouseX) * 0.05;
     this.mouseY += (this.targetMouseY - this.mouseY) * 0.05;
@@ -206,18 +221,28 @@ class CanvasFlightEngine {
         // Standard high-definition glowing star
         this.ctx.beginPath();
         this.ctx.arc(x, y, size, 0, Math.PI * 2);
-        if (star.hue === 190) {
-          this.ctx.fillStyle = `rgba(56, 189, 248, ${alpha})`;
-          this.ctx.shadowColor = '#38bdf8';
-          this.ctx.shadowBlur = 4;
-        } else if (star.hue === 270) {
-          this.ctx.fillStyle = `rgba(192, 132, 252, ${alpha})`;
-          this.ctx.shadowColor = '#a855f7';
-          this.ctx.shadowBlur = 4;
+        if (this.shadowEnabled) {
+          if (star.hue === 190) {
+            this.ctx.fillStyle = `rgba(56, 189, 248, ${alpha})`;
+            this.ctx.shadowColor = '#38bdf8';
+            this.ctx.shadowBlur = 4;
+          } else if (star.hue === 270) {
+            this.ctx.fillStyle = `rgba(192, 132, 252, ${alpha})`;
+            this.ctx.shadowColor = '#a855f7';
+            this.ctx.shadowBlur = 4;
+          } else {
+            this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            this.ctx.shadowColor = '#ffffff';
+            this.ctx.shadowBlur = size > 1.8 ? 6 : 0;
+          }
         } else {
-          this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-          this.ctx.shadowColor = '#ffffff';
-          this.ctx.shadowBlur = size > 1.8 ? 6 : 0;
+          if (star.hue === 190) {
+            this.ctx.fillStyle = `rgba(56, 189, 248, ${alpha})`;
+          } else if (star.hue === 270) {
+            this.ctx.fillStyle = `rgba(192, 132, 252, ${alpha})`;
+          } else {
+            this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+          }
         }
         this.ctx.fill();
         this.ctx.shadowBlur = 0; // Reset

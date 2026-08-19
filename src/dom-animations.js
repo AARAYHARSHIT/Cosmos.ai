@@ -111,6 +111,7 @@ export function setupDOMAnimations() {
   initCipherEngine();
   setupHeroLetters();
   setupNavbarAndControls();
+  setupMobileMenu();
   setupCardSpotlightSheen();
   setupStatCounters();
   setupLiveTelemetrySparkline();
@@ -119,6 +120,8 @@ export function setupDOMAnimations() {
   setupCheckoutModal();
   setupNewsletter();
   setup3DCardTilt();
+  setupNebulaControls();
+  setupPlanetCardInteractions();
   initTerminal({
     toggleWarpDrive: (val) => {},
     isWarpActive: () => false,
@@ -198,21 +201,25 @@ function setupHeroLetters() {
   const h1 = document.querySelector('#hero h1');
   if (!h1 || h1.dataset.splitDone) return;
 
-  const text = h1.textContent.trim();
-  h1.innerHTML = text.split('').map(char =>
-    char === ' '
-      ? '<span class="letter">&nbsp;</span>'
-      : `<span class="letter">${char}</span>`
-  ).join('');
+  const words = [
+    { text: 'Explore', isGradient: false },
+    { text: 'the', isGradient: false },
+    { text: 'Infinite', isGradient: false },
+    { text: 'Cosmos', isGradient: true },
+  ];
+
+  h1.innerHTML = words.map(w =>
+    `<span class="hero-word ${w.isGradient ? 'gradient-text' : ''}">${w.text}</span>`
+  ).join(' ');
   h1.dataset.splitDone = 'true';
 
-  const letters = h1.querySelectorAll('.letter');
-  if (letters.length) {
-    animate(letters, {
+  const wordEls = h1.querySelectorAll('.hero-word');
+  if (wordEls.length) {
+    animate(wordEls, {
       opacity: [0, 1],
-      translateY: [35, 0],
-      delay: stagger(30, { start: 150 }),
-      duration: 800,
+      translateY: [24, 0],
+      delay: stagger(80, { start: 150 }),
+      duration: 700,
       easing: 'outCubic',
     });
   }
@@ -383,6 +390,99 @@ function setupNavbarAndControls() {
     el.addEventListener('mouseenter', () => playBeep('hover'), { passive: true });
     el.addEventListener('click', () => playBeep('click'));
   });
+}
+
+function setupMobileMenu() {
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const closeBtn = document.getElementById('mobile-nav-close');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+  if (!toggleBtn || !overlay) return;
+
+  function openMenu() {
+    toggleBtn.classList.add('open');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    toggleBtn.classList.remove('open');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    if (overlay.classList.contains('active')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  closeBtn?.addEventListener('click', closeMenu);
+
+  // Close on overlay click (outside drawer)
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeMenu();
+  });
+
+  // Close on link click and scroll to section
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      const targetEl = document.querySelector(targetId);
+
+      closeMenu();
+
+      if (targetEl) {
+        setTimeout(() => {
+          const lenis = getLenis();
+          if (lenis) {
+            lenis.scrollTo(targetEl, {
+              duration: 1.3,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            });
+          } else {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 300);
+      }
+    });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+
+  // Update active mobile link based on scroll
+  const sections = document.querySelectorAll('section[id], footer[id]');
+  const mobileObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          mobileLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    },
+    { rootMargin: '-25% 0px -35% 0px', threshold: 0 }
+  );
+  sections.forEach(s => mobileObserver.observe(s));
 }
 
 function setupNebulaControls() {

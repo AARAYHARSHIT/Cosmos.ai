@@ -39,20 +39,20 @@
   --font-body:              'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono:              'JetBrains Mono', 'Fira Code', monospace;
 
-  --font-size-h1:           clamp(2.75rem, 5.5vw, 4.75rem);
-  --font-size-h2:           clamp(2rem, 3.8vw, 3.15rem);
-  --font-size-h3:           clamp(1.2rem, 2.2vw, 1.65rem);
+  --font-size-h1:           clamp(2.25rem, 5vw, 4.75rem);
+  --font-size-h2:           clamp(1.6rem, 3.5vw, 3.15rem);
+  --font-size-h3:           clamp(1.1rem, 2vw, 1.65rem);
   --font-size-body:         1rem;
   --line-height-heading:    1.08;
   --line-height-body:       1.6;
 
-  /* Spacing */
+  /* Fluid Spacing (mobile-first) */
   --spacing-xs:             0.25rem;
   --spacing-sm:             0.5rem;
   --spacing-md:             1rem;
   --spacing-lg:             1.75rem;
-  --spacing-xl:             3.5rem;
-  --spacing-2xl:            6.5rem;
+  --spacing-xl:             clamp(2rem, 4vw, 3.5rem);
+  --spacing-2xl:            clamp(3rem, 6vw, 6.5rem);
 
   /* Glassmorphism, Radii & Shadows */
   --radius-sm:              8px;
@@ -65,4 +65,13 @@
   --shadow-card-hover:      0 20px 45px -12px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   --shadow-glow-cyan:       0 0 30px rgba(56, 189, 248, 0.35);
   --shadow-glow-violet:     0 0 30px rgba(168, 85, 247, 0.35);
+}
+
+/* Mobile: reduce blur intensity for performance */
+@media (max-width: 768px) {
+  :root {
+    --glass-blur: blur(12px) saturate(150%);
+    --shadow-card: 0 6px 20px -8px rgba(0, 0, 0, 0.5);
+    --shadow-card-hover: 0 12px 30px -8px rgba(56, 189, 248, 0.15);
+  }
 }

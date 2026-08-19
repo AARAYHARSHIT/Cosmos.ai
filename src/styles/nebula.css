@@ -54,6 +54,7 @@
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
+  -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -81,4 +82,41 @@
   border-color: var(--color-accent-violet);
   color: #ffffff;
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+}
+
+@media (max-width: 480px) {
+  .nebula-chip {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  #nebula-discovery {
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+
+  #nebula-discovery h2 {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+  }
+
+  #nebula-discovery .nebula-text {
+    font-size: 1rem;
+  }
+
+  .nebula-controls {
+    padding: var(--spacing-md);
+    width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  .chip-group {
+    gap: 8px;
+  }
+
+  .nebula-chip {
+    padding: 7px 14px;
+    font-size: 0.8rem;
+  }
 }

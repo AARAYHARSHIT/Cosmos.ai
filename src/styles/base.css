@@ -7,28 +7,34 @@
 }
 
 html {
-  scroll-behavior: auto; /* Managed by Lenis smooth scroll */
+  scroll-behavior: auto;
   scroll-padding-top: 80px;
   background-color: var(--color-bg-deep);
   color: var(--color-text-primary);
+  overflow-x: clip;
+  max-width: 100vw;
+  width: 100%;
 }
 
 body {
   font-family: var(--font-body);
   background-color: var(--color-bg-deep);
   color: var(--color-text-primary);
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
+  width: 100%;
   line-height: var(--line-height-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 #starfield-canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
   background-color: var(--color-bg-deep);
@@ -158,7 +164,7 @@ body {
 
 /* Layer 1: Deep Stars */
 .layer-deep-stars {
-  background-image: 
+  background-image:
     radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
     radial-gradient(1.5px 1.5px at 100px 150px, #ffffff, rgba(0,0,0,0)),
     radial-gradient(1px 1px at 250px 80px, #ffffff, rgba(0,0,0,0)),
@@ -174,7 +180,7 @@ body {
 
 /* Layer 2: Nebula Glow */
 .layer-nebula-glow {
-  background: 
+  background:
     radial-gradient(circle at 15% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
     radial-gradient(circle at 85% 70%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
     radial-gradient(circle at 50% 10%, rgba(20, 184, 166, 0.1) 0%, transparent 60%);
@@ -186,8 +192,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 150vw;
-  height: 150vw;
+  width: min(900px, 100vw);
+  height: min(900px, 100vw);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, rgba(56, 189, 248, 0.08) 40%, transparent 70%);
   transform: translate(-50%, -50%) scale(0.1);
@@ -199,7 +205,7 @@ body {
 
 /* Layer 3: Tech Grid */
 .layer-grid {
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 255, 220, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 220, 0.03) 1px, transparent 1px);
   background-size: 80px 80px;
@@ -219,24 +225,24 @@ body {
 }
 
 .planet-azurea {
-  width: 400px;
-  height: 400px;
-  right: 10%;
+  width: min(400px, 60vw);
+  height: min(400px, 60vw);
+  right: 5%;
   top: 25%;
   background: radial-gradient(circle at 30% 30%, #0284c7, #082f49);
-  box-shadow: 
+  box-shadow:
     inset -40px -40px 80px rgba(0, 0, 0, 0.9),
     inset 20px 20px 40px rgba(56, 189, 248, 0.4),
     0 0 120px rgba(2, 132, 199, 0.4);
 }
 
 .planet-vesperion {
-  width: 600px;
-  height: 600px;
+  width: min(600px, 80vw);
+  height: min(600px, 80vw);
   left: -5%;
   top: 55%;
   background: radial-gradient(circle at 30% 30%, #7e22ce, #3b0764);
-  box-shadow: 
+  box-shadow:
     inset -60px -60px 120px rgba(0, 0, 0, 0.9),
     inset 20px 20px 50px rgba(216, 180, 254, 0.3),
     0 0 150px rgba(126, 34, 206, 0.3);
@@ -258,7 +264,6 @@ body {
 /* Floating Abstract Shapes */
 .css-shape {
   position: absolute;
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 20px;
   background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
@@ -269,8 +274,12 @@ body {
 .shape-2 { width: 80px; height: 80px; right: 25%; top: 45%; transform: rotate(-25deg); border-radius: 50%; }
 .shape-3 { width: 150px; height: 150px; left: 35%; top: 75%; transform: rotate(45deg); }
 
+@media (max-width: 768px) {
+  .css-shape { display: none; }
+}
+
 /* ==========================================================================
-   CHAPTER 03.5 // QUANTUM RELATIVITY GATEWAY (Inter-Chapter Parallax Bridge)
+   QUANTUM RELATIVITY GATEWAY
    ========================================================================== */
 .quantum-gateway-section {
   position: relative;
@@ -286,6 +295,13 @@ body {
   z-index: 5;
 }
 
+@media (max-width: 768px) {
+  .quantum-gateway-section {
+    min-height: auto;
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+}
+
 .gateway-container {
   width: 100%;
   max-width: 1280px;
@@ -298,7 +314,7 @@ body {
 }
 
 .gateway-heading {
-  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   margin: var(--spacing-xs) 0;
@@ -307,8 +323,8 @@ body {
 /* 3D Gyroscopic Astrolabe Stage */
 .astrolabe-3d-stage {
   position: relative;
-  width: 480px;
-  height: 480px;
+  width: min(480px, 85vw);
+  height: min(480px, 85vw);
   margin: var(--spacing-xl) auto;
   display: flex;
   align-items: center;
@@ -326,22 +342,22 @@ body {
 }
 
 .ring-outer {
-  width: 460px;
-  height: 460px;
+  width: 95%;
+  height: 95%;
   border: 2px solid rgba(0, 255, 220, 0.5);
   animation: astrolabe-spin-x 24s linear infinite;
 }
 
 .ring-middle {
-  width: 340px;
-  height: 340px;
+  width: 70%;
+  height: 70%;
   border: 2px dashed rgba(56, 189, 248, 0.6);
   animation: astrolabe-spin-y 18s linear infinite reverse;
 }
 
 .ring-inner {
-  width: 220px;
-  height: 220px;
+  width: 46%;
+  height: 46%;
   border: 1.5px solid rgba(168, 85, 247, 0.7);
   animation: astrolabe-spin-z 12s linear infinite;
 }
@@ -363,11 +379,15 @@ body {
 .node-2 { top: auto; bottom: -10px; }
 .node-4 { top: auto; bottom: -10px; border-color: #38bdf8; color: #38bdf8; }
 
+@media (max-width: 480px) {
+  .astrolabe-node { display: none; }
+}
+
 /* Central Tesseract 3D Cube */
 .singularity-core-stage {
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: min(100px, 25vw);
+  height: min(100px, 25vw);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,8 +396,8 @@ body {
 
 .photon-orbit-ring {
   position: absolute;
-  width: 140px;
-  height: 140px;
+  width: 140%;
+  height: 140%;
   border-radius: 50%;
   border: 2px dotted #00ffdc;
   animation: rotate-slow 6s linear infinite;
@@ -398,7 +418,6 @@ body {
   height: 60px;
   background: rgba(0, 255, 220, 0.12);
   border: 1px solid rgba(0, 255, 220, 0.7);
-  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -440,22 +459,53 @@ body {
 /* Parallax Floating Relativistic Data Panels */
 .gateway-data-stream {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xl);
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
   width: 100%;
   margin-top: var(--spacing-lg);
   text-align: left;
 }
 
+@media (min-width: 768px) {
+  .gateway-data-stream {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+  }
+}
+
 .stream-panel {
   padding: var(--spacing-lg);
   background: rgba(8, 12, 28, 0.85);
-  border: 1px solid rgba(0, 255, 220, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
   will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .stream-panel {
+    padding: var(--spacing-md);
+  }
+
+  .stream-formula {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+
+  .stream-panel p {
+    font-size: 0.85rem;
+  }
+
+  .gateway-heading {
+    font-size: clamp(1.3rem, 5vw, 2rem);
+  }
+
+  .astrolabe-3d-stage {
+    width: min(300px, 80vw);
+    height: min(300px, 80vw);
+  }
 }
 
 .stream-header {
@@ -475,6 +525,7 @@ body {
   border-left: 3px solid var(--color-accent-cyan);
   color: #ffffff;
   margin: var(--spacing-xs) 0;
+  overflow-x: auto;
 }
 
 .stream-panel p {
@@ -492,10 +543,12 @@ body {
   color: var(--color-text-muted);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
 }
 
 /* ==========================================================================
-   CHAPTER 04 // QUANTUM ENGINE CORE BACKDROP
+   QUANTUM ENGINE CORE BACKDROP
    ========================================================================== */
 .quantum-core-backdrop {
   position: absolute;
@@ -514,8 +567,8 @@ body {
 
 .quantum-singularity-core {
   position: absolute;
-  width: 320px;
-  height: 320px;
+  width: min(320px, 50vw);
+  height: min(320px, 50vw);
   border-radius: 50%;
   background: radial-gradient(circle at center, rgba(0, 255, 220, 0.2) 0%, rgba(16, 185, 129, 0.08) 40%, transparent 70%);
   box-shadow: 0 0 120px rgba(0, 255, 220, 0.25);
@@ -529,14 +582,14 @@ body {
   will-change: transform;
 }
 
-.ring-alpha { width: 550px; height: 550px; border-style: dashed; animation: rotate-slow 35s linear infinite; }
-.ring-beta { width: 750px; height: 750px; border-color: rgba(56, 189, 248, 0.15); animation: rotate-slow 50s linear infinite reverse; }
-.ring-gamma { width: 1000px; height: 1000px; border-color: rgba(168, 85, 247, 0.12); }
+.ring-alpha { width: min(550px, 80vw); height: min(550px, 80vw); border-style: dashed; animation: rotate-slow 35s linear infinite; }
+.ring-beta { width: min(750px, 95vw); height: min(750px, 95vw); border-color: rgba(56, 189, 248, 0.15); animation: rotate-slow 50s linear infinite reverse; }
+.ring-gamma { width: min(1000px, 130vw); height: min(1000px, 130vw); border-color: rgba(168, 85, 247, 0.12); }
 
 .quantum-circuit-grid {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     radial-gradient(circle at center, rgba(0, 255, 220, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
   opacity: 0.6;
@@ -545,7 +598,7 @@ body {
 }
 
 /* ==========================================================================
-   CHAPTER 05 // SENSOR ARRAY BACKDROP
+   SENSOR ARRAY BACKDROP
    ========================================================================== */
 .sensor-array-backdrop {
   position: absolute;
@@ -559,6 +612,7 @@ body {
   justify-content: center;
   pointer-events: none;
   z-index: 0;
+  overflow: hidden;
 }
 
 .sensor-dish-ring {
@@ -567,9 +621,9 @@ body {
   border: 1px solid rgba(56, 189, 248, 0.15);
 }
 
-.dish-outer { width: 850px; height: 850px; border-style: dashed; animation: rotate-slow 60s linear infinite; }
-.dish-mid { width: 600px; height: 600px; border-color: rgba(0, 255, 220, 0.2); }
-.dish-inner { width: 380px; height: 380px; border-style: dotted; border-color: rgba(168, 85, 247, 0.25); animation: rotate-slow 40s linear infinite reverse; }
+.dish-outer { width: min(850px, 110vw); height: min(850px, 110vw); border-style: dashed; animation: rotate-slow 60s linear infinite; }
+.dish-mid { width: min(600px, 80vw); height: min(600px, 80vw); border-color: rgba(0, 255, 220, 0.2); }
+.dish-inner { width: min(380px, 50vw); height: min(380px, 50vw); border-style: dotted; border-color: rgba(168, 85, 247, 0.25); animation: rotate-slow 40s linear infinite reverse; }
 
 .sensor-signal-wave {
   position: absolute;
@@ -590,8 +644,8 @@ main {
   position: relative;
   z-index: 1;
   width: 100%;
-  perspective: 1200px;
-  transform-style: preserve-3d;
+  max-width: 100vw;
+  overflow-x: clip;
 }
 
 /* Foreground 3D Parallax Container */
@@ -599,13 +653,11 @@ main {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 50; /* Sits above content but below modals/nav */
+  width: 100%;
+  height: 100%;
+  z-index: 50;
   pointer-events: none;
-  overflow: visible;
-  perspective: 1500px;
-  transform-style: preserve-3d;
+  overflow: hidden;
 }
 
 .fg-object {
@@ -614,7 +666,6 @@ main {
   transform-style: preserve-3d;
 }
 
-/* Floating 3D Primitives */
 .fg-ring {
   border: 1px solid rgba(0, 255, 220, 0.4);
   border-radius: 50%;
@@ -625,8 +676,8 @@ main {
 .fg-cube {
   border: 1px solid rgba(168, 85, 247, 0.5);
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(168, 85, 247, 0.02));
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2);
   border-radius: 12px;
 }
@@ -639,9 +690,18 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
 }
 
-/* Subtle Interstellar Horizon Glow Dividers */
+@media (max-width: 768px) {
+  section {
+    min-height: auto;
+    padding: var(--spacing-xl) var(--spacing-sm);
+  }
+}
+
 section::after {
   content: '';
   position: absolute;
@@ -658,6 +718,12 @@ section::after {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 0 var(--spacing-sm);
+  }
 }
 
 /* Typography */
@@ -696,11 +762,15 @@ p {
   text-shadow: 0 0 20px rgba(255, 80, 150, 0.4);
 }
 
+.accent-emerald {
+  color: var(--color-accent-emerald);
+}
+
 /* Glassmorphism Cards with Dynamic Spotlight Sheen */
 .card {
   background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 255, 220, 0.08), transparent 40%), var(--color-bg-card);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-glass);
   border-radius: 18px;
   padding: var(--spacing-lg);
@@ -778,6 +848,7 @@ p {
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  white-space: nowrap;
 }
 
 .cta-button.primary-cta {
@@ -795,6 +866,7 @@ p {
   background: rgba(255, 255, 255, 0.08);
   color: var(--color-text-primary);
   border-color: var(--border-glass-bright);
+  -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
 }
 
@@ -827,6 +899,7 @@ p {
   gap: 12px;
   padding: 8px 16px;
   background: rgba(10, 15, 30, 0.75);
+  -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(0, 255, 220, 0.25);
   border-radius: 50px;
@@ -928,7 +1001,6 @@ p {
   white-space: nowrap;
 }
 
-/* Cursor Hover Locking States */
 .cyber-cursor.hovering .cursor-ring {
   width: 48px;
   height: 48px;
@@ -949,8 +1021,50 @@ p {
   box-shadow: 0 0 25px var(--color-accent-rose);
 }
 
+@keyframes rotate-slow {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 @media (pointer: coarse) {
   .cyber-cursor {
     display: none !important;
   }
+}
+
+/* Touch-friendly improvements for mobile */
+@media (max-width: 768px) {
+  .cta-button {
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .nav-btn,
+  .hamburger-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .gallery-filter-btn {
+    padding: 8px 14px;
+    min-height: 36px;
+  }
+
+  .planet-select-card {
+    min-height: 48px;
+  }
+
+  .mobile-nav-link {
+    min-height: 48px;
+  }
+
+  .nebula-chip {
+    min-height: 40px;
+    padding: 8px 14px;
+  }
+}
+
+/* Utility for muted text */
+.text-muted {
+  color: var(--color-text-muted);
 }

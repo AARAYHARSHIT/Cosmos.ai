@@ -3,18 +3,20 @@
   inset: 0;
   z-index: 2000;
   background: rgba(2, 4, 10, 0.85);
-  backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  display: flex;
+  backdrop-filter: blur(24px) saturate(180%);
+  display: none;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-md);
   opacity: 0;
   pointer-events: none;
+  overflow: hidden;
   transition: opacity 0.3s ease;
 }
 
 .cosmos-modal.active {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
 }
@@ -72,7 +74,13 @@
 
 .lightbox-layout {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 769px) {
+  .lightbox-layout {
+    grid-template-columns: 1.2fr 1fr;
+  }
 }
 
 .lightbox-img-pane {
@@ -80,8 +88,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 420px;
-  border-right: 1px solid var(--border-glass);
+  min-height: 240px;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+@media (min-width: 769px) {
+  .lightbox-img-pane {
+    min-height: 420px;
+    border-right: 1px solid var(--border-glass);
+    border-bottom: none;
+  }
 }
 
 .lightbox-img-pane img {
@@ -92,11 +108,17 @@
 }
 
 .lightbox-info-pane {
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: var(--spacing-sm);
+}
+
+@media (min-width: 769px) {
+  .lightbox-info-pane {
+    padding: var(--spacing-xl);
+  }
 }
 
 .lightbox-title {
@@ -143,7 +165,7 @@
   box-shadow: 0 0 50px rgba(56, 189, 248, 0.2);
   display: flex;
   flex-direction: column;
-  height: 580px;
+  height: min(580px, 80vh);
 }
 
 .terminal-header {
@@ -171,10 +193,15 @@
 .dot-green { background: #27c93f; }
 
 .terminal-title {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--color-text-muted);
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .terminal-title { display: block; }
 }
 
 .terminal-chips {
@@ -217,8 +244,12 @@
 .terminal-line.banner {
   color: var(--color-accent-cyan);
   white-space: pre;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   line-height: 1.1;
+}
+
+@media (min-width: 641px) {
+  .terminal-line.banner { font-size: 0.7rem; }
 }
 
 .terminal-line.line-system { color: #818cf8; }
@@ -242,6 +273,7 @@
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--color-accent-cyan);
+  white-space: nowrap;
 }
 
 .terminal-input {
@@ -308,25 +340,17 @@
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  .lightbox-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .lightbox-img-pane {
-    min-height: 240px;
-    border-right: none;
-    border-bottom: 1px solid var(--border-glass);
-  }
-}
-
 /* Surface Radar Holographic Scan Modal */
 .scan-modal-card {
   max-width: 680px;
   background: rgba(8, 12, 28, 0.95);
   border: 1px solid var(--color-accent-cyan);
   box-shadow: 0 0 50px rgba(0, 255, 220, 0.3), inset 0 0 30px rgba(0, 255, 220, 0.1);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
+}
+
+@media (min-width: 641px) {
+  .scan-modal-card { padding: var(--spacing-xl); }
 }
 
 .scan-modal-content {
@@ -344,8 +368,8 @@
 
 .scan-visual-stage {
   position: relative;
-  width: 220px;
-  height: 220px;
+  width: min(220px, 60vw);
+  height: min(220px, 60vw);
   margin: var(--spacing-md) auto;
   border-radius: 50%;
   display: flex;
@@ -356,8 +380,8 @@
 }
 
 .scan-sphere-render {
-  width: 170px;
-  height: 170px;
+  width: 77%;
+  height: 77%;
   border-radius: 50%;
   box-shadow: inset -20px -20px 40px rgba(0,0,0,0.9), 0 0 30px rgba(56, 189, 248, 0.4);
 }
@@ -381,9 +405,15 @@
 
 .scan-data-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--spacing-sm);
   text-align: left;
+}
+
+@media (min-width: 641px) {
+  .scan-data-columns {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .scan-col {
@@ -413,4 +443,85 @@
 
 .scan-modal-footer .cta-button {
   width: 100%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .cosmos-modal {
+    padding: var(--spacing-sm);
+  }
+
+  .modal-card {
+    max-height: 85vh;
+    border-radius: var(--radius-md);
+  }
+
+  .lightbox-card {
+    max-width: 100%;
+  }
+
+  .lightbox-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .lightbox-img-pane {
+    min-height: 200px;
+    border-bottom: 1px solid var(--border-glass);
+  }
+
+  .lightbox-info-pane {
+    padding: var(--spacing-md);
+  }
+
+  .lightbox-title {
+    font-size: 1.3rem;
+  }
+
+  .lightbox-desc {
+    font-size: 0.85rem;
+  }
+
+  .terminal-card {
+    max-width: 100%;
+    height: min(500px, 85vh);
+    border-radius: var(--radius-md);
+  }
+
+  .terminal-header {
+    padding: 10px 14px;
+  }
+
+  .terminal-output {
+    padding: 14px;
+    font-size: 0.8rem;
+  }
+
+  .terminal-input-row {
+    padding: 10px 14px;
+  }
+
+  .checkout-card {
+    max-width: 100%;
+    padding: var(--spacing-md);
+  }
+
+  .checkout-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .scan-modal-card {
+    max-width: 100%;
+    padding: var(--spacing-md);
+  }
+
+  .scan-visual-stage {
+    width: min(180px, 50vw);
+    height: min(180px, 50vw);
+  }
+
+  .modal-close {
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+  }
 }

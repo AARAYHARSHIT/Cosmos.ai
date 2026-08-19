@@ -428,11 +428,13 @@ export function setupScrollTriggers() {
         }
       });
 
-      // Left and Right Relativistic Panels glide across screen
+      // Left and Right Relativistic Panels glide with responsive offsets
+      const isDesktop = window.innerWidth >= 768;
       gsap.fromTo('.stream-panel.panel-left',
-        { x: -60, opacity: 0.6 },
+        { x: isDesktop ? -50 : 0, y: isDesktop ? 0 : 30, opacity: 0.6 },
         {
           x: 0,
+          y: 0,
           opacity: 1,
           ease: 'power2.out',
           scrollTrigger: {
@@ -445,9 +447,10 @@ export function setupScrollTriggers() {
       );
 
       gsap.fromTo('.stream-panel.panel-right',
-        { x: 60, opacity: 0.6 },
+        { x: isDesktop ? 50 : 0, y: isDesktop ? 0 : 30, opacity: 0.6 },
         {
           x: 0,
+          y: 0,
           opacity: 1,
           ease: 'power2.out',
           scrollTrigger: {
